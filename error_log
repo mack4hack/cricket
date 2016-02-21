@@ -1,0 +1,163 @@
+[29-Oct-2015 15:22:21 UTC] PHP Fatal error:  Call to undefined function base_url() in /home/gj1512/public_html/pixmadness.in/application/views/admin/login.php on line 63
+[29-Oct-2015 15:23:40 UTC] PHP Fatal error:  Call to undefined function base_url() in /home/gj1512/public_html/pixmadness.in/application/views/admin/login.php on line 63
+[29-Oct-2015 15:23:43 UTC] PHP Fatal error:  Call to undefined function base_url() in /home/gj1512/public_html/pixmadness.in/application/views/admin/login.php on line 63
+[29-Oct-2015 15:28:37 UTC] PHP Fatal error:  Call to undefined function base_url() in /home/gj1512/public_html/pixmadness.in/application/views/admin/login.php on line 63
+[29-Oct-2015 15:30:19 UTC] PHP Fatal error:  Call to undefined function base_url() in /home/gj1512/public_html/pixmadness.in/application/views/admin/login.php on line 63
+[29-Oct-2015 15:30:51 UTC] PHP Fatal error:  Call to undefined function base_url() in /home/gj1512/public_html/pixmadness.in/application/views/admin/login.php on line 63
+[29-Oct-2015 15:30:54 UTC] PHP Fatal error:  Call to undefined function base_url() in /home/gj1512/public_html/pixmadness.in/application/views/admin/login.php on line 63
+[29-Oct-2015 15:30:57 UTC] PHP Fatal error:  Call to undefined function base_url() in /home/gj1512/public_html/pixmadness.in/application/views/admin/login.php on line 63
+[31-Oct-2015 12:07:09 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 202
+[31-Oct-2015 12:07:12 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 202
+[31-Oct-2015 12:07:28 UTC] PHP Fatal error:  Call to a member function index() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 52
+[31-Oct-2015 12:10:56 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 52
+[31-Oct-2015 12:15:32 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 52
+[31-Oct-2015 12:15:46 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 52
+[31-Oct-2015 12:15:48 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 52
+[31-Oct-2015 12:18:55 UTC] PHP Fatal error:  Class 'Getlocation' not found in /home/gj1512/public_html/pixmadness.in/system/core/Loader.php on line 305
+[31-Oct-2015 12:26:04 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 23
+[31-Oct-2015 12:26:06 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 23
+[31-Oct-2015 12:26:08 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 23
+[31-Oct-2015 12:26:09 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 23
+[31-Oct-2015 12:26:42 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 23
+[31-Oct-2015 12:26:44 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 23
+[31-Oct-2015 12:26:46 UTC] PHP Fatal error:  Call to a member function getCountry() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 23
+[31-Oct-2015 12:29:17 UTC] PHP Fatal error:  Cannot use [] for reading in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 52
+[31-Oct-2015 12:29:19 UTC] PHP Fatal error:  Cannot use [] for reading in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 52
+[31-Oct-2015 12:29:21 UTC] PHP Fatal error:  Cannot use [] for reading in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 52
+[31-Oct-2015 12:39:35 UTC] PHP Fatal error:  Call to undefined method CI_DB_mysql_driver::result() in /home/gj1512/public_html/pixmadness.in/application/models/Getlocation.php on line 13
+[31-Oct-2015 12:39:36 UTC] PHP Fatal error:  Call to undefined method CI_DB_mysql_driver::result() in /home/gj1512/public_html/pixmadness.in/application/models/Getlocation.php on line 13
+[31-Oct-2015 12:40:01 UTC] PHP Fatal error:  Call to undefined method GetLocation::result() in /home/gj1512/public_html/pixmadness.in/application/models/Getlocation.php on line 13
+[31-Oct-2015 12:40:03 UTC] PHP Fatal error:  Call to undefined method GetLocation::result() in /home/gj1512/public_html/pixmadness.in/application/models/Getlocation.php on line 13
+[31-Oct-2015 12:40:04 UTC] PHP Fatal error:  Call to undefined method GetLocation::result() in /home/gj1512/public_html/pixmadness.in/application/models/Getlocation.php on line 13
+[31-Oct-2015 12:40:04 UTC] PHP Fatal error:  Call to undefined method GetLocation::result() in /home/gj1512/public_html/pixmadness.in/application/models/Getlocation.php on line 13
+[31-Oct-2015 12:43:44 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/gj1512/public_html/pixmadness.in/application/models/Getlocation.php on line 13
+[31-Oct-2015 12:43:46 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/gj1512/public_html/pixmadness.in/application/models/Getlocation.php on line 13
+[31-Oct-2015 12:43:57 UTC] PHP Fatal error:  Class 'Getlocation' not found in /home/gj1512/public_html/pixmadness.in/system/core/Loader.php on line 305
+[31-Oct-2015 12:43:59 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:44:02 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:44:04 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:45:01 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:45:03 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:45:05 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:45:56 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:46:19 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:46:22 UTC] PHP Fatal error:  Cannot use object of type stdClass as array in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 54
+[31-Oct-2015 12:53:25 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 12:53:38 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:17:36 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:18:54 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:19:36 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:19:39 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:20:21 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:20:24 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:20:59 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:24:24 UTC] PHP Fatal error:  Class 'Getlocation' not found in /home/gj1512/public_html/pixmadness.in/system/core/Loader.php on line 305
+[31-Oct-2015 15:25:24 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:25:35 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:26:53 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:27:48 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:28:37 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:28:56 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:29:40 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:30:10 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:30:55 UTC] PHP Fatal error:  Call to undefined method CI_Loader::nodel() in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:31:28 UTC] PHP Fatal error:  Call to undefined method CI_Loader::nodel() in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 39
+[31-Oct-2015 15:32:10 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:32:41 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:33:32 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 15:33:40 UTC] PHP Fatal error:  Call to a member function getData() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 40
+[31-Oct-2015 18:19:15 UTC] PHP Parse error:  syntax error, unexpected '$insert' (T_VARIABLE) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 63
+[31-Oct-2015 18:19:19 UTC] PHP Parse error:  syntax error, unexpected '$insert' (T_VARIABLE) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 63
+[31-Oct-2015 18:19:53 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 64
+[31-Oct-2015 18:19:55 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 64
+[31-Oct-2015 18:19:57 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 64
+[31-Oct-2015 18:20:59 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 64
+[31-Oct-2015 18:21:01 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 64
+[31-Oct-2015 18:21:02 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 64
+[31-Oct-2015 18:21:04 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 64
+[31-Oct-2015 18:21:51 UTC] PHP Parse error:  syntax error, unexpected '$insert' (T_VARIABLE) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 63
+[31-Oct-2015 18:21:53 UTC] PHP Parse error:  syntax error, unexpected '$insert' (T_VARIABLE) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 63
+[31-Oct-2015 18:21:55 UTC] PHP Parse error:  syntax error, unexpected '$insert' (T_VARIABLE) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 63
+[31-Oct-2015 18:23:41 UTC] PHP Parse error:  syntax error, unexpected '$insert' (T_VARIABLE) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 63
+[31-Oct-2015 18:23:42 UTC] PHP Parse error:  syntax error, unexpected '$insert' (T_VARIABLE) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 63
+[31-Oct-2015 18:23:45 UTC] PHP Parse error:  syntax error, unexpected '$insert' (T_VARIABLE) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 63
+[31-Oct-2015 18:24:05 UTC] PHP Parse error:  syntax error, unexpected ':' in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 65
+[31-Oct-2015 18:24:06 UTC] PHP Parse error:  syntax error, unexpected ':' in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 65
+[31-Oct-2015 18:24:37 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 65
+[31-Oct-2015 18:24:42 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 65
+[31-Oct-2015 18:25:12 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 65
+[31-Oct-2015 19:58:17 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/controllers/Letsplay.php on line 24
+[31-Oct-2015 19:58:55 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/controllers/Letsplay.php on line 26
+[31-Oct-2015 20:00:12 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/controllers/Letsplay.php on line 29
+[31-Oct-2015 20:00:17 UTC] PHP Parse error:  syntax error, unexpected ':', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/controllers/Letsplay.php on line 29
+[01-Nov-2015 17:12:53 UTC] PHP Fatal error:  Call to a member function get_dealers() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 276
+[01-Nov-2015 17:13:34 UTC] PHP Fatal error:  Call to a member function get_dealers() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 276
+[01-Nov-2015 17:13:37 UTC] PHP Fatal error:  Call to a member function get_dealers() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 276
+[01-Nov-2015 17:27:02 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 301
+[01-Nov-2015 17:27:04 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 301
+[01-Nov-2015 17:27:06 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 301
+[01-Nov-2015 17:27:07 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 301
+[01-Nov-2015 17:27:07 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_dealer.php on line 301
+[01-Nov-2015 18:01:15 UTC] PHP Fatal error:  Call to a member function set_mailtype() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 78
+[01-Nov-2015 19:05:24 UTC] PHP Fatal error:  Call to undefined method CI_DB_mysql_driver::num_rows() in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 91
+[01-Nov-2015 19:42:14 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:16 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:29 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:30 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:31 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:32 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:33 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:34 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:46 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:47 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:48 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:49 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:49 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:42:49 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:43:22 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:43:23 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:43:24 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:43:25 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:43:26 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[01-Nov-2015 19:43:27 UTC] PHP Parse error:  syntax error, unexpected '{', expecting ',' or ';' in /home/gj1512/public_html/pixmadness.in/application/views/admin/add_player.php on line 89
+[02-Nov-2015 18:09:37 UTC] PHP Fatal error:  Class 'Getlocation' not found in /home/gj1512/public_html/pixmadness.in/system/core/Loader.php on line 305
+[02-Nov-2015 18:12:33 UTC] PHP Fatal error:  Class 'Getlocation' not found in /home/gj1512/public_html/pixmadness.in/system/core/Loader.php on line 305
+[02-Nov-2015 18:27:36 UTC] PHP Fatal error:  Class 'Getlocation' not found in /home/gj1512/public_html/pixmadness.in/system/core/Loader.php on line 305
+[03-Nov-2015 00:56:45 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 00:56:52 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 00:59:39 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:01:19 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:01:22 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:01:23 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:01:43 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:02:40 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:05:00 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:05:01 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:06:43 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:06:44 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:06:46 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:06:47 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:06:47 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:06:52 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:07:51 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 01:07:54 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[03-Nov-2015 22:54:54 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 54
+[03-Nov-2015 22:54:55 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 54
+[03-Nov-2015 22:56:19 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 54
+[03-Nov-2015 22:56:20 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 54
+[03-Nov-2015 22:57:35 Asia/Kolkata] PHP Fatal error:  Call to a member function result() on a non-object in /home/gj1512/public_html/pixmadness.in/application/views/admin/edit_player.php on line 56
+[04-Nov-2015 02:00:50 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::num_rows() in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 153
+[04-Nov-2015 02:02:48 Asia/Kolkata] PHP Fatal error:  Call to undefined method Admin::num_rows() in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 153
+[04-Nov-2015 02:40:31 Asia/Kolkata] PHP Fatal error:  Call to a member function sess_destroy() on a non-object in /home/gj1512/public_html/pixmadness.in/application/controllers/Auth.php on line 62
+[05-Nov-2015 00:35:32 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:35:32 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:35:33 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:35:35 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:35:35 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:36:21 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:36:23 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:36:25 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:36:26 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:36:28 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:36:43 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
+[05-Nov-2015 00:36:45 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/gj1512/public_html/pixmadness.in/application/controllers/Admin.php on line 164
