@@ -1756,6 +1756,10 @@ class Admin extends CI_Controller
         }    
         else{
 
+            $to = date('Y-m-d');
+            $from = date('Y-m-d');
+            $result['data_daily'] = $this->Admin_model->getAccounts($from, $to);
+
             $monday = date( 'Y-m-d', strtotime( 'monday this week' ) );
             $sunday = date( 'Y-m-d', strtotime( 'sunday' ) );
 
@@ -1767,6 +1771,8 @@ class Admin extends CI_Controller
             if(strtotime($monday) > strtotime($from)){
                 $monday = date( 'Y-m-d', strtotime( '-6 day' ) );
             }
+
+            $result['data_weekly'] = $this->Admin_model->getAccounts($from, $monday);
 
             date_default_timezone_set("Asia/Calcutta");
             if(date('Y-m-d') == $sunday){
