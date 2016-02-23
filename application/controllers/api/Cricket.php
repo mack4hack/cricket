@@ -96,12 +96,11 @@ class Cricket extends REST_Controller
 	 	$u_id = $this->post('player_id');
 		$match_id = $this->post('match_id');
 		$m_id = $this->post('m_id');
-		$odd_id = $this->post('odd_id');
 		$odds = $this->post('odds');
 		$chips = $this->post('chips');
 		$last_eight_digit = substr($u_id,3,10); 
 		$transaction_id = "C".$match_id.$u_id.$m_id;
-		$transaction_time =  date('H:i:s');
+		$transaction_time = time();
 		/*get status of game wether betting is closed ot not*/
 		$game_type = $this->Cricket_model->getGameType($m_id);
 		//print_r($game_type);
@@ -115,6 +114,8 @@ class Cricket extends REST_Controller
 				 $total_amount  = $total_amount + $chips;
 			}
 			
+			
+			
 			$this->db->select('present_amount');
             $this->db->from('user_master');
             $this->db->where('id', $u_id);
@@ -126,9 +127,9 @@ class Cricket extends REST_Controller
             
             	$commission = $chips * 0.05;
 				
-				$data = array("user_id"=>$u_id, "match_id" => $match_id,"odd_id" =>$odd_id, "chips"=>$odds, "chips" => $chips,"payout" => $payout,'transaction_id'=>$transaction_id,"transaction_time"=>$transaction_time,'commission' =>$commission);
+				$data = array("user_id"=>$u_id, "match_id" => $match_id, "chips"=>$odds, "chips" => $chips,"payout" => $payout,'transaction_id'=>$transaction_id,"transaction_time"=>$transaction_time,'commission' =>$commission);
             	            
-           		$history = array('game_type' => $game_type, 'player_id' => $u_id, 'bet_amount' => $chips, 'payout' => $payout, 'timeslot' => date('Y-m-d H:i:s'), 'timeslot_id' => $this->Admin_model->getTimeslotId() ,'transaction_id' =>$transaction_id);
+           		$history = array('game_type' => 1, 'player_id' => $u_id, 'bet_amount' => $chips, 'payout' => $payout, 'timeslot' => date('Y-m-d H:i:s'), 'timeslot_id' => $this->Admin_model->getTimeslotId() ,'transaction_id' =>$transaction_id   )  ;
 			//calclulate commison and dealer id
 				$this->db->select('dealer_id');
 				$this->db->from('dealer_player');
@@ -143,9 +144,9 @@ class Cricket extends REST_Controller
 				$credit_dealer = array('id' => $dealer_id, 'bet_amount' => $chips);
 				$credit = array('id' => 1, 'bet_amount' => $chips - $bet_amount_dealer);
 				
-				$admin_history = array('game_type' => $game_type, 'player_id' => $u_id, 'commission' => $bet_amount_dealer, 'bet_amount' => $chips, 'timeslot' => date('Y-m-d H:i:s'), 'timeslot_id' => $this->Admin_model->getTimeslotId() ,'transaction_id' =>$transaction_id  );
+				$admin_history = array('game_type' => 3, 'player_id' => $u_id, 'commission' => $bet_amount_dealer, 'bet_amount' => $chips, 'timeslot' => date('Y-m-d H:i:s'), 'timeslot_id' => $this->Admin_model->getTimeslotId() ,'transaction_id' =>$transaction_id  );
 				
-				$dealer_history = array('game_type' => $game_type, 'player_id' => $u_id, 'dealer_id' => $this->getDealerId($u_id), 'bet_amount' => $chips, 'commission' => $bet_amount_dealer, 'timeslot' => date('Y-m-d H:i:s'), 'timeslot_id' => $this->Admin_model->getTimeslotId() ,'transaction_id' =>$transaction_id  );
+				$dealer_history = array('game_type' => 3, 'player_id' => $u_id, 'dealer_id' => $this->getDealerId($u_id), 'bet_amount' => $chips, 'commission' => $bet_amount_dealer, 'timeslot' => date('Y-m-d H:i:s'), 'timeslot_id' => $this->Admin_model->getTimeslotId() ,'transaction_id' =>$transaction_id  );
 				
 				if ($this->Cricket_model->addUserCricketMatchBet($data)) {
 					$this->Bets_model->addplayerhistory($history);
@@ -161,11 +162,11 @@ class Cricket extends REST_Controller
 						} 
 						else {
 							
-							$dealer_history = array('game_type' => $game_type, 'player_id' => $u_id, 'dealer_id' => $this->getDealerId($u_id), 'bet_amount' => $chips, 'commission' => '', 'timeslot' => date('Y-m-d H:i:s'), 'timeslot_id' => $this->Admin_model->getTimeslotId() ,'transaction_id' =>$transaction_id  );
+							$dealer_history = array('game_type' => 3, 'player_id' => $u_id, 'dealer_id' => $this->getDealerId($u_id), 'bet_amount' => $jodi_data['bet_amount'], 'commission' => '', 'timeslot' => date('Y-m-d H:i:s'), 'timeslot_id' => $this->Admin_model->getTimeslotId() ,'transaction_id' =>$transaction_id  );
 							
 							$this->Bets_model->addDealerHistory($dealer_history);
 							
-							$credit = array('id' => $dealer_id, 'bet_amount' => $chips);
+							$credit = array('id' => $dealer_id, 'bet_amount' => $jodi_data['bet_amount'],);
 							$this->Bets_model->credit($credit);
 						}
 					
@@ -200,25 +201,6 @@ class Cricket extends REST_Controller
        
     }
 	 
-	
-	public function cancelCricketBet_post() {
-        $player_id = $this->post('player_id');
-        //$digit = $this->post('digit');
-        //$game_type = $this->post('game_type');
-        
-        if ($this->Bets_model->cancelCricBet($player_id)) {
-            
-            $this->response(['status' => TRUE, 'message' => 'Bets Cancelled Successfully'], REST_Controller::HTTP_OK);
-             // NOT_FOUND (404) being the HTTP response code
-            
-            
-        } 
-        else {
-            $this->response(['status' => FALSE, 'message' => 'Bets Cannot Be Cancelled!'], REST_Controller::HTTP_NOT_FOUND);
-             // NOT_FOUND (404) being the HTTP response code
-            
-        }
-    }
 	 
 	 
 	 public function getDealerId($player_id) {
