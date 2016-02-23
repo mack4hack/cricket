@@ -1457,7 +1457,7 @@ function GetAllMatchList()
                 // alert(AddClass);
                 //AddClass = 'class="dashboard-stat yellow  slide" ';
                 MatchListDataArray += '<div ' + AddClassValue + '>';
-                MatchListDataArray += '<div class="visual"><i class="fa fa-money"></i></div><div class="details">' + value['status'] + '<div class="number"></div><div class="desc">' + value['name'] + '</div></div><a class="more" href="#" onclick=MatchDetailValues(' + value['id'] + ');>View more <i class="m-icon-swapright m-icon-white"></i></a>';
+                MatchListDataArray += '<div class="visual"><i class="fa fa-money"></i></div><div class="details">' + value['status'] + '-' + value['format'] + '-' + value['start_date'] + '<div class="number"></div><div class="desc">' + value['name'] + '</div></div><a class="more" href="#" onclick=MatchDetailValues(' + value['id'] + ');>View more <i class="m-icon-swapright m-icon-white"></i></a>';
                 MatchListDataArray += '</div>';
 
             });
