@@ -1589,6 +1589,8 @@ function delete_dealer($id)
 			$total_balance = 0;
 			$total_commission = 0;
 
+			$data = array();
+
 		    foreach ($week_days as $day) {
 		    	
 

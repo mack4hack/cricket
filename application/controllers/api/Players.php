@@ -399,7 +399,29 @@
         }
         
     
-    
+    	public function accountsPlayerByWeek_get()
+	    {
+	        $weekarr = explode('To', $_GET['week']);
+	        $from = $weekarr[0];
+	        $from = date('Y-m-d',strtotime($from));
+	        $to = $weekarr[1];
+	        $to = date('Y-m-d',strtotime($to));
+	        $player_id = $_GET['player_id'];
+	        $result = $this->Admin_model->getAccountsPlayerByWeek($player_id,$to,$from);
+	        if(!empty($result))
+			{
+				$this->response([
+				'status' => TRUE,
+				'data' => $result
+				], REST_Controller::HTTP_OK);
+			}
+			else{   
+				$this->response([
+					'status' => FALSE,
+					'message' => 'No Data Found!!!'
+				], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+			}
+	    }
    
     
     
