@@ -1453,11 +1453,11 @@ function GetAllMatchList()
                 {
                     AddClassValue = "class='dashboard-stat yellow  slide' ";
                 }
-
+                asd = value['format'];
                 // alert(AddClass);
                 //AddClass = 'class="dashboard-stat yellow  slide" ';
                 MatchListDataArray += '<div ' + AddClassValue + '>';
-                MatchListDataArray += '<div class="visual"><i class="fa fa-money"></i></div><div class="details">' + value['status'] + '-' + value['format'] + '-' + value['start_date'] + '<div class="number"></div><div class="desc">' + value['name'] + '</div></div><a class="more" href="#" onclick=MatchDetailValues(' + value['id'] + ');>View more <i class="m-icon-swapright m-icon-white"></i></a>';
+                MatchListDataArray += '<div class="visual"><i class="fa fa-money"></i></div><div class="details">' + value['status'] + '&nbsp;&nbsp;&nbsp; ' + value['format'] + '&nbsp;&nbsp;&nbsp;' + value['start_date'] + '<div class="number"></div><div class="desc">' + value['name'] + '</div></div><a class="more" href="#" onclick="MatchDetailValues(\'' + value['id'] + '\',\'' + value['format'] + '\')";>View more <i class="m-icon-swapright m-icon-white"></i></a>';
                 MatchListDataArray += '</div>';
 
             });
@@ -1478,9 +1478,28 @@ function GetAllMatchList()
 
 }
 
-function MatchDetailValues(MatchId)
+function MatchDetailValues(MatchId , MatchFormat)
 {
+    $('.ClassHundreds').hide();
+    $('.ClassThirties').hide();
+    $('.ClassFifties').hide();
     $('#MatchPanelContener').show();
+    if(MatchFormat == "t20")
+    {
+        $('.ClassHundreds').hide();
+        $('.ClassThirties').show();
+        $('.ClassFifties').show();
+        
+    }
+    if(MatchFormat == "one-day")
+    {
+        $('.ClassThirties').hide();
+        $('.ClassFifties').show();
+        $('.ClassHundreds').show();
+    }
+     
+    
+    
     MatchTossTabDataFun(MatchId);
     MatchFirstBallTabDataFun(MatchId);
     MatchFirstOverTabDataFun(MatchId);
