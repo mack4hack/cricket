@@ -322,7 +322,7 @@ function getCricketMatchOddsByMatchId($match_id,$m_id){
 	$this->db->where('match_id',$match_id);
 	$this->db->where('m_id',$m_id);
     $query = $this->db->get();
-	//echo $this->db->last_query();die;
+	////echo $this->db->last_query();die;
     return $query->result_array();
 }
 
