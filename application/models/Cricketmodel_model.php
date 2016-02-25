@@ -61,6 +61,21 @@ class Cricketmodel_model extends CI_Model
         
        return $query->result();
     }
+    
+    // get match key for current date played       
+    function GetLiveMatchKeyAPIToday()
+    {
+        $today = date('Y-m-d');
+        $this->db->select('unique');
+        $this->db->from('match_list');
+        $this->db->where('start_date', $today);
+       // $this->db->order_by('id', "ASC");
+       // $this->db->limit(10);
+        $query=$this->db->get();
+        $players = $query->result(); 
+        
+       return $query->result();
+    }
         
         
     // get config_cric_odds data for        
@@ -116,7 +131,16 @@ class Cricketmodel_model extends CI_Model
     {
         $data = array("match_load" => 1);
         $this->db->where('id', $MatchId);
-	$this->db->update("match_list", $data);
+    $this->db->update("match_list", $data);
+         
+    }
+    
+     // update match load to 1 after insertion of master data to schedule data
+    function UpdateLiveMatchData($ArrayOfMatchUpdateList , $UniqueKeyOfMatch)
+    {
+        //$data = array("match_load" => 1);
+        $this->db->where('unique', $UniqueKeyOfMatch);
+    $this->db->update("match_list", $ArrayOfMatchUpdateList);
          
     }
     
@@ -148,11 +172,11 @@ class Cricketmodel_model extends CI_Model
         // 3 Fist ball team A , 4 first ball team b
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 3 OR cms.m_id = 4)');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 3 OR cms.m_id = 4)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -164,11 +188,11 @@ class Cricketmodel_model extends CI_Model
        
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 5 OR cms.m_id = 6)');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 5 OR cms.m_id = 6)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -180,11 +204,11 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 7 OR cms.m_id = 8)');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 7 OR cms.m_id = 8)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -196,11 +220,11 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 9 OR cms.m_id = 10)');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 9 OR cms.m_id = 10)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -212,12 +236,12 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
         //$this->db->join('match_list ml','cms.match_id=ml.id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 15 OR cms.m_id = 16)');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 15 OR cms.m_id = 16)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -229,12 +253,12 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
         //$this->db->join('match_list ml','cms.match_id=ml.id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 17 OR cms.m_id = 18)');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 17 OR cms.m_id = 18)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -246,12 +270,12 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
         //$this->db->join('match_list ml','cms.match_id=ml.id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 19 OR cms.m_id = 20)');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 19 OR cms.m_id = 20)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -263,12 +287,12 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
         //$this->db->join('match_list ml','cms.match_id=ml.id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 21 OR cms.m_id = 22)');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 21 OR cms.m_id = 22)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -280,12 +304,12 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
         //$this->db->join('match_list ml','cms.match_id=ml.id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 13 OR cms.m_id = 14)');
+    $this->db->where('cms.match_id ='.$MatchId.' AND (cms.m_id = 13 OR cms.m_id = 14)');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -298,12 +322,12 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
         //$this->db->join('match_list ml','cms.match_id=ml.id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND cms.m_id = 1');
+    $this->db->where('cms.match_id ='.$MatchId.' AND cms.m_id = 1');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -315,12 +339,12 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
         //$this->db->join('match_list ml','cms.match_id=ml.id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND cms.m_id = 11');
+    $this->db->where('cms.match_id ='.$MatchId.' AND cms.m_id = 11');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         
@@ -332,12 +356,12 @@ class Cricketmodel_model extends CI_Model
         
         $this->db->select('*');
         $this->db->from('cric_matchbet_schedule cms');
-	$this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
+    $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
         //$this->db->join('match_list ml','cms.match_id=ml.id');
-	$this->db->where('cms.match_id ='.$MatchId.' AND cms.m_id = 12');
+    $this->db->where('cms.match_id ='.$MatchId.' AND cms.m_id = 12');
         //$this->db->where('');
         $query = $this->db->get();
-	//echo $this->db->last_query();die;
+    //echo $this->db->last_query();die;
         return $query->result_array();
         
         

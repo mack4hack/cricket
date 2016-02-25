@@ -103,7 +103,9 @@ class Cricket extends REST_Controller
 		$transaction_id = "C".$match_id.$u_id.$m_id;
 		$transaction_time =  date('H:i:s');
 		/*get status of game wether betting is closed ot not*/
-		$game_type = $this->Cricket_model->getGameType($m_id);
+		$game_type_res = $this->Cricket_model->getGameType($m_id);
+	
+		$game_type = $game_type_res[0]['game_type'];
 		//print_r($game_type);
 		//die;
 		$game_status = $this->Cricket_model->checkBettingClosed($match_id,$m_id);
@@ -251,6 +253,27 @@ class Cricket extends REST_Controller
             
         }
 	} 
+	
+	function getMatchLiveScore_get(){
+		$match_id = $this->get('match_id');
+		$live_score = $this->Cricket_model->getCricketMatchId($match_id);
+		if(!empty($live_score)){
+		 	$result['Live_Score']  = $live_score;	
+        }
+		if (!empty($result)) {
+            
+            $this->response(['status' => TRUE, 'data' => $result
+            ], REST_Controller::HTTP_OK);
+             // NOT_FOUND (404) being the HTTP response code
+            
+            
+        } 
+        else {
+            $this->response(['status' => FALSE, 'message' => 'No data found!'], REST_Controller::HTTP_NOT_FOUND);
+             // NOT_FOUND (404) being the HTTP response code
+            
+        }
+	}
 	 
 	 
 }

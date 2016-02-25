@@ -24,18 +24,18 @@ class Cricketcontroller extends CI_Controller
         $Data['MatchList'] = $this->Cricketmodel_model->getMatchList();
         $this->load->view('admin/cricket',$Data);
     }
-    // get tocken access from this GetApiAuthentication function	
+    // get tocken access from this GetApiAuthentication function    
     function GetApiAuthentication()
-    {	 
+    {    
 
         $form_url="http://www.litzscore.com/rest/v2/auth/";
         $data_to_post = array(
         "access_key" => "c5fcdde18fe2dae84a78d3e90035a372",
-        "secret_key" => "8976c672ad179cb4ca212ae7a1a175dc",			
+        "secret_key" => "8976c672ad179cb4ca212ae7a1a175dc",         
         "app_id" => "145340019452649",
-        "device_id" => "abr344mkd99"			
+        "device_id" => "abr344mkd99"            
         );
-	
+    
         $curl = curl_init();
         curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
         curl_setopt($curl,CURLOPT_URL, $form_url);
@@ -48,8 +48,89 @@ class Cricketcontroller extends CI_Controller
         return $TokenAccess;
         
     }
-	
+    
 
+    
+    
+    ///rest/v2/match/{MATCH_KEY}/balls/{OVER_KEY}/
+    
+    // Live Match Data From  
+    function CronLiveMatchDataAutomated()
+    {
+        $TokenAccess = $this->GetApiAuthentication();
+        
+        $today = date('Y-m-d');
+        //$UniqueKeyOfMatch = $this->Cricketmodel_model->GetLiveMatchKeyAPIToday();
+        //print_r($UniqueKeyOfMatch);
+        //echo $UniqueKeyOfMatch;
+        $UniqueKeyOfMatch = "pslt20_2016_final";
+        $url="http://www.litzscore.com/rest/v2/match/".$UniqueKeyOfMatch."/?access_token=".$TokenAccess;
+        ///rest/v2/match/iplt20_2013_g30/?access_token=ACCESSTOKEN
+        
+        
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+        $output=curl_exec($ch);
+        $LiveMatchArray =  json_decode($output);
+        if( $LiveMatchArray->data->card->toss->won != "" )
+        {
+            
+            $ArrayOfMatchUpdateList = array( 
+                
+                "toss_win" => $LiveMatchArray->data->card->toss->won,
+                "decision" => $LiveMatchArray->data->card->toss->decision,
+                "runs_str" => $LiveMatchArray->data->card->now->runs_str,
+                "batting_team" => $LiveMatchArray->data->card->now->batting_team,
+                "bowling_team" => $LiveMatchArray->data->card->now->bowling_team,
+                "runs_rate" => $LiveMatchArray->data->card->now->req->runs_rate
+                    
+                 );
+            
+            
+            $ArrayMatchListNotLoaded = $this->Cricketmodel_model->UpdateLiveMatchData($ArrayOfMatchUpdateList, $UniqueKeyOfMatch);
+        }
+        
+        //echo "<pre>";
+        //$BallByBallArray->data->card->toss->decision; //bat or baol
+        //echo $BallByBallArray->data->card->toss->won;
+        //echo         $LiveMatchArray->data->card->now->runs_str;
+
+        //print_r($LiveMatchArray->data->card->now);
+        
+        exit;
+        
+    }
+    
+    // Live Match Data From  
+    function CronLiveMatchBallByBallDataAutomated()
+    {
+        $TokenAccess = $this->GetApiAuthentication();
+        // get match data of next month when 5 days are remaning to end month  // need to work on this
+        $url="http://www.litzscore.com/rest/v2/match/pslt20_2016_final/balls/?access_token=".$TokenAccess;
+        ///rest/v2/match/iplt20_2013_g30/?access_token=ACCESSTOKEN
+        
+        
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+        $output=curl_exec($ch);
+        $BallByBallArray =  json_decode($output);
+        
+        echo "<pre>";
+        print_r($BallByBallArray->data->over);
+        exit;
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // one day call to this function 
     function CronDataAutomated()
     {
@@ -67,7 +148,7 @@ class Cricketcontroller extends CI_Controller
         //echo "<pre>";
         //print_r($matches); //exit;
         foreach($matches as $value)
-        {	
+        {   
             $MatchData = array_filter($value->matches);
             
             if(!empty($MatchData))
@@ -123,8 +204,8 @@ class Cricketcontroller extends CI_Controller
             
         } // end of match loaded count if
        
-	//echo "Done All";
-		
+    //echo "Done All";
+        
     } // end of function
     
     function GetAllMatchList()
@@ -343,5 +424,5 @@ class Cricketcontroller extends CI_Controller
     
 
    
-	
+    
 }
