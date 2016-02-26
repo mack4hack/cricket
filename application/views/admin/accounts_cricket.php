@@ -70,7 +70,7 @@
                                             foreach($data_daily as $dd){ $dealer_id = $dd['dealer_id'];  ?>
                                             <tr class="success">
                                                 <td><?php echo $dd['sr_no']; ?></td>
-                                                <td><a href="<?php echo base_url("/admin/accountsdealer?dealer_id=$dealer_id") ?>"><?php echo $dd['user_code']; ?></td>
+                                                <td id="dealer"><a value="<?php echo $dealer_id; ?>"><?php echo $dd['user_code']; ?></td>
                                                 <td><?php echo $dd['bet_amount']; ?></td>
                                                 <td><?php echo $dd['payout']; ?></td>
                                                 <td><?php echo $dd['commission']; ?></td>
@@ -84,6 +84,8 @@
                                             <?php  } ?>
                                         </tbody>
                                     </table>
+                                    <div id="daily">
+                                    </div>
                                 </div>
                                 <div class="tab-pane table-scrollable" id="tab_1_1_2">
                                     <table class="table table-bordered table-hover">
@@ -195,6 +197,18 @@ Demo.init(); // init demo features
             return false;
         });
     });
+
+
+    $('.table #dealer').each(function(){
+        $(this).click(function(){
+            dealer = $(this).find('a').attr('value');
+            dealer = encodeURIComponent(dealer);
+            user_code = $(this).find('a').text();
+            $('#daily').load('http://localhost/ci/admin/dealerCricketAccountsDaily?dealer_id='+dealer+'&user_code='+user_code,function () { });
+            return false;
+        });
+    });
+
 
 </script>
 

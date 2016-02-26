@@ -1900,8 +1900,18 @@ class Admin extends CI_Controller
     {
             
                 $this->load->view('admin/singlematch');
-            
-        
+    }
+
+    public function dealerCricketAccountsDaily()
+    {
+        // $weekarr = explode('To', $_GET['week']);
+        // $from = $weekarr[0];
+        $from = date('Y-m-d');#,strtotime($from));
+        $to = $from;
+        // $to = date('Y-m-d',strtotime($to));
+        $dealer_id = $_GET['dealer_id'];
+        $result['data_daily'] = $this->Admin_model->getAccountsDealerCricket($to, $from,$dealer_id);
+        $this->load->view('admin/dealer_accounts_cricket_daily', $result);
     }
     
 }
