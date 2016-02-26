@@ -49,11 +49,12 @@
         dealer_id = $('#dealer_id').val();
         $(this).click(function(){
             week = $(this).find('a').attr('week');
-            //week = '';
+            dates = week.split("To");
+            date = dates[0];
             player_id = $(this).find('a').attr('value');
             user_code = $(this).find('a').text();
-            week = encodeURIComponent(week);
-            $('#mack3').load('<?php echo base_url("/admin/playeraccountscricketweekly?user_code='+user_code+'&week='+week+'&player_id="); ?>'+player_id,function () { });
+            date = encodeURIComponent(date);
+            $('#mack3').load('<?php echo base_url("/admin/accountsPlayerCricketWeeklyByDate?date='+date+'&user_code='+user_code+'&player_id="); ?>'+player_id,function () { });
             return false;
         });
     });

@@ -1854,7 +1854,7 @@ class Admin extends CI_Controller
                 
                 $date = date('Y-m-d',strtotime($date));
 
-                $result['data_weekly'] = $this->Admin_model->getAccountsPlayerByDate($player_id,$date);
+                $result['data_weekly'] = $this->Admin_model->getCricketAccountsPlayerByDate($player_id,$date);
                 
                 $this->load->view('admin/accounts_player_cricket_weekly_bydate', $result);
             //}    
@@ -1910,7 +1910,7 @@ class Admin extends CI_Controller
         $to = $from;
         // $to = date('Y-m-d',strtotime($to));
         $dealer_id = $_GET['dealer_id'];
-        $result['data_daily'] = $this->Admin_model->getAccountsDealerCricket($to, $from,$dealer_id);
+        $result['data_weekly'] = $this->Admin_model->getAccountsDealerCricket($to, $from,$dealer_id);
         $this->load->view('admin/dealer_accounts_cricket_daily', $result);
     }
     

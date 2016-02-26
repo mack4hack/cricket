@@ -204,7 +204,7 @@ Demo.init(); // init demo features
             dealer = $(this).find('a').attr('value');
             dealer = encodeURIComponent(dealer);
             user_code = $(this).find('a').text();
-            $('#daily').load('http://localhost/ci/admin/dealerCricketAccountsDaily?dealer_id='+dealer+'&user_code='+user_code,function () { });
+            $('#daily').load('<?php echo base_url("/admin/dealerCricketAccountsDaily?dealer_id='+dealer+'&user_code=");?>'+user_code,function () { });
             return false;
         });
     });

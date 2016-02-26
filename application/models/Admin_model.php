@@ -2074,4 +2074,96 @@ function delete_dealer($id)
 
 	    return $data;
 	}
+
+	function getCricketAccountsPlayerByDate($player_id,$day)
+	{
+			
+		$data = array();
+		
+		$this->db->select('user_code');
+     	$this->db->from('user_master');
+	    $this->db->where('id',$player_id);
+	    $query=$this->db->get()->row();;
+	    $user_code =  $query->user_code;
+
+	   	$timeslot_id = 1; 
+	   	for ($i = 0 * 60; $i < 24 * 60; $i+= 15) {
+            $hr = floor($i / 60);
+            if ($hr <= 9) $hr = '0' . $hr;
+            
+            $min = ($i / 60 - floor($i / 60)) * 60;
+            if ($min <= 9) $min = '0' . $min;
+            
+            $start = $hr . ":" . $min;
+            
+            $newTime = date("h:i a", strtotime($start . " +15 minutes"));
+            
+            //$time_slots[] = $start." To ".$newTime;
+            //if(strtotime($newTime) < strtotime(date('h:i a')))
+            	$timeslots[] = array('timeslot_id' => $timeslot_id, 'timeslot' => $newTime,);
+            $timeslot_id++;
+        }
+
+        //echo "<pre>";
+	    //	print_r($timeslots); die;
+
+        $total_bet = 0 ;
+		$total_wins = 0;
+		$total_balance = 0;
+		$total_commission = 0;
+
+
+		if(!empty($timeslots))
+		{	$i=1;
+			foreach ($timeslots as $timeslot)
+			{
+				//print_r($timeslot); die;
+				$this->db->select('sum(bet_amount) as chips');
+				$this->db->from('player_history');
+				$this->db->where('timeslot_id',$timeslot['timeslot_id']);
+				$this->db->where('player_id',$player_id);
+				$this->db->like('timeslot',$day);
+				//$this->db->like('timeslot',$timeslot->timeslot);
+				$query=$this->db->get()->row();
+				//echo $this->db->last_query(); die;
+				$chips = $query->chips;
+
+				$this->db->select('sum(payout) as win');
+				$this->db->from('player_history');
+				$this->db->where('result','1');
+				$this->db->where('timeslot_id',$timeslot['timeslot_id']);
+				$this->db->where('player_id',$player_id);
+				$this->db->like('timeslot',$day);
+				$query=$this->db->get()->row();
+				$win = $query->win;
+
+				
+			   	$balance = $chips - $win;
+			   	$total_bet = $total_bet + $chips ;
+				$total_wins = $total_wins + $win;
+				$total_balance = $total_balance + $balance;
+
+				if($chips){
+				   	$data[]= array(
+				   			'sr_no' => $i,
+				   			'user_code' => $user_code,
+				   			'bet_amount'=>$chips,
+				   			'payout'=>$win,
+				   			'balance'=>number_format($balance,2),
+				   			'total_bet'=>number_format($total_bet,2),
+				   			'total_wins'=>number_format($total_wins,2),
+				   			'total_balance'=>number_format($total_balance,2),
+				   			'draw_time'=>$timeslot['timeslot'],
+				   			'timeslot_id'=>$timeslot['timeslot_id'],
+				   		);
+				   	$i++;
+				}   	
+			}
+		}	
+
+		//echo "<pre>";
+		//print_r($data);
+	   //	die;
+	  	return $data;
+	}
 }
