@@ -1874,4 +1874,109 @@ function delete_dealer($id)
 		// echo "<pre>"; print_r($data);  	die;
 	  	return $data;
 	}
+
+	function getAccountsCricket($from,$to)
+	{
+		$this->db->select('user_code,id');
+     	$this->db->from('user_master');
+	    $this->db->where('role_id','2');
+	    $query=$this->db->get();
+	     // echo($this->db->last_query());  die;
+	    $dealers =  $query->result();
+
+	    $i=1;
+	    $total_bet = 0 ;
+		$total_wins = 0;
+		$total_balance = 0;
+		$total_commission = 0;
+
+	    foreach ($dealers as $dealer) {
+	    	
+	    	$this->db->select('sum(bet_amount) as bet_amount');
+			$this->db->from('dealer_history');
+			$this->db->where('bet_amount >= 0');
+			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+			$this->db->where($where);
+			$query=$this->db->get()->row();
+			$bet_amount = 0;
+			  //echo($this->db->last_query());  die;
+			if($query){
+				$bet_amount = $query->bet_amount;
+			}
+
+			$this->db->select('sum(commission) as commission');
+			$this->db->from('dealer_history');
+			$this->db->where('bet_amount >= 0');
+			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+			$this->db->where($where);
+			$query=$this->db->get()->row();
+			$commission = 0;
+			//echo($this->db->last_query()); 
+			if($query){
+				$commission = $query->commission;
+			}
+
+			
+
+			$this->db->select('sum(total) as total');
+			$this->db->from('dealer_history');
+			$this->db->where('bet_amount >= 0');
+			$where = '(timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+			$this->db->where($where);
+			$query=$this->db->get()->row();
+			$total = 0;
+			// echo($this->db->last_query()); die;
+			if($query){
+				$total = $query->total;
+			}	
+
+			$too = $to.' 00:00:00'; 
+	    	$fromm = $from.' 23:59:59'; 
+
+			$this->db->select('sum(payout) as payout');
+			$this->db->from('player_history');
+			$this->db->join('dealer_player', 'dealer_player.player_id = player_history.player_id');
+			$this->db->where('result','1');
+			$where = 'dealer_player.dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$too.'" AND  "'.$fromm.'") AND game_type > 3';
+			$this->db->where($where);
+			$query=$this->db->get()->row();
+			$payout = 0;
+			//echo($this->db->last_query());
+			if($query){
+				$payout = $query->payout;
+			}
+
+
+			$balance = $bet_amount - $payout - $commission;
+			$total_bet = $total_bet+$bet_amount;
+			$total_wins = $total_wins+$payout;
+			$total_balance = $total_balance+$balance;
+			$total_commission = $total_commission + $commission;
+
+			$data[]= array(
+			   			'sr_no' => $i,
+			   			'user_code'=>$dealer->user_code,
+			   			'dealer_id'=>$dealer->id,
+			   			'bet_amount'=>$bet_amount,
+			   			'payout'=>$payout,
+			   			'commission'=>$commission,
+			   			'total'=>$total,
+			   			'week' => date('d-m-Y',strtotime($to)) .' To '.date('d-m-Y',strtotime($from)),
+			   			'month' => date('M-Y'),
+			   			'balance'=>number_format($balance,2),
+			   			'total_bet'=>number_format($total_bet,2),
+			   			'total_wins'=>number_format($total_wins,2),
+			   			'total_balance'=>number_format($total_balance,2),
+			   			'total_commission'=>number_format($total_commission,2)
+			   			//'draw_time'=>  $timeslot['timeslot'], // date('d-m-y',strtotime($timeslot['timeslot'])).'  '.date('h:i a',strtotime($draw_time['1'])),
+			   			//'balance'=>$credited -($debited + $commission)
+			   		);
+			$i++;
+	    }
+
+	    //print_r($data);
+	    //die;
+
+	    return $data;
+	}
 }

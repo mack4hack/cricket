@@ -1758,7 +1758,7 @@ class Admin extends CI_Controller
 
             $to = date('Y-m-d');
             $from = date('Y-m-d');
-            $result['data_daily'] = $this->Admin_model->getAccounts($from, $to);
+            $result['data_daily'] = $this->Admin_model->getAccountsCricket($from, $to);
 
             $monday = date( 'Y-m-d', strtotime( 'monday this week' ) );
             $sunday = date( 'Y-m-d', strtotime( 'sunday' ) );
