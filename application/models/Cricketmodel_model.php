@@ -366,6 +366,41 @@ class Cricketmodel_model extends CI_Model
         
         
     }
+    
+    // Update Mater Odds Value
+    function SetUpdateMasterOddsData($MasterOddId , $data , $ScheduleUpdateArray)
+    {
+        //$data = array("match_load" => 1);
+        $this->db->where('odd_id', $MasterOddId);
+    $this->db->update("config_cric_odds", $data);
+        
+        $this->db->where('odd_id', $MasterOddId);
+    $this->db->update("cric_matchbet_schedule", $ScheduleUpdateArray);
+         
+    }
+    
+    // Update Mater Odds Value
+    function SetUpdateScheduleOddsData($ScheduleId , $data)
+    {
+        //$data = array("match_load" => 1);
+        $this->db->where('id', $ScheduleId);
+    $this->db->update("cric_matchbet_schedule", $data);
+        //echo $this->db->last_query();die;
+         
+    }
+    
+    
+     // get match format
+    function getMatchFormatData($MatchIdReturn)
+    {
+        
+        $this->db->select('format');
+        $this->db->where('id', $MatchIdReturn);
+        $query = $this->db->get("match_list")->row();
+        
+        return $query->format;
+        
+    }
 
         
         

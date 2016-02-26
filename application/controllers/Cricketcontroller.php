@@ -63,7 +63,7 @@ class Cricketcontroller extends CI_Controller
         //$UniqueKeyOfMatch = $this->Cricketmodel_model->GetLiveMatchKeyAPIToday();
         //print_r($UniqueKeyOfMatch);
         //echo $UniqueKeyOfMatch;
-        $UniqueKeyOfMatch = "pslt20_2016_final";
+        $UniqueKeyOfMatch = "asiacup_2016_g2";
         $url="http://www.litzscore.com/rest/v2/match/".$UniqueKeyOfMatch."/?access_token=".$TokenAccess;
         ///rest/v2/match/iplt20_2013_g30/?access_token=ACCESSTOKEN
         
@@ -76,6 +76,7 @@ class Cricketcontroller extends CI_Controller
         if( $LiveMatchArray->data->card->toss->won != "" )
         {
             
+            
             $ArrayOfMatchUpdateList = array( 
                 
                 "toss_win" => $LiveMatchArray->data->card->toss->won,
@@ -83,20 +84,30 @@ class Cricketcontroller extends CI_Controller
                 "runs_str" => $LiveMatchArray->data->card->now->runs_str,
                 "batting_team" => $LiveMatchArray->data->card->now->batting_team,
                 "bowling_team" => $LiveMatchArray->data->card->now->bowling_team,
-                "runs_rate" => $LiveMatchArray->data->card->now->req->runs_rate
+                "winner_team" => $LiveMatchArray->data->card->winner_team,
+                "runs_rate" => $LiveMatchArray->data->card->now->req->runs_rate,
+                "status" =>"started"
+                
                     
                  );
             
             
             $ArrayMatchListNotLoaded = $this->Cricketmodel_model->UpdateLiveMatchData($ArrayOfMatchUpdateList, $UniqueKeyOfMatch);
         }
+         
+        if($LiveMatchArray->data->card->winner_team != "")
+            {
+                $StatusArray = array( "status" => "completed" );;
+               $this->Cricketmodel_model->UpdateLiveMatchData($StatusArray, $UniqueKeyOfMatch);
+          
+            }
         
-        //echo "<pre>";
+        echo "<pre>";
         //$BallByBallArray->data->card->toss->decision; //bat or baol
         //echo $BallByBallArray->data->card->toss->won;
-        //echo         $LiveMatchArray->data->card->now->runs_str;
+        //echo $LiveMatchArray->data->card->now->runs_str;
 
-        //print_r($LiveMatchArray->data->card->now);
+        print_r($LiveMatchArray->data->card);
         
         exit;
         
@@ -106,8 +117,9 @@ class Cricketcontroller extends CI_Controller
     function CronLiveMatchBallByBallDataAutomated()
     {
         $TokenAccess = $this->GetApiAuthentication();
-        // get match data of next month when 5 days are remaning to end month  // need to work on this
-        $url="http://www.litzscore.com/rest/v2/match/pslt20_2016_final/balls/?access_token=".$TokenAccess;
+        $UniqueKeyOfMatch = "asiacup_2016_g3";
+      
+        $url="http://www.litzscore.com/rest/v2/match/".$UniqueKeyOfMatch."/balls/?access_token=".$TokenAccess;
         ///rest/v2/match/iplt20_2013_g30/?access_token=ACCESSTOKEN
         
         
@@ -118,7 +130,7 @@ class Cricketcontroller extends CI_Controller
         $BallByBallArray =  json_decode($output);
         
         echo "<pre>";
-        print_r($BallByBallArray->data->over);
+        print_r($BallByBallArray->data);
         exit;
         
     }
@@ -192,7 +204,7 @@ class Cricketcontroller extends CI_Controller
                     $GetConfigOddDataArray = $this->Cricketmodel_model->GetConfigOddMasterData();                
                     foreach ($GetConfigOddDataArray as $key => $v) 
                     {
-                        $ScheduleArrayDataValue =  array("match_id" => $value->id,"odd_id" => $v->odd_id, "odds" => $v->odds, "m_id" => $v->m_id);
+                        $ScheduleArrayDataValue =  array("match_id" => $value->id,"odd_id" => $v->odd_id, "odds" => $v->odds_master, "m_id" => $v->m_id);
                         $this->Cricketmodel_model->MatchBetSheduleDataInsert($ScheduleArrayDataValue);
                     }
                 }    
@@ -415,6 +427,64 @@ class Cricketcontroller extends CI_Controller
         $AllMatchWicketFallAtRunsArrayData = $this->Cricketmodel_model->GetFirstWicketFallAtRunsGameDetails($MatchId);
         
         echo json_encode($AllMatchWicketFallAtRunsArrayData);
+    
+    
+    }
+    
+    
+    // Odds Change from backend
+    function SetChangeOddsCommonData()
+    {
+       // print_R( $_POST['OddsKey']);
+        //exit;
+        $MatchIdReturn = '';
+        foreach ($_POST['OddsKey'] as $key => $value) {
+            
+            $GameTypeFlag = $value['GameTypeFlag'];
+            $OddsValue = $value['OddsValue'];
+            $OddsId = $value['OddsId'];
+            
+            $OddsIdArray = explode("_",$OddsId);
+            $MatchId = $OddsIdArray[1];
+            $MasterOddId = $OddsIdArray[2];
+            $ScheduleId = $OddsIdArray[3];
+            $MatchIdReturn = $MatchId;
+            
+            $MasterUpdateArray = array(
+                
+                "odds_master" => $OddsValue
+                
+            );
+            
+            $ScheduleUpdateArray = array(
+                
+                "odds" => $OddsValue
+                
+            );
+            
+            //echo $OddsIdArray[0]." ".$OddsIdArray[1]."<br>";
+            
+            if($GameTypeFlag == 1)
+            {
+                $this->Cricketmodel_model->SetUpdateMasterOddsData($MasterOddId , $MasterUpdateArray , $ScheduleUpdateArray);
+        
+            }
+            
+            $this->Cricketmodel_model->SetUpdateScheduleOddsData($ScheduleId , $ScheduleUpdateArray);
+        }
+        
+        // select mmatch format
+        $MatchFormat = $this->Cricketmodel_model->getMatchFormatData($MatchIdReturn);
+        
+        $MatchArray = array(
+                
+                "MatchId" => $MatchIdReturn,
+                 "MatchFormat" => $MatchFormat
+                
+            );
+        
+       echo json_encode($MatchArray);
+      
     
     
     }

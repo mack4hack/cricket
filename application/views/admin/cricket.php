@@ -60,9 +60,16 @@
                 </div>
             </div>
             
+            <br><br>
+                <div class="col-sm-4">
+                    <button onclick="CallOddFunctionData();" class="btn green">
+                        Master Odds Change
+                    </button>
+                </div>
+                <br><br>
             
             <div class="row"  id="game6">
-
+                
                 <div class="col-md-12">
 
                     <div class="portlet box red">
@@ -1371,7 +1378,9 @@
                                         </table>
                                     </div>
                                 </div>
+                                
                                 <div class="row pull-right col-sm-6" >
+                                    
                                     <div class="col-sm-4">
                                         <a href="javascript:;" class="btn red">
                                             Grand Total
@@ -1409,7 +1418,16 @@
 
 <!-- END CONTAINER -->
 <!-- BEGIN FOOTER -->
+
+<div id="dialog" title="Basic dialog">
+  <p>Would You like to change these odds?</p
+</div>
+
 <?php include'footer.php'; ?>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+ 
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  
 <!-- END FOOTER -->
 <link href="<?php echo base_url() ?>assets/global/plugins/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" type="text/css"/>
 <script src="<?php echo base_url() ?>/assets/global/plugins/jquery.bxslider/jquery.bxslider.min.js" type="text/javascript"></script>
@@ -1419,7 +1437,9 @@
 $(document).ready(function () {
 
     $('#MatchPanelContener').hide();
+    $( "#dialog" ).hide();
     GetAllMatchList();
+    //$( "#dialog" ).dialog();
 });
 
 function GetAllMatchList()
@@ -1525,30 +1545,40 @@ function MatchTossTabDataFun(MatchId)
         success: function (res) {
 
             var AllMatchDetailDataValue = '';
-            //alert(res[0].toss_win);
+            var MatchTeamNameValueA = "";
+            var MatchTeamNameValueB = "";
+            
             if (res[0].toss_win != null)
             {
-                alert("in");
-                var i = 0;
-                if (res[0].toss_win == "a")
+               
+                if (res[0].toss_win == "a" && res[0].decision == "bowl")
+                {
+                    //$("#teama").text(res[0].team_a);
+                    MatchTeamNameValueA = res[0].team_b;
+                    MatchTeamNameValueB = res[0].team_a;
+                }
+                
+               if (res[0].toss_win == "b" && res[0].decision == "bowl")
                 {
                     //$("#teama").text(res[0].team_a);
                     MatchTeamNameValueA = res[0].team_a;
-                    i = 1;
-                }
-                else
-                {
-                    //$("#teama").text(res[0].team_b);
-                    MatchTeamNameValueA = res[0].team_b;
-                    i = 2;
-                }
-
-                if (i == 1) { /* $("#teamb").text(res[0].team_b);*/
                     MatchTeamNameValueB = res[0].team_b;
                 }
-                if (i == 2) {  /* $("#teamb").text(res[0].team_a); */
+                
+                if (res[0].toss_win == "a" && res[0].decision == "bat")
+                {
+                    //$("#teama").text(res[0].team_a);
+                    MatchTeamNameValueA = res[0].team_a;
+                    MatchTeamNameValueB = res[0].team_b;
+                }
+                
+               if (res[0].toss_win == "b" && res[0].decision == "bat")
+                {
+                    //$("#teama").text(res[0].team_a);
+                    MatchTeamNameValueA = res[0].team_b;
                     MatchTeamNameValueB = res[0].team_a;
                 }
+
             }
             else
             {
@@ -1556,6 +1586,7 @@ function MatchTossTabDataFun(MatchId)
                 MatchTeamNameValueA = res[0].team_a;
                 MatchTeamNameValueB = res[0].team_b;
             }
+            
             //alert("Before");
             AllMatchDetailDataValue += '<table class="table table-striped table-bordered table-hover" id="sample_1"><thead><tr>';
             AllMatchDetailDataValue += '<td>' + MatchTeamNameValueA + '</td><td>' + MatchTeamNameValueB + '</td><td>Total Bet on Team A</td><td>Payout</td><td>Total Bet on Team B</td><td>Payout</td><td>Enter Result</td><td><input type="button"   name="execute"  id="execute" class="execute btn"  value="Execute"   /></td>';
@@ -1591,7 +1622,7 @@ function MatchFirstBallTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1605,7 +1636,7 @@ function MatchFirstBallTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1651,7 +1682,7 @@ function MatchFirstOverTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1665,7 +1696,7 @@ function MatchFirstOverTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1710,7 +1741,7 @@ function MatchFirstTenOverSessionTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1724,7 +1755,7 @@ function MatchFirstTenOverSessionTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1770,7 +1801,7 @@ function MatchFirstWicketTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1784,7 +1815,7 @@ function MatchFirstWicketTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1830,7 +1861,7 @@ function MatchFirstThirtyTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1844,7 +1875,7 @@ function MatchFirstThirtyTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1886,7 +1917,7 @@ function MatchFirstFiftyTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1900,7 +1931,7 @@ function MatchFirstFiftyTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1942,7 +1973,7 @@ function MatchFirstHundredTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1956,7 +1987,7 @@ function MatchFirstHundredTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -1998,7 +2029,7 @@ function MatchWicketFallAtRunsTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -2012,7 +2043,7 @@ function MatchWicketFallAtRunsTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -2053,7 +2084,7 @@ function MatchFirstRunRateTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -2067,7 +2098,7 @@ function MatchFirstRunRateTabDataFun(MatchId)
                     
                     TeamDataB += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -2114,7 +2145,7 @@ function MatchWinLossTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -2161,7 +2192,7 @@ function MatchHighestOpeningPartnerShipTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -2205,7 +2236,7 @@ function MatchRaceToFiftyTabDataFun(MatchId)
                     
                     TeamDataA += '<tr class="odd gradeX">\n\
                                                 <td>'+value['perticulars']+'</td>\n\
-                                                 <td> <input type="text" name="odds" id="odds" value="'+value['odds']+'"/> </td>\n\
+                                                 <td> <input type="text" class="OddToraceFiftyClass" name="odds_'+IndiexId+'" id="odds_'+value['match_id']+'_'+value['odd_id']+'_'+value['id']+'" value="'+value['odds']+'"/> </td>\n\
                                                 <td>  </td> \n\
                                                 <td class="center">  </td>\n\
                                                 <td class="center ">\n\
@@ -2224,6 +2255,62 @@ function MatchRaceToFiftyTabDataFun(MatchId)
         }
         })
 }
+
+function FunctionToChangeOdds(GameTypeFlag)
+{ // 1 for Change Master odds also // 0 for change only selected match odds 
+    //alert("Coming Odds");
+   // OddToraceFiftyClass
+   var OddsJavascriptArray = [];
+   $(".OddToraceFiftyClass").each(function() {
+    //alert($(this).val()+" "+$(".OddToraceFiftyClass").attr('id'));
+    OddsJavascriptArray.push({
+        GameTypeFlag: GameTypeFlag,
+        OddsValue: $(this).val(),
+        OddsId: $(this).attr('id')
+        });
+    
+    });
+    //alert(els);
+    
+    
+    $.ajax({
+    type: "POST",
+    url: "<?php echo base_url(); ?>" + "index.php/cricketcontroller/SetChangeOddsCommonData",
+    dataType: 'json',
+    data: {OddsKey : OddsJavascriptArray},
+    success: function (res) {
+
+        //alert(res['MatchId']);
+        MatchDetailValues(res['MatchId'], res['MatchFormat']);
+    }
+    });
+    
+    
+    
+}
+
+function CallOddFunctionData()
+{
+    $( "#dialog" ).show();
+   // $( "#dialog" ).dialog();
+        $( "#dialog" ).dialog({
+      resizable: false,
+      height:140,
+      width:340,
+      modal: true,
+      buttons: {
+        "All Matches": function() {
+            FunctionToChangeOdds(1);
+          $( this ).dialog( "close" );
+        },
+        "This Match": function() {
+            FunctionToChangeOdds(0);
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+}
+
 
 </script>
 <style type="text/css">

@@ -206,10 +206,13 @@ AND STR_TO_DATE( "'.$next_date.'", "%Y-%m-%d" )', NULL, FALSE );
         
         
         $query = $this->db->get()->row();
-        $transaction_id = $query->transaction_id;
+    //echo $this->db->last_query();die;
+        
+    
         //echo "<pre>";print_r($query->transaction_id);die;
         
         if (!empty($query)) {
+        $transaction_id = $query->transaction_id;
             $bet_amount = $query->bet_amount;
             
             //calclulate commison and dealer id

@@ -208,7 +208,7 @@ class Cricket extends REST_Controller
         //$digit = $this->post('digit');
         //$game_type = $this->post('game_type');
         
-        if ($this->Bets_model->cancelCricBet($player_id)) {
+        if ($this->Cricket_model->cancelCricBet($player_id)) {
             
             $this->response(['status' => TRUE, 'message' => 'Bets Cancelled Successfully'], REST_Controller::HTTP_OK);
              // NOT_FOUND (404) being the HTTP response code
