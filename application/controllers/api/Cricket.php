@@ -101,7 +101,7 @@ class Cricket extends REST_Controller
 		$chips = $this->post('chips');
 		$last_eight_digit = substr($u_id,3,10); 
 		$transaction_id = "C".$match_id.$u_id.$m_id;
-		$transaction_time =  date('H:i:s');
+		$transaction_time =  date('Y-m-d H:i:s');
 		/*get status of game wether betting is closed ot not*/
 		$game_type_res = $this->Cricket_model->getGameType($m_id);
 	
