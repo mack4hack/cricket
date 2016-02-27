@@ -1913,5 +1913,44 @@ class Admin extends CI_Controller
         $result['data_weekly'] = $this->Admin_model->getAccountsDealerCricket($to, $from,$dealer_id);
         $this->load->view('admin/dealer_accounts_cricket_daily', $result);
     }
+
+    public function accountsPlayerCricketDailyByDate()
+    {
+        if (!$this->ion_auth->logged_in()) {
+            redirect('auth/login', 'refresh');
+        }    
+        else{
+            //if(isset($_GET['week'])){
+                $player_id = $_GET['player_id'];
+                $date = $_GET['date'];
+                
+                $date = date('Y-m-d',strtotime($date));
+
+                $result['data_weekly'] = $this->Admin_model->getCricketAccountsPlayerByDate($player_id,$date);
+                
+                $this->load->view('admin/accounts_player_cricket_daily_bydate', $result);
+            //}    
+        }
+        
+    }
+
+    public function accountsPlayerCricketDailyByMatch()
+    {
+        if (!$this->ion_auth->logged_in()) {
+            redirect('auth/login', 'refresh');
+        }    
+        else{
+            //if(isset($_GET['week'])){
+                $player_id = $_GET['player_id'];
+                $date = $_GET['date'];
+                $match_id = $_GET['match_id'];
+               
+                $result['data_weekly'] = $this->Admin_model->getAccountsPlayerDailyByMatch($player_id,$date,$match_id);
+                
+                $this->load->view('admin/accounts_player_cricket_daily_bymatch', $result);
+            //}    
+        }
+        
+    }
     
 }

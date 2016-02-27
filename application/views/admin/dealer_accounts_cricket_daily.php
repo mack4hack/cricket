@@ -41,7 +41,7 @@
         <?php  } ?>
     </tbody>
 </table>
-<div id="mack3"></div>
+<div id="mack31"></div>
 
 <script type="text/javascript">
     
@@ -54,7 +54,7 @@
             player_id = $(this).find('a').attr('value');
             user_code = $(this).find('a').text();
             date = encodeURIComponent(date);
-            $('#mack3').load('<?php echo base_url("/admin/accountsPlayerCricketWeeklyByDate?date='+date+'&user_code='+user_code+'&player_id="); ?>'+player_id,function () { });
+            $('#mack31').load('<?php echo base_url("/admin/accountsPlayerCricketDailyByDate?date='+date+'&user_code='+user_code+'&player_id="); ?>'+player_id,function () { });
             return false;
         });
     });
