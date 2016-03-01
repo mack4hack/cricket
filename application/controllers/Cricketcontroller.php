@@ -311,11 +311,11 @@ class Cricketcontroller extends CI_Controller {
     function CronDataAutomated() {
 
         $TokenAccess = $this->GetApiAuthentication();
-        
+        echo $TokenAccess;
         if($TokenAccess != "")
         {
-            //$CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
-            $CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
+            $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
+            //$CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
             // get match data of next month when 5 days are remaning to end month  // need to work on this
             $url = $CommonAuthUrl."schedule/?access_token=" . $TokenAccess;
             $ch = curl_init();
