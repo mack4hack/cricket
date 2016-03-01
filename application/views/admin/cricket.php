@@ -2382,13 +2382,27 @@
                                     var Incremental = 1;
                                     $.each(res, function (key, value) {
                                         
-                                         TeamDataA += '<tr>\n\
+                                        if(value['Innings_code'] == value['batting_team']+"_1")
+                                        {
+                                            TeamDataA += '<tr>\n\
                                                             <td>' + Incremental + '</td>\n\\n\
                                                             <td>' + value['player_name'] + '</td>\n\
                                                             <td> ' + value['player_runs'] + ' </td> \n\
                                                             <td>' + value['player_balls'] + '  </td>\n\\n\
                                                             <td>' + value['player_strike_rate'] + '  </td>\n\
                                                        </tr>';
+                                        }
+                                        else
+                                        {
+                                            TeamDataB += '<tr>\n\
+                                                            <td>' + Incremental + '</td>\n\\n\
+                                                            <td>' + value['player_name'] + '</td>\n\
+                                                            <td> ' + value['player_runs'] + ' </td> \n\
+                                                            <td>' + value['player_balls'] + '  </td>\n\\n\
+                                                            <td>' + value['player_strike_rate'] + '  </td>\n\
+                                                       </tr>';
+                                        }
+                                         
                                              
                                             Incremental = Incremental + 1;
                                             
@@ -2396,7 +2410,7 @@
                                     });
 
                                     $(".tBodyBatsmansA").html(TeamDataA);
-                                    //$(".tBodyBatsmansB").html(TeamDataB);
+                                    $(".tBodyBatsmansB").html(TeamDataB);
                                     // $(".tBodyRunRateTeamB").html(TeamDataB);
 
                                 }

@@ -28,7 +28,9 @@ class Cricketcontroller extends CI_Controller {
     // get tocken access from this GetApiAuthentication function	
     function GetApiAuthentication() {
 
-        $form_url = "http://www.litzscore.com/rest/v2/auth/";
+        //$form_url = "http://www.litzscore.com/rest/v2/auth/";
+        $form_url = "https://rest.cricketapi.com/rest/v2/auth/";
+        //https://rest.cricketapi.com/rest/v2/auth/
         $data_to_post = array(
             "access_key" => "c5fcdde18fe2dae84a78d3e90035a372",
             "secret_key" => "8976c672ad179cb4ca212ae7a1a175dc",

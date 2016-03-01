@@ -526,7 +526,7 @@ class Cricketmodel_model extends CI_Model {
         $this->db->from('team_player tp');
         $this->db->join('match_list mt', 'tp.match_id=mt.id');
         $this->db->where('tp.match_id ='. $MatchId);
-        $this->db->where('tp.Innings_code', "a_1");
+        //$this->db->where('tp.Innings_code', "a_1");
         $this->db->where('tp.player_name !=',"null");
         $query = $this->db->get();
         //echo $this->db->last_query();die;
