@@ -320,15 +320,19 @@ class Cricketcontroller extends CI_Controller {
             $url = "https://rest.cricketapi.com/rest/v2/schedule/?access_token=".$TokenAccess;
             //$url = $CommonAuthUrl."schedule/?access_token=" . $TokenAccess;
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            
             $output = curl_exec($ch);
             $asd = json_decode($output);
             curl_close($ch);
             //$matches = $asd->data->months[0]->days;
             $ArrayOfMatchList = array();
             echo "In Auto<pre>";
-            print_r($asd); exit;
+            print_r($asd);
+            echo "asd";
+            print_r($output);
+            exit;
             foreach ($matches as $value) {
                 $MatchData = array_filter($value->matches);
 
