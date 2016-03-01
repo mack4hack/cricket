@@ -322,10 +322,10 @@ class Cricketcontroller extends CI_Controller {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $output = curl_exec($ch);
             $asd = json_decode($output);
-            $matches = $asd->data->months[0]->days;
+            //$matches = $asd->data->months[0]->days;
             $ArrayOfMatchList = array();
             echo "<pre>";
-            print_r($asd); //exit;
+            print_r($asd); exit;
             foreach ($matches as $value) {
                 $MatchData = array_filter($value->matches);
 
