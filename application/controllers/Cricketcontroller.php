@@ -17,6 +17,7 @@ class Cricketcontroller extends CI_Controller {
         $this->load->model('Cricketmodel_model');
         $this->load->model('Bets_model');
         $this->load->library('ion_auth');
+        $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
     }
 
     // call to cricket page of view
@@ -29,8 +30,9 @@ class Cricketcontroller extends CI_Controller {
     function GetApiAuthentication() {
 
         //$form_url = "http://www.litzscore.com/rest/v2/auth/";
-        $form_url = "https://rest.cricketapi.com/rest/v2/auth/";
-        //https://rest.cricketapi.com/rest/v2/auth/
+        //$form_url = "https://rest.cricketapi.com/rest/v2/auth/";
+        $form_url = $this->CommonAuthUrl;
+       
         $data_to_post = array(
             "access_key" => "c5fcdde18fe2dae84a78d3e90035a372",
             "secret_key" => "8976c672ad179cb4ca212ae7a1a175dc",
@@ -49,7 +51,7 @@ class Cricketcontroller extends CI_Controller {
         $TokenAccess = (isset($TokenArray->auth->access_token))?$TokenArray->auth->access_token:"";
         curl_close($curl);
         //echo "shrikant";
-        echo "Ckecking Tocken Access:<pre>";
+        echo $form_url."Ckecking Tocken Access:<pre>";
         print_r($TokenArray); exit;
         return $TokenAccess;
     }
@@ -311,7 +313,7 @@ class Cricketcontroller extends CI_Controller {
         if($TokenAccess != "")
         {
             // get match data of next month when 5 days are remaning to end month  // need to work on this
-            $url = "http://www.litzscore.com/rest/v2/schedule/?access_token=" . $TokenAccess;
+            $url = $CommonAuthUrl."schedule/?access_token=" . $TokenAccess;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
