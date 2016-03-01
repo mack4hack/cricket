@@ -70,8 +70,8 @@ class Cricketcontroller extends CI_Controller {
                 foreach ($UniqueKeyOfMatchArray as $key => $v) {
                     $UniqueKeyOfMatch = $v->unique;
                     $MatchUniqueId = $v->id;
-                    $MatchUniqueId = 45;
-                    $UniqueKeyOfMatch = "asiacup_2016_g8";
+                    //$MatchUniqueId = 45;
+                    //$UniqueKeyOfMatch = "asiacup_2016_g8";
                     //http://www.litzscore.com/rest/v2/
                     $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
                     $url = $CommonAuthUrl."match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
@@ -81,8 +81,8 @@ class Cricketcontroller extends CI_Controller {
                     curl_setopt($ch,CURLOPT_ENCODING , "gzip");
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
-                    echo "<pre>";
-                    print_r($LiveMatchArray);// exit;
+                    //echo "<pre>";
+                    //print_r($LiveMatchArray);// exit;
 
                     if (count((array) $LiveMatchArray->data->card->toss) > 0) {
                         if ($LiveMatchArray->data->card->toss->won != "") {
@@ -315,13 +315,9 @@ class Cricketcontroller extends CI_Controller {
     function CronDataAutomated() {
 
         $TokenAccess = $this->GetApiAuthentication();
-        //echo $TokenAccess;
         if($TokenAccess != "")
         {
-            $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
-            //$CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
-            // get match data of next month when 5 days are remaning to end month  // need to work on this
-            //$url = "https://rest.cricketapi.com/rest/v2/schedule/?access_token=".$TokenAccess;
+            $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";            
             $url = $CommonAuthUrl."schedule/?access_token=" . $TokenAccess;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
