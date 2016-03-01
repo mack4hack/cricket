@@ -848,7 +848,7 @@ function delete_dealer($id)
 	    	$this->db->select('sum(bet_amount) as bet_amount');
 			$this->db->from('dealer_history');
 			$this->db->where('bet_amount >= 0');
-			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 			$this->db->where($where);
 			$query=$this->db->get()->row();
 			$bet_amount = 0;
@@ -860,7 +860,7 @@ function delete_dealer($id)
 			$this->db->select('sum(commission) as commission');
 			$this->db->from('dealer_history');
 			$this->db->where('bet_amount >= 0');
-			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 			$this->db->where($where);
 			$query=$this->db->get()->row();
 			$commission = 0;
@@ -874,7 +874,7 @@ function delete_dealer($id)
 			$this->db->select('sum(total) as total');
 			$this->db->from('dealer_history');
 			$this->db->where('bet_amount >= 0');
-			$where = '(timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+			$where = '(timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 			$this->db->where($where);
 			$query=$this->db->get()->row();
 			$total = 0;
@@ -890,7 +890,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->join('dealer_player', 'dealer_player.player_id = player_history.player_id');
 			$this->db->where('result','1');
-			$where = 'dealer_player.dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$too.'" AND  "'.$fromm.'")';
+			$where = 'dealer_player.dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$too.'" AND  "'.$fromm.'") AND game_type < 4';
 			$this->db->where($where);
 			$query=$this->db->get()->row();
 			$payout = 0;
@@ -961,7 +961,7 @@ function delete_dealer($id)
 		    	$this->db->select('sum(bet_amount) as bet_amount');
 				$this->db->from('dealer_history');
 				$this->db->where('bet_amount >= 0');
-				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$bet_amount = 0;
@@ -973,7 +973,7 @@ function delete_dealer($id)
 				$this->db->select('sum(commission) as commission');
 				$this->db->from('dealer_history');
 				$this->db->where('bet_amount >= 0');
-				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$commission = 0;
@@ -985,7 +985,7 @@ function delete_dealer($id)
 				$this->db->select('sum(payout) as payout');
 				$this->db->from('player_history');
 				$this->db->where('result','1');
-				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$payout = 0;
@@ -1080,7 +1080,7 @@ function delete_dealer($id)
 				$this->db->from('player_history');
 				// $this->db->where('bet_amount >= 0');
 				//$where = 'player_id = "'.$player->player_id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
-				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%"';
+				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$bet_amount = 0;
@@ -1092,7 +1092,7 @@ function delete_dealer($id)
 				$this->db->select('sum(payout) as payout');
 				$this->db->from('player_history');
 				$this->db->where('result','1');
-				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%"';
+				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$payout = 0;
@@ -1193,6 +1193,7 @@ function delete_dealer($id)
 				$this->db->from('player_history');
 				$this->db->where('timeslot_id',$timeslot['timeslot_id']);
 				$this->db->where('player_id',$player_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				//$this->db->like('timeslot',$timeslot->timeslot);
 				$query=$this->db->get()->row();
@@ -1204,6 +1205,7 @@ function delete_dealer($id)
 				$this->db->where('result','1');
 				$this->db->where('timeslot_id',$timeslot['timeslot_id']);
 				$this->db->where('player_id',$player_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$query=$this->db->get()->row();
 				$win = $query->win;
@@ -1245,7 +1247,7 @@ function delete_dealer($id)
 		
 		$this->db->select('id,transaction_id');
      	$this->db->from('player_history');
-     	$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'"';
+     	$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'" AND game_type < 4';
 	    $this->db->where($where);
 	    $this->db->group_by('transaction_id');
 	    $query=$this->db->get();
@@ -1277,6 +1279,7 @@ function delete_dealer($id)
 				// $this->db->where('id',$record->id);
 				$this->db->where('player_id',$player_id);
 				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$this->db->group_by('transaction_id');
 				//$this->db->like('timeslot',$timeslot->timeslot);
@@ -1290,6 +1293,7 @@ function delete_dealer($id)
 				// $this->db->where('id',$record->id);
 				$this->db->where('player_id',$player_id);
 				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$query=$this->db->get()->row();
 				//echo $this->db->last_query(); die;
@@ -1462,6 +1466,7 @@ function delete_dealer($id)
 			$this->db->select('bet_amount as chips');
 			$this->db->from('player_history');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$chips = '';
@@ -1472,6 +1477,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->where('result','1');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			// $this->db->where('transaction_id',$record->transaction_id);
 			// $this->db->like('timeslot',$day);
 			$win = 0;
@@ -1484,6 +1490,7 @@ function delete_dealer($id)
 			$this->db->select('sum(bet_amount) as total_bet');
 			$this->db->from('player_history');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$total_bet = '';
@@ -1494,6 +1501,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->where('result','1');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			//echo $this->db->last_query(); die;
 			$total_wins ='';
@@ -1504,6 +1512,7 @@ function delete_dealer($id)
 			$this->db->select('first_digit,second_digit,jodi_digit');
 			$this->db->from('player_history');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$first_digit = $query->first_digit;
@@ -1531,6 +1540,7 @@ function delete_dealer($id)
 			$this->db->select('timeslot');
 			$this->db->from('player_history');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			//echo $this->db->last_query(); die;
 			if($query)
@@ -1601,7 +1611,7 @@ function delete_dealer($id)
 				$this->db->from('player_history');
 				// $this->db->where('bet_amount >= 0');
 				//$where = 'player_id = "'.$player->player_id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
-				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%"';
+				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$bet_amount = 0;
@@ -1613,7 +1623,7 @@ function delete_dealer($id)
 				$this->db->select('sum(payout) as payout');
 				$this->db->from('player_history');
 				$this->db->where('result','1');
-				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%"';
+				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$payout = 0;
@@ -1677,7 +1687,7 @@ function delete_dealer($id)
 		
 		$this->db->select('id,transaction_id');
      	$this->db->from('player_history');
-     	$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'"';
+     	$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'" AND game_type < 4';
 	    $this->db->where($where);
 	    $this->db->group_by('transaction_id');
 	    $query=$this->db->get();
@@ -1709,6 +1719,7 @@ function delete_dealer($id)
 				// $this->db->where('id',$record->id);
 				$this->db->where('player_id',$player_id);
 				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$this->db->group_by('transaction_id');
 				//$this->db->like('timeslot',$timeslot->timeslot);
@@ -1722,6 +1733,7 @@ function delete_dealer($id)
 				// $this->db->where('id',$record->id);
 				$this->db->where('player_id',$player_id);
 				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$query=$this->db->get()->row();
 				//echo $this->db->last_query(); die;
@@ -1763,6 +1775,7 @@ function delete_dealer($id)
      	$this->db->from('player_history');
      	//$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'"';
 	    $this->db->where('transaction_id',$transaction_id);
+	    $this->db->where('game_type <',4);
 	    //$this->db->group_by('transaction_id');
 	    $query=$this->db->get();
 	    //echo($this->db->last_query());  die;
@@ -1781,6 +1794,7 @@ function delete_dealer($id)
 			$this->db->select('bet_amount as chips');
 			$this->db->from('player_history');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$chips = '';
@@ -1791,6 +1805,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->where('result','1');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			// $this->db->where('transaction_id',$record->transaction_id);
 			// $this->db->like('timeslot',$day);
 			$win = 0;
@@ -1803,6 +1818,7 @@ function delete_dealer($id)
 			$this->db->select('sum(bet_amount) as total_bet');
 			$this->db->from('player_history');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$total_bet = '';
@@ -1813,6 +1829,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->where('result','1');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			//echo $this->db->last_query(); die;
 			$total_wins ='';
@@ -1823,6 +1840,7 @@ function delete_dealer($id)
 			$this->db->select('first_digit,second_digit,jodi_digit');
 			$this->db->from('player_history');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$first_digit = $query->first_digit;
@@ -1847,6 +1865,7 @@ function delete_dealer($id)
 			$this->db->select('timeslot');
 			$this->db->from('player_history');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			//echo $this->db->last_query(); die;
 			if($query)
