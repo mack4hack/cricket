@@ -323,11 +323,12 @@ class Cricketcontroller extends CI_Controller {
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $output = curl_exec($ch);
-            $asd = json_decode($output);
+            //$asd = json_decode($output);
+            curl_close($ch);
             //$matches = $asd->data->months[0]->days;
             $ArrayOfMatchList = array();
             echo "In Auto<pre>";
-            print_r($asd); exit;
+            print_r($output); exit;
             foreach ($matches as $value) {
                 $MatchData = array_filter($value->matches);
 
