@@ -45,7 +45,7 @@ class Cricketcontroller extends CI_Controller {
         curl_setopt($curl, CURLOPT_URL, $form_url);
         curl_setopt($curl, CURLOPT_POST, sizeof($data_to_post));
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data_to_post);
-        curl_setopt($ch,CURLOPT_ENCODING , "gzip");
+        //curl_setopt($ch,CURLOPT_ENCODING , "gzip");
         $result = curl_exec($curl);
         $TokenArray = json_decode($result);
         //$TokenAccessValue = $TokenArray->auth->access_token;
