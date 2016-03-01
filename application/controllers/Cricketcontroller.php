@@ -17,7 +17,7 @@ class Cricketcontroller extends CI_Controller {
         $this->load->model('Cricketmodel_model');
         $this->load->model('Bets_model');
         $this->load->library('ion_auth');
-        $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
+        
     }
 
     // call to cricket page of view
@@ -28,10 +28,10 @@ class Cricketcontroller extends CI_Controller {
 
     // get tocken access from this GetApiAuthentication function	
     function GetApiAuthentication() {
-
+        $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
         //$form_url = "http://www.litzscore.com/rest/v2/auth/";
         //$form_url = "https://rest.cricketapi.com/rest/v2/auth/";
-        $form_url = $this->$CommonAuthUrl;
+        $form_url = $CommonAuthUrl;
        
         $data_to_post = array(
             "access_key" => "c5fcdde18fe2dae84a78d3e90035a372",
@@ -50,8 +50,8 @@ class Cricketcontroller extends CI_Controller {
         //$TokenAccessValue = $TokenArray->auth->access_token;
         $TokenAccess = (isset($TokenArray->auth->access_token))?$TokenArray->auth->access_token:"";
         curl_close($curl);
-        //echo "shrikant";
-        echo $form_url."Ckecking Tocken Access:<pre>";
+        echo "shrikant".$TokenAccess;
+        //echo $form_url."Ckecking Tocken Access:<pre>";
         print_r($TokenArray); exit;
         return $TokenAccess;
     }
@@ -71,7 +71,9 @@ class Cricketcontroller extends CI_Controller {
                     $MatchUniqueId = $v->id;
                     //$MatchUniqueId = 41;
                     //$UniqueKeyOfMatch = "asiacup_2016_g4";
-                    $url = "http://www.litzscore.com/rest/v2/match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
+                    //http://www.litzscore.com/rest/v2/
+                    $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
+                    $url = $CommonAuthUrl."match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, $url);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -312,6 +314,7 @@ class Cricketcontroller extends CI_Controller {
         
         if($TokenAccess != "")
         {
+            $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
             // get match data of next month when 5 days are remaning to end month  // need to work on this
             $url = $CommonAuthUrl."schedule/?access_token=" . $TokenAccess;
             $ch = curl_init();
