@@ -48,7 +48,7 @@ class Cricketcontroller extends CI_Controller {
         curl_close($curl);
         //echo "shrikant";
         echo "<pre>";
-        print_r($TokenAccess); exit;
+        print_r($TokenArray); exit;
         return $TokenAccess;
     }
 
