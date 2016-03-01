@@ -325,7 +325,7 @@ class Cricketcontroller extends CI_Controller {
             $matches = $asd->data->months[0]->days;
             $ArrayOfMatchList = array();
             echo "<pre>";
-            print_r($matches); //exit;
+            print_r($asd); //exit;
             foreach ($matches as $value) {
                 $MatchData = array_filter($value->matches);
 
