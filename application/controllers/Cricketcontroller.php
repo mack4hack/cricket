@@ -45,6 +45,7 @@ class Cricketcontroller extends CI_Controller {
         curl_setopt($curl, CURLOPT_URL, $form_url);
         curl_setopt($curl, CURLOPT_POST, sizeof($data_to_post));
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data_to_post);
+        curl_setopt($ch,CURLOPT_ENCODING , "gzip");
         $result = curl_exec($curl);
         $TokenArray = json_decode($result);
         //$TokenAccessValue = $TokenArray->auth->access_token;
@@ -77,6 +78,7 @@ class Cricketcontroller extends CI_Controller {
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, $url);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch,CURLOPT_ENCODING , "gzip");
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
 
@@ -311,14 +313,14 @@ class Cricketcontroller extends CI_Controller {
     function CronDataAutomated() {
 
         $TokenAccess = $this->GetApiAuthentication();
-        echo $TokenAccess;
+        //echo $TokenAccess;
         if($TokenAccess != "")
         {
             $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
             //$CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
             // get match data of next month when 5 days are remaning to end month  // need to work on this
-            $url = "https://rest.cricketapi.com/rest/v2/schedule/?access_token=".$TokenAccess;
-            //$url = $CommonAuthUrl."schedule/?access_token=" . $TokenAccess;
+            //$url = "https://rest.cricketapi.com/rest/v2/schedule/?access_token=".$TokenAccess;
+            $url = $CommonAuthUrl."schedule/?access_token=" . $TokenAccess;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -326,7 +328,7 @@ class Cricketcontroller extends CI_Controller {
             $output = curl_exec($ch);
             $asd = json_decode($output);
             curl_close($ch);
-            //$matches = $asd->data->months[0]->days;
+            $matches = $asd->data->months[0]->days;
             $ArrayOfMatchList = array();
             //echo "In Auto<pre>";
             //print_r($asd);
