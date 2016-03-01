@@ -31,7 +31,7 @@ class Cricketcontroller extends CI_Controller {
 
         //$form_url = "http://www.litzscore.com/rest/v2/auth/";
         //$form_url = "https://rest.cricketapi.com/rest/v2/auth/";
-        $form_url = $this->CommonAuthUrl;
+        $form_url = $CommonAuthUrl;
        
         $data_to_post = array(
             "access_key" => "c5fcdde18fe2dae84a78d3e90035a372",
