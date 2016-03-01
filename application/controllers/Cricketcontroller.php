@@ -317,7 +317,7 @@ class Cricketcontroller extends CI_Controller {
             $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
             //$CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
             // get match data of next month when 5 days are remaning to end month  // need to work on this
-            $url = "https://rest.cricketapi.com/rest/v2/schedule/?access_token=2s145340019452649s705458475496511359";
+            $url = "https://rest.cricketapi.com/rest/v2/schedule/?access_token=".$TokenAccess;
             //$url = $CommonAuthUrl."schedule/?access_token=" . $TokenAccess;
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
