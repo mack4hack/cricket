@@ -328,11 +328,11 @@ class Cricketcontroller extends CI_Controller {
             curl_close($ch);
             //$matches = $asd->data->months[0]->days;
             $ArrayOfMatchList = array();
-            echo "In Auto<pre>";
-            print_r($asd);
-            echo "asd";
-            print_r($output);
-            exit;
+            //echo "In Auto<pre>";
+            //print_r($asd);
+            //echo "asd";
+            //print_r($output);
+            //exit;
             foreach ($matches as $value) {
                 $MatchData = array_filter($value->matches);
 
