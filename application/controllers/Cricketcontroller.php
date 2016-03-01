@@ -31,7 +31,7 @@ class Cricketcontroller extends CI_Controller {
         $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
         //$form_url = "http://www.litzscore.com/rest/v2/auth/";
         //$form_url = "https://rest.cricketapi.com/rest/v2/auth/";
-        $form_url = $CommonAuthUrl;
+        $form_url = $CommonAuthUrl."auth/";
        
         $data_to_post = array(
             "access_key" => "c5fcdde18fe2dae84a78d3e90035a372",
@@ -238,7 +238,7 @@ class Cricketcontroller extends CI_Controller {
                                 // print_r($dataWicketArray);
                             } // end of fall wicket foreach
 
-                            $this->CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
+                            ///$this->CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
                         }
                     }
 
@@ -264,48 +264,9 @@ class Cricketcontroller extends CI_Controller {
     }
 
 // end of function
-    // Live Match Data From  
-    function CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId) {
-        $TokenAccess = $this->GetApiAuthentication();
-        $BattingKeyUpdatedId = $BattingKeyId . "_1";
-        //$BattingKeyUpdatedId = "b_1_1";
-        //$UniqueKeyOfMatch = "asiacup_2016_g1";
-
-        $url = "http://www.litzscore.com/rest/v2/match/" . $UniqueKeyOfMatch . "/balls/" . $BattingKeyUpdatedId . "/?access_token=" . $TokenAccess;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $output = curl_exec($ch);
-        $BallByBallArray = json_decode($output);
-
-        if (count((array) $BallByBallArray) > 6) {
-            $FirstBallMatchKey = $BallByBallArray->data->over->balls[0];
-            $FirstBallCheck = $BallByBallArray->data->balls->$FirstBallMatchKey;
-            //echo "In Ball By ball<pre>";
-            //print_r($FirstBallCheck);//ball_by_ball
-            $CheckedMatchBallByBall = $this->Cricketmodel_model->getCheckUniqueMatchBallByBallPresent($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
-
-            if ($CheckedMatchBallByBall == 0) {
-                $BallByBallArrayValues = array(
-                    "ball_comment" => $FirstBallCheck->comment,
-                    "ball_batting_team" => $FirstBallCheck->batting_team,
-                    "ball_over_str" => $FirstBallCheck->over_str,
-                    "ball_dotball" => $FirstBallCheck->batsman->dotball,
-                    "ball_runs" => $FirstBallCheck->runs,
-                    "ball_wicket" => $FirstBallCheck->wicket,
-                    "ball_type" => $FirstBallCheck->ball_type,
-                    "ball_wicket_type" => $FirstBallCheck->wicket_type,
-                    "unique_key" => $UniqueKeyOfMatch,
-                    "Innings_code" => $BattingKeyId,
-                    "match_id" => $MatchUniqueId
-                );
-
-                $this->Cricketmodel_model->MatchFirstBallSummaryInsert($BallByBallArrayValues);
-            }
-        }
-    }
-
+   
+    
+    
 // end of cron live data access ball by ball
     // one day call to this function 
     function CronDataAutomated() {
