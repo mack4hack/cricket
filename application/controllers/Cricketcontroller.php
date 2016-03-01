@@ -47,7 +47,7 @@ class Cricketcontroller extends CI_Controller {
         $TokenAccess = (isset($TokenArray->auth->access_token))?$TokenArray->auth->access_token:"";
         curl_close($curl);
         //echo "shrikant";
-        echo "<pre>";
+        echo "Ckecking Tocken Access:<pre>";
         print_r($TokenArray); exit;
         return $TokenAccess;
     }
