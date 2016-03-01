@@ -43,8 +43,12 @@ class Cricketcontroller extends CI_Controller {
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data_to_post);
         $result = curl_exec($curl);
         $TokenArray = json_decode($result);
-        $TokenAccess = $TokenArray->auth->access_token;
+        //$TokenAccessValue = $TokenArray->auth->access_token;
+        $TokenAccess = (isset($TokenArray->auth->access_token))?$TokenArray->auth->access_token:"";
         curl_close($curl);
+        //echo "shrikant";
+        echo "<pre>";
+        print_r($TokenAccess); exit;
         return $TokenAccess;
     }
 
@@ -52,192 +56,205 @@ class Cricketcontroller extends CI_Controller {
     // Live Match Data From  
     function CronLiveMatchDataAutomated() {
         $TokenAccess = $this->GetApiAuthentication();
+        if($TokenAccess != "")
+        {
+            $UniqueKeyOfMatchArray = $this->Cricketmodel_model->GetLiveMatchKeyAPIToday();
 
-        $UniqueKeyOfMatchArray = $this->Cricketmodel_model->GetLiveMatchKeyAPIToday();
+            if (count($UniqueKeyOfMatchArray) > 0) {
 
-        if (count($UniqueKeyOfMatchArray) > 0) {
+                foreach ($UniqueKeyOfMatchArray as $key => $v) {
+                    $UniqueKeyOfMatch = $v->unique;
+                    $MatchUniqueId = $v->id;
+                    //$MatchUniqueId = 41;
+                    //$UniqueKeyOfMatch = "asiacup_2016_g4";
+                    $url = "http://www.litzscore.com/rest/v2/match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $output = curl_exec($ch);
+                    $LiveMatchArray = json_decode($output);
 
-            foreach ($UniqueKeyOfMatchArray as $key => $v) {
-                $UniqueKeyOfMatch = $v->unique;
-                $MatchUniqueId = $v->id;
-                //$MatchUniqueId = 41;
-                //$UniqueKeyOfMatch = "asiacup_2016_g4";
-                $url = "http://www.litzscore.com/rest/v2/match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $output = curl_exec($ch);
-                $LiveMatchArray = json_decode($output);
+                    if (count((array) $LiveMatchArray->data->card->toss) > 0) {
+                        if ($LiveMatchArray->data->card->toss->won != "") {
+                            $RunRate = (isset($LiveMatchArray->data->card->now->req->runs_rate)) ? $LiveMatchArray->data->card->now->req->runs_rate : "0";
 
-                if (count((array) $LiveMatchArray->data->card->toss) > 0) {
-                    if ($LiveMatchArray->data->card->toss->won != "") {
-                        $RunRate = (isset($LiveMatchArray->data->card->now->req->runs_rate)) ? $LiveMatchArray->data->card->now->req->runs_rate : "0";
-
-                        $ArrayOfMatchUpdateList = array(
-                            "toss_win" => $LiveMatchArray->data->card->toss->won,
-                            "decision" => $LiveMatchArray->data->card->toss->decision,
-                            "runs_str" => $LiveMatchArray->data->card->now->runs_str,
-                            "batting_team" => $LiveMatchArray->data->card->now->batting_team,
-                            "bowling_team" => $LiveMatchArray->data->card->now->bowling_team,
-                            "winner_team" => $LiveMatchArray->data->card->winner_team,
-                            "runs_rate" => $RunRate,
-                            "status" => "started"
-                        );
+                            $ArrayOfMatchUpdateList = array(
+                                "toss_win" => $LiveMatchArray->data->card->toss->won,
+                                "decision" => $LiveMatchArray->data->card->toss->decision,
+                                "runs_str" => $LiveMatchArray->data->card->now->runs_str,
+                                "batting_team" => $LiveMatchArray->data->card->now->batting_team,
+                                "bowling_team" => $LiveMatchArray->data->card->now->bowling_team,
+                                "winner_team" => $LiveMatchArray->data->card->winner_team,
+                                "runs_rate" => $RunRate,
+                                "status" => "started"
+                            );
 
 
-                        $ArrayMatchListNotLoaded = $this->Cricketmodel_model->UpdateLiveMatchData($ArrayOfMatchUpdateList, $UniqueKeyOfMatch);
-                    }
+                            $ArrayMatchListNotLoaded = $this->Cricketmodel_model->UpdateLiveMatchData($ArrayOfMatchUpdateList, $UniqueKeyOfMatch);
+                        }
 
-                    if ($LiveMatchArray->data->card->winner_team != "") {
-                        $StatusArray = array("status" => "completed");
-                        ;
-                        $this->Cricketmodel_model->UpdateLiveMatchData($StatusArray, $UniqueKeyOfMatch);
-                    }
-                } //end of toss if 
-                //echo "<pre>";
-                if (count((array) $LiveMatchArray->data->card->innings) > 0) {
-                    foreach ($LiveMatchArray->data->card->innings as $key => $summary) {
+                        if ($LiveMatchArray->data->card->winner_team != "") {
+                            $StatusArray = array("status" => "completed");
+                            ;
+                            $this->Cricketmodel_model->UpdateLiveMatchData($StatusArray, $UniqueKeyOfMatch);
+                        }
+                    } //end of toss if 
+                    //echo "<pre>";
+                    if (count((array) $LiveMatchArray->data->card->innings) > 0) {
+                        foreach ($LiveMatchArray->data->card->innings as $key => $summary) {
 
-                        $BattingKeyId = $summary->key;
-                        foreach ($summary->overs_summary as $key => $PerOver) {
+                            $BattingKeyId = $summary->key;
+                            foreach ($summary->overs_summary as $key => $PerOver) {
 
-                            $CheckedMatchSummaryOver = $this->Cricketmodel_model->getCheckUniqueMatchOverSummaryPresent($MatchUniqueId, $BattingKeyId, $PerOver->over);
+                                $CheckedMatchSummaryOver = $this->Cricketmodel_model->getCheckUniqueMatchOverSummaryPresent($MatchUniqueId, $BattingKeyId, $PerOver->over);
 
-                            if ($CheckedMatchSummaryOver == 0) {
-                                $ScoreExplode = explode("in", $PerOver->score);
-                                $RunsWicket = explode("/", $ScoreExplode[0]);
-                                $WicketKeyImp = "";
+                                if ($CheckedMatchSummaryOver == 0) {
+                                    $ScoreExplode = explode("in", $PerOver->score);
+                                    $RunsWicket = explode("/", $ScoreExplode[0]);
+                                    $WicketKeyImp = "";
 
-                                if (count($PerOver->wickets) > 0) {
-                                    $WicketKeyImp = implode(",", $PerOver->wickets);
+                                    if (count($PerOver->wickets) > 0) {
+                                        $WicketKeyImp = implode(",", $PerOver->wickets);
+                                    }
+
+                                    $ArrayOfOverSummaryList = array(
+                                        "score" => $PerOver->score,
+                                        "match_id" => $MatchUniqueId,
+                                        "Innings_code" => $BattingKeyId,
+                                        "over" => $PerOver->over,
+                                        "current_run_rate" => $PerOver->current_run_rate,
+                                        "total_run" => $RunsWicket[0],
+                                        "over_run" => $PerOver->runs,
+                                        "wicket" => $RunsWicket[1],
+                                        "wicket_key" => $WicketKeyImp,
+                                        "summary_count" => $key + 1
+                                    );
+
+                                    $this->Cricketmodel_model->MatchOverSummaryInsert($ArrayOfOverSummaryList);
+                                }
+                            } // end of over summary
+
+                            foreach ($summary->batting_order as $key => $PlayerKey) {
+
+                                $CheckedMatchPlayer = $this->Cricketmodel_model->getCheckUniqueMatchPlyerPresent($MatchUniqueId, $BattingKeyId, $PlayerKey);
+
+                                if ($CheckedMatchPlayer == 0) {
+                                    $ArrayOfPlayerSummaryList = array(
+                                        "match_id" => $MatchUniqueId,
+                                        "Innings_code" => $BattingKeyId,
+                                        "player_key" => $PlayerKey
+                                    );
+
+                                    $this->Cricketmodel_model->MatchPlayerSummaryInsert($ArrayOfPlayerSummaryList);
+                                } else {
+                                    //$LiveMatchArray->data->card->players->a_rahane
+                                    $PlayerArrayLists = $this->Cricketmodel_model->GetSelectPlayerAllKeyData($MatchUniqueId, $BattingKeyId);
+
+                                    foreach ($PlayerArrayLists as $key => $AllPlayerKey) {
+
+
+                                        $PlayerKey = $AllPlayerKey->player_key;
+                                        $PlayerDetails = $LiveMatchArray->data->card->players->$PlayerKey;
+                                        //print_r($PlayerDetails->fullname);
+                                        if (count($PlayerDetails->match->innings) > 0) {
+                                            foreach ($PlayerDetails->match->innings as $key => $PlayerBatttingArray) {
+
+                                                if (count((array) $PlayerBatttingArray->batting) > 0) {
+                                                    $PlayerPlayedBallCount = $PlayerBatttingArray->batting->balls;
+                                                    $PlayerRunsCount = $PlayerBatttingArray->batting->runs;
+                                                    $PlayerStrikeRate = $PlayerBatttingArray->batting->strike_rate;
+                                                    $PlayerDismissed = (isset($PlayerBatttingArray->batting->dismissed)) ? $PlayerBatttingArray->batting->dismissed : "0";
+                                                    $PlayerTeamRun = "";
+                                                    $PlayerTeamOver = "";
+                                                    $PlayerTeamBall = "";
+                                                    $PlayerTeamWicketIndex = "";
+                                                    $PlayerTeamWicketType = "";
+
+                                                    if ($PlayerDismissed == 1) {
+                                                        $PlayerTeamRun = $PlayerBatttingArray->batting->dismissed_at->team_runs;
+                                                        $PlayerTeamOver = $PlayerBatttingArray->batting->dismissed_at->over;
+                                                        $PlayerTeamBall = $PlayerBatttingArray->batting->dismissed_at->ball;
+                                                        $PlayerTeamWicketIndex = $PlayerBatttingArray->batting->dismissed_at->wicket_index;
+                                                        $PlayerTeamWicketType = $PlayerBatttingArray->batting->ball_of_dismissed->wicket_type;
+                                                    }
+
+                                                    $PlayerDetailArrayData = array(
+                                                        "player_name" => $PlayerDetails->fullname,
+                                                        "player_runs" => $PlayerRunsCount,
+                                                        "player_balls" => $PlayerPlayedBallCount,
+                                                        "player_strike_rate" => $PlayerStrikeRate,
+                                                        "player_dismissed" => $PlayerDismissed,
+                                                        "team_runs" => $PlayerTeamRun,
+                                                        "team_over" => $PlayerTeamOver,
+                                                        "team_over_ball" => $PlayerTeamBall,
+                                                        "player_wicket_index" => $PlayerTeamWicketIndex,
+                                                        "wicket_type" => $PlayerTeamWicketType,
+                                                        "player_count" => $key + 1
+                                                    );
+
+                                                    //$BattingKeyId//$MatchUniqueId
+                                                    $this->Cricketmodel_model->UpdatePlayerAllData($PlayerDetailArrayData, $MatchUniqueId, $BattingKeyId, $PlayerKey);
+                                                } // checked batting array blank or not
+                                            } // player detail data foreach
+                                        } // checked inning data available or not
+                                    }
+                                } // end of player data else
+                                //$LiveMatchArray->data->card->players;
+                            }  // batting order foreach
+
+
+                            foreach ($summary->fall_of_wickets as $key => $FallWicket) {
+
+                                $WicketDownPlayerName = explode("at", $FallWicket);
+                                preg_match_all('!\d+\.*\d*!', $FallWicket, $dataWicketArray);
+                                //echo $WicketDownPlayerName[0]." ".$dataWicketArray[0][0]."<br>";
+                                //$Wicket
+
+                                $CheckedMatchWicket = $this->Cricketmodel_model->getCheckUniqueMatchWicketPresent($MatchUniqueId, $BattingKeyId, $dataWicketArray[0][0]);
+
+                                if ($CheckedMatchWicket == 0) {
+                                    $ArrayOfWicketSummaryList = array(
+                                        "match_id" => $MatchUniqueId,
+                                        "Innings_code" => $BattingKeyId,
+                                        "wicket_player_name" => $WicketDownPlayerName[0],
+                                        "wicket_out_total_run" => $dataWicketArray[0][0],
+                                        "wicket_out_total_over" => $dataWicketArray[0][1],
+                                        "wicket_summary" => $FallWicket,
+                                        "wicket_count" => $key + 1
+                                    );
+
+                                    $this->Cricketmodel_model->MatchWicketSummaryInsert($ArrayOfWicketSummaryList);
                                 }
 
-                                $ArrayOfOverSummaryList = array(
-                                    "score" => $PerOver->score,
-                                    "match_id" => $MatchUniqueId,
-                                    "Innings_code" => $BattingKeyId,
-                                    "over" => $PerOver->over,
-                                    "current_run_rate" => $PerOver->current_run_rate,
-                                    "total_run" => $RunsWicket[0],
-                                    "over_run" => $PerOver->runs,
-                                    "wicket" => $RunsWicket[1],
-                                    "wicket_key" => $WicketKeyImp,
-                                    "summary_count" => $key + 1
-                                );
-
-                                $this->Cricketmodel_model->MatchOverSummaryInsert($ArrayOfOverSummaryList);
-                            }
-                        } // end of over summary
-
-                        foreach ($summary->batting_order as $key => $PlayerKey) {
-
-                            $CheckedMatchPlayer = $this->Cricketmodel_model->getCheckUniqueMatchPlyerPresent($MatchUniqueId, $BattingKeyId, $PlayerKey);
-
-                            if ($CheckedMatchPlayer == 0) {
-                                $ArrayOfPlayerSummaryList = array(
-                                    "match_id" => $MatchUniqueId,
-                                    "Innings_code" => $BattingKeyId,
-                                    "player_key" => $PlayerKey
-                                );
-
-                                $this->Cricketmodel_model->MatchPlayerSummaryInsert($ArrayOfPlayerSummaryList);
-                            } else {
-                                //$LiveMatchArray->data->card->players->a_rahane
-                                $PlayerArrayLists = $this->Cricketmodel_model->GetSelectPlayerAllKeyData($MatchUniqueId, $BattingKeyId);
-
-                                foreach ($PlayerArrayLists as $key => $AllPlayerKey) {
-
-
-                                    $PlayerKey = $AllPlayerKey->player_key;
-                                    $PlayerDetails = $LiveMatchArray->data->card->players->$PlayerKey;
-                                    //print_r($PlayerDetails->fullname);
-                                    if (count($PlayerDetails->match->innings) > 0) {
-                                        foreach ($PlayerDetails->match->innings as $key => $PlayerBatttingArray) {
-
-                                            if (count((array) $PlayerBatttingArray->batting) > 0) {
-                                                $PlayerPlayedBallCount = $PlayerBatttingArray->batting->balls;
-                                                $PlayerRunsCount = $PlayerBatttingArray->batting->runs;
-                                                $PlayerStrikeRate = $PlayerBatttingArray->batting->strike_rate;
-                                                $PlayerDismissed = (isset($PlayerBatttingArray->batting->dismissed)) ? $PlayerBatttingArray->batting->dismissed : "0";
-                                                $PlayerTeamRun = "";
-                                                $PlayerTeamOver = "";
-                                                $PlayerTeamBall = "";
-                                                $PlayerTeamWicketIndex = "";
-                                                $PlayerTeamWicketType = "";
-
-                                                if ($PlayerDismissed == 1) {
-                                                    $PlayerTeamRun = $PlayerBatttingArray->batting->dismissed_at->team_runs;
-                                                    $PlayerTeamOver = $PlayerBatttingArray->batting->dismissed_at->over;
-                                                    $PlayerTeamBall = $PlayerBatttingArray->batting->dismissed_at->ball;
-                                                    $PlayerTeamWicketIndex = $PlayerBatttingArray->batting->dismissed_at->wicket_index;
-                                                    $PlayerTeamWicketType = $PlayerBatttingArray->batting->ball_of_dismissed->wicket_type;
-                                                }
-
-                                                $PlayerDetailArrayData = array(
-                                                    "player_name" => $PlayerDetails->fullname,
-                                                    "player_runs" => $PlayerRunsCount,
-                                                    "player_balls" => $PlayerPlayedBallCount,
-                                                    "player_strike_rate" => $PlayerStrikeRate,
-                                                    "player_dismissed" => $PlayerDismissed,
-                                                    "team_runs" => $PlayerTeamRun,
-                                                    "team_over" => $PlayerTeamOver,
-                                                    "team_over_ball" => $PlayerTeamBall,
-                                                    "player_wicket_index" => $PlayerTeamWicketIndex,
-                                                    "wicket_type" => $PlayerTeamWicketType,
-                                                    "player_count" => $key + 1
-                                                );
-
-                                                //$BattingKeyId//$MatchUniqueId
-                                                $this->Cricketmodel_model->UpdatePlayerAllData($PlayerDetailArrayData, $MatchUniqueId, $BattingKeyId, $PlayerKey);
-                                            } // checked batting array blank or not
-                                        } // player detail data foreach
-                                    } // checked inning data available or not
-                                }
-                            } // end of player data else
-                            //$LiveMatchArray->data->card->players;
-                        }  // batting order foreach
-
-
-                        foreach ($summary->fall_of_wickets as $key => $FallWicket) {
-
-                            $WicketDownPlayerName = explode("at", $FallWicket);
-                            preg_match_all('!\d+\.*\d*!', $FallWicket, $dataWicketArray);
-                            //echo $WicketDownPlayerName[0]." ".$dataWicketArray[0][0]."<br>";
-                            //$Wicket
-
-                            $CheckedMatchWicket = $this->Cricketmodel_model->getCheckUniqueMatchWicketPresent($MatchUniqueId, $BattingKeyId, $dataWicketArray[0][0]);
-
-                            if ($CheckedMatchWicket == 0) {
-                                $ArrayOfWicketSummaryList = array(
-                                    "match_id" => $MatchUniqueId,
-                                    "Innings_code" => $BattingKeyId,
-                                    "wicket_player_name" => $WicketDownPlayerName[0],
-                                    "wicket_out_total_run" => $dataWicketArray[0][0],
-                                    "wicket_out_total_over" => $dataWicketArray[0][1],
-                                    "wicket_summary" => $FallWicket,
-                                    "wicket_count" => $key + 1
-                                );
-
-                                $this->Cricketmodel_model->MatchWicketSummaryInsert($ArrayOfWicketSummaryList);
-                            }
 
 
 
+                                // print_r($dataWicketArray);
+                            } // end of fall wicket foreach
 
-                            // print_r($dataWicketArray);
-                        } // end of fall wicket foreach
-
-                        $this->CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
+                            $this->CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
+                        }
                     }
-                }
 
 
-                $this->CronCricketMatchPayoutAutomated($UniqueKeyOfMatch, $MatchUniqueId); // get calculate chip and payout
-                // "<pre>";
-                //print_r($LiveMatchArray->data->card);
-                exit;
-            } // end of foreach of match key
-        } // end if of match key
+                    $this->CronCricketMatchPayoutAutomated($UniqueKeyOfMatch, $MatchUniqueId); // get calculate chip and payout
+                    // "<pre>";
+                    //print_r($LiveMatchArray->data->card);
+                    exit;
+                } // end of foreach of match key
+            } // end if of match key
+        } // end of if (if tocken access not available)
+        else
+        {
+            $ArrayErrorList = array(
+                
+                        "desc" => "Access Tocken not working ",
+                        "function" => "CronLiveMatchDataAutomated()"
+             );
+            
+            $this->Cricketmodel_model->MatchErrorInsert($ArrayErrorList);
+        }
+        
     }
 
 // end of function
@@ -288,61 +305,77 @@ class Cricketcontroller extends CI_Controller {
     function CronDataAutomated() {
 
         $TokenAccess = $this->GetApiAuthentication();
-        // get match data of next month when 5 days are remaning to end month  // need to work on this
-        $url = "http://www.litzscore.com/rest/v2/schedule/?access_token=" . $TokenAccess;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $output = curl_exec($ch);
-        $asd = json_decode($output);
-        $matches = $asd->data->months[0]->days;
-        $ArrayOfMatchList = array();
-        //echo "<pre>";
-        //print_r($matches); //exit;
-        foreach ($matches as $value) {
-            $MatchData = array_filter($value->matches);
+        
+        if($TokenAccess != "")
+        {
+            // get match data of next month when 5 days are remaning to end month  // need to work on this
+            $url = "http://www.litzscore.com/rest/v2/schedule/?access_token=" . $TokenAccess;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $output = curl_exec($ch);
+            $asd = json_decode($output);
+            $matches = $asd->data->months[0]->days;
+            $ArrayOfMatchList = array();
+            //echo "<pre>";
+            //print_r($matches); //exit;
+            foreach ($matches as $value) {
+                $MatchData = array_filter($value->matches);
 
-            if (!empty($MatchData)) {
+                if (!empty($MatchData)) {
 
-                foreach ($MatchData as $v) {
-                    //echo $i++.$v->name." ".$v->status." ".$v->key."<br>";t20//one-day
-                    if ($v->format == "t20" || $v->format == "one-day") {
-                        $CheckedMatchKey = $this->Cricketmodel_model->getCheckUniqueMatchIdPresent($v->key);
+                    foreach ($MatchData as $v) {
+                        //echo $i++.$v->name." ".$v->status." ".$v->key."<br>";t20//one-day
+                        if ($v->format == "t20" || $v->format == "one-day") {
+                            $CheckedMatchKey = $this->Cricketmodel_model->getCheckUniqueMatchIdPresent($v->key);
 
-                        if ($CheckedMatchKey == 0) { // 0 will insert int odatabase as new match from server
-                            $ArrayOfMatchList[] = array("name" => $v->name, "status" => $v->status
-                                , "unique" => $v->key, "format" => $v->format, "venue" => $v->venue
-                                , "start_date" => $v->start_date->iso, "team_a" => $v->teams->a->name, "team_b" => $v->teams->b->name
-                                , "winner_team" => $v->winner_team, "match_load" => 0
-                            );
+                            if ($CheckedMatchKey == 0) { // 0 will insert int odatabase as new match from server
+                                $ArrayOfMatchList[] = array("name" => $v->name, "status" => $v->status
+                                    , "unique" => $v->key, "format" => $v->format, "venue" => $v->venue
+                                    , "start_date" => $v->start_date->iso, "team_a" => $v->teams->a->name, "team_b" => $v->teams->b->name
+                                    , "winner_team" => $v->winner_team, "match_load" => 0
+                                );
+                            }
                         }
                     }
                 }
-            }
-        } // end of foreach
+            } // end of foreach
 
-        $this->Cricketmodel_model->MatchListInsert($ArrayOfMatchList);
-        $ArrayMatchListNotLoaded = $this->Cricketmodel_model->GetMatchNotLoaded();
+            $this->Cricketmodel_model->MatchListInsert($ArrayOfMatchList);
+            $ArrayMatchListNotLoaded = $this->Cricketmodel_model->GetMatchNotLoaded();
 
-        if (count($ArrayMatchListNotLoaded) > 0) {
+            if (count($ArrayMatchListNotLoaded) > 0) {
 
-            foreach ($ArrayMatchListNotLoaded as $key => $value) {
-                // Check if match id already exist then not insert data
-                $CheckedMatchKeyInOddScheduleValue = $this->Cricketmodel_model->getCheckUniqueMatchIdPresentInOddsscheduleTable($value->id);
+                foreach ($ArrayMatchListNotLoaded as $key => $value) {
+                    // Check if match id already exist then not insert data
+                    $CheckedMatchKeyInOddScheduleValue = $this->Cricketmodel_model->getCheckUniqueMatchIdPresentInOddsscheduleTable($value->id);
 
-                if ($CheckedMatchKeyInOddScheduleValue == 0) { // 0 will insert int odatabase as new match from server
-                    $GetConfigOddDataArray = $this->Cricketmodel_model->GetConfigOddMasterData();
-                    foreach ($GetConfigOddDataArray as $key => $v) {
-                        $ScheduleArrayDataValue = array("match_id" => $value->id, "odd_id" => $v->odd_id, "odds" => $v->odds_master, "m_id" => $v->m_id);
-                        $this->Cricketmodel_model->MatchBetSheduleDataInsert($ScheduleArrayDataValue);
+                    if ($CheckedMatchKeyInOddScheduleValue == 0) { // 0 will insert int odatabase as new match from server
+                        $GetConfigOddDataArray = $this->Cricketmodel_model->GetConfigOddMasterData();
+                        foreach ($GetConfigOddDataArray as $key => $v) {
+                            $ScheduleArrayDataValue = array("match_id" => $value->id, "odd_id" => $v->odd_id, "odds" => $v->odds_master, "m_id" => $v->m_id);
+                            $this->Cricketmodel_model->MatchBetSheduleDataInsert($ScheduleArrayDataValue);
+                        }
                     }
-                }
 
-                // update match list table match_load column
-                $this->Cricketmodel_model->SetMatchLoadUpdate($value->id);
-            } // end of match loaded count loop
-        } // end of match loaded count if
-        //echo "Done All";
+                    // update match list table match_load column
+                    $this->Cricketmodel_model->SetMatchLoadUpdate($value->id);
+                } // end of match loaded count loop
+            } // end of match loaded count if
+            //echo "Done All";
+        }
+        else
+        {
+            $ArrayErrorList = array(
+                
+                        "desc" => "Access Tocken not working CronDataAutomated function ",
+                        "function" => "CronDataAutomated()"
+             );
+            
+            $this->Cricketmodel_model->MatchErrorInsert($ArrayErrorList);
+        }
+        
+        
     }
 
 // end of function
@@ -839,4 +872,19 @@ class Cricketcontroller extends CI_Controller {
     }
 
     /*  swapnil data // End//   */
+    
+    
+    // Match details batsman data to backend
+    function GetAllBatsmanData() {
+        $data = array(
+            'key' => $this->input->post('key'),
+        );
+        $MatchId = $data['key'];
+
+        $allBatsmanDataArray = $this->Cricketmodel_model->GetAllBatsmanDataDetails($MatchId);
+
+        echo json_encode($allBatsmanDataArray);
+    }
+    
+    
 }

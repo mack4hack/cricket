@@ -1410,6 +1410,42 @@
             </div><!--End of game 12 as Race to Fifty-->
 
         </div><!---End Of Hide Div--->
+        
+        
+        <div id="ScoreCardContainer">
+            <div class="SectionTeamA">
+                <div class=""></div>
+                <table border="1" cellspacing="1" cellpadding="1" >
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Batsman</th>
+                            <th>Run</th>
+                            <th>Ball</th>
+                            <th>Strike Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tBodyBatsmansA"></tbody>
+                </table>
+            </div>
+            <div class="SectionTeamB">
+                <table border="1" cellspacing="1" cellpadding="1" >
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Batsman</th>
+                            <th>Run</th>
+                            <th>Ball</th>
+                            <th>Strike Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tBodyBatsmansB"></tbody>
+                </table>
+            </div>
+            
+        </div>
+        
+        
     </div>
     <!-- BEGIN CONTENT -->
 </div>
@@ -1437,6 +1473,7 @@
                         $(document).ready(function () {
 
                             $('#MatchPanelContener').hide();
+                            $('#ScoreCardContainer').hide();
                             $("#dialog").hide();
                             GetAllMatchList();
                             //$( "#dialog" ).dialog();
@@ -1482,7 +1519,7 @@
                                         ' + value['status'] + '<br> \n\
                                         ' + value['format'] + '<br>\n\
                                         ' + value['start_date'] + '\
-                                       <div class="desc">' + value['name'] + '</div>\n\
+                                       <div class="desc"><a class="more" href="#" onclick="MatchScoreCardValues(\'' + value['id'] + '\',\'' + value['format'] + '\')";>' + value['name'] + '</a></div>\n\
                                        </div>\n\
                                         <a class="more" href="#" onclick="MatchDetailValues(\'' + value['id'] + '\',\'' + value['format'] + '\')";>View more <i class="m-icon-swapright m-icon-white"></i></a>';
                                         MatchListDataArray += '</div>';
@@ -1504,7 +1541,7 @@
                             });
 
                         }
-
+                        
                         function MatchDetailValues(MatchId, MatchFormat)
                         {
                             $('.ClassHundreds').hide();
@@ -2316,6 +2353,54 @@
                                     }
                                 }
                             });
+                        }
+
+
+
+                        function MatchScoreCardValues(MatchId, MatchFormat)
+                        {
+                            MatchId = 41;
+                            $('#MatchPanelContener').hide();
+                            $('#ScoreCardContainer').show();
+                            
+                            //alert(MatchId+ " "+MatchFormat);
+                            MatchBatsmanScoreDataFun(MatchId);
+                           
+                        }
+                        
+                        function MatchBatsmanScoreDataFun(MatchId)
+                        {
+                            $.ajax({
+                                type: "POST",
+                                url: "<?php echo base_url(); ?>" + "index.php/cricketcontroller/GetAllBatsmanData",
+                                dataType: 'json',
+                                data: {key: MatchId},
+                                success: function (res) {
+
+                                    var TeamDataA = '';
+                                    var TeamDataB = '';
+                                    var Incremental = 1;
+                                    $.each(res, function (key, value) {
+                                        
+                                         TeamDataA += '<tr>\n\
+                                                            <td>' + Incremental + '</td>\n\\n\
+                                                            <td>' + value['player_name'] + '</td>\n\
+                                                            <td> ' + value['player_runs'] + ' </td> \n\
+                                                            <td>' + value['player_balls'] + '  </td>\n\\n\
+                                                            <td>' + value['player_strike_rate'] + '  </td>\n\
+                                                       </tr>';
+                                             
+                                            Incremental = Incremental + 1;
+                                            
+
+                                    });
+
+                                    $(".tBodyBatsmansA").html(TeamDataA);
+                                    //$(".tBodyBatsmansB").html(TeamDataB);
+                                    // $(".tBodyRunRateTeamB").html(TeamDataB);
+
+                                }
+                            })
                         }
 
 
