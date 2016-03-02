@@ -82,7 +82,7 @@ class Cricketcontroller extends CI_Controller {
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
                     echo "ss<pre>";
-                   //$LiveMatchArray->data->card->balls->$OverBallKeyValue
+                    echo $LiveMatchArray->data->card->now->batting_team;
                     print_r($LiveMatchArray->data); exit;
                     //exit;
 
