@@ -72,8 +72,8 @@ class Cricketcontroller extends CI_Controller {
                     $MatchUniqueId = $v->id;
                     //$MatchUniqueId = 45;
                     //$UniqueKeyOfMatch = "asiacup_2016_g8";
-                    $CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
-                    //$CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
+                    //$CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
+                    $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
                     $url = $CommonAuthUrl."match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, $url);
