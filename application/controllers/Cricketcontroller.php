@@ -217,15 +217,14 @@ class Cricketcontroller extends CI_Controller {
                             } // end of fall wicket foreach
                             
                             
-                                $OverNumberValue = $LiveMatchArray->data->card->now->recent_overs[0][0];// get over no
+                            
+                            
+                            if($LiveMatchArray->data->card->now->recent_overs[0][0] == 10)
+                            {
                                 $OverBallKeyValue = $LiveMatchArray->data->card->now->recent_overs[0][1][0]; // get over key
 
-                                //print_r($LiveMatchArray->data->card->balls->$OverBallKeyValue);
-
-                                //$FirstBallCheck = $BallByBallArray->data->balls->$FirstBallMatchKey;
                                 $FirstBallCheck = $LiveMatchArray->data->card->balls->$OverBallKeyValue;
-                                   //echo "In Ball By ball<pre>";
-                                   //print_r($FirstBallCheck);//ball_by_ball
+                                 
                                 $CheckedMatchBallByBall = $this->Cricketmodel_model->getCheckUniqueMatchBallByBallPresent($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
 
                                 if ($CheckedMatchBallByBall == 0) {
@@ -245,6 +244,8 @@ class Cricketcontroller extends CI_Controller {
 
                                     $this->Cricketmodel_model->MatchFirstBallSummaryInsert($BallByBallArrayValues);
                                 }
+                            }
+                                
                      
                      
                      
