@@ -81,9 +81,9 @@ class Cricketcontroller extends CI_Controller {
                     curl_setopt($ch,CURLOPT_ENCODING , "gzip");
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
-                    echo "ss<pre>";
-                    echo $LiveMatchArray->data->card->now->batting_team;
-                    print_r($LiveMatchArray->data); exit;
+                    //echo "ss<pre>";
+                    //echo $LiveMatchArray->data->card->now->batting_team;
+                    //print_r($LiveMatchArray->data); exit;
                     //exit;
 
                     if (count((array) $LiveMatchArray->data->card->toss) > 0) {
@@ -220,7 +220,7 @@ class Cricketcontroller extends CI_Controller {
                             foreach ($LiveMatchArray->data->card->now->recent_overs as $key => $valueOfRecentOver) {
                                 
                                 
-                                if($valueOfRecentOver[0] == 11 )
+                                if($valueOfRecentOver[0] == 11 && $LiveMatchArray->data->card->now->batting_team."_1" == $BattingKeyId)
                                 {
                                     $OverBallKeyValue = $valueOfRecentOver[1][0]; // get over key
 
