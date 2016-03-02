@@ -219,7 +219,7 @@ class Cricketcontroller extends CI_Controller {
                             
                             
                             
-                            if($LiveMatchArray->data->card->now->recent_overs[0][0] == 10)
+                            if($LiveMatchArray->data->card->now->recent_overs[0][0] == 11)
                             {
                                 $OverBallKeyValue = $LiveMatchArray->data->card->now->recent_overs[0][1][0]; // get over key
 
