@@ -2359,7 +2359,7 @@
 
                         function MatchScoreCardValues(MatchId, MatchFormat)
                         {
-                            MatchId = 41;
+                            //MatchId = 41;
                             $('#MatchPanelContener').hide();
                             $('#ScoreCardContainer').show();
                             
