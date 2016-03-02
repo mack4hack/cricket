@@ -220,7 +220,7 @@ class Cricketcontroller extends CI_Controller {
                             foreach ($LiveMatchArray->data->card->now->recent_overs as $key => $valueOfRecentOver) {
                                 
                                 
-                                if($valueOfRecentOver[0] == 11 && $LiveMatchArray->data->card->now->batting_team."_1" == $BattingKeyId)
+                                if($valueOfRecentOver[0] == 1 && $LiveMatchArray->data->card->now->batting_team."_1" == $BattingKeyId)
                                 {
                                     $OverBallKeyValue = $valueOfRecentOver[1][0]; // get over key
 
