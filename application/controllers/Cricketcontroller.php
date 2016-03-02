@@ -70,9 +70,9 @@ class Cricketcontroller extends CI_Controller {
                 foreach ($UniqueKeyOfMatchArray as $key => $v) {
                     $UniqueKeyOfMatch = $v->unique;
                     $MatchUniqueId = $v->id;
-                    //$MatchUniqueId = 45;
-                    //$UniqueKeyOfMatch = "asiacup_2016_g8";
-                    //$CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
+                    $MatchUniqueId = 46;
+                    $UniqueKeyOfMatch = "asiacup_2016_g9";
+                    $CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
                     $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
                     $url = $CommonAuthUrl."match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
                     $ch = curl_init();
@@ -83,7 +83,7 @@ class Cricketcontroller extends CI_Controller {
                     $LiveMatchArray = json_decode($output);
                     echo "ss<pre>";
                    //$LiveMatchArray->data->card->balls->$OverBallKeyValue
-                     print_r($LiveMatchArray->data); exit;
+                     //print_r($LiveMatchArray->data); exit;
                     //exit;
 
                     if (count((array) $LiveMatchArray->data->card->toss) > 0) {
