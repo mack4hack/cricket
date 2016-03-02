@@ -217,38 +217,38 @@ class Cricketcontroller extends CI_Controller {
                             } // end of fall wicket foreach
                             
                             
-                            
-                            
-                            if($LiveMatchArray->data->card->now->recent_overs[0][0] == 11 && $LiveMatchArray->data->card->now->batting_team."_1" == $BattingKeyId)
-                            {
-                                $OverBallKeyValue = $LiveMatchArray->data->card->now->recent_overs[0][1][0]; // get over key
-
-                                $FirstBallCheck = $LiveMatchArray->data->card->balls->$OverBallKeyValue;
-                                 
-                                $CheckedMatchBallByBall = $this->Cricketmodel_model->getCheckUniqueMatchBallByBallPresent($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
-
-                                if ($CheckedMatchBallByBall == 0) {
-                                    $BallByBallArrayValues = array(
-                                        "ball_comment" => $FirstBallCheck->comment,
-                                        "ball_batting_team" => $FirstBallCheck->batting_team,
-                                        "ball_over_str" => $FirstBallCheck->over_str,
-                                        "ball_dotball" => $FirstBallCheck->batsman->dotball,
-                                        "ball_runs" => $FirstBallCheck->runs,
-                                        "ball_wicket" => $FirstBallCheck->wicket,
-                                        "ball_type" => $FirstBallCheck->ball_type,
-                                        "ball_wicket_type" => $FirstBallCheck->wicket_type,
-                                        "unique_key" => $UniqueKeyOfMatch,
-                                        "Innings_code" => $BattingKeyId,
-                                        "match_id" => $MatchUniqueId
-                                    );
-
-                                    $this->Cricketmodel_model->MatchFirstBallSummaryInsert($BallByBallArrayValues);
-                                }
-                            }
+                            foreach ($LiveMatchArray->data->card->now->recent_overs as $key => $valueOfRecentOver) {
                                 
-                     
-                     
-                     
+                                
+                                if($valueOfRecentOver[0] == 11)
+                                {
+                                    $OverBallKeyValue = $valueOfRecentOver[1][0]; // get over key
+
+                                    $FirstBallCheck = $LiveMatchArray->data->card->balls->$OverBallKeyValue;
+
+                                    $CheckedMatchBallByBall = $this->Cricketmodel_model->getCheckUniqueMatchBallByBallPresent($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
+
+                                    if ($CheckedMatchBallByBall == 0) {
+                                        $BallByBallArrayValues = array(
+                                            "ball_comment" => $FirstBallCheck->comment,
+                                            "ball_batting_team" => $FirstBallCheck->batting_team,
+                                            "ball_over_str" => $FirstBallCheck->over_str,
+                                            "ball_dotball" => $FirstBallCheck->batsman->dotball,
+                                            "ball_runs" => $FirstBallCheck->runs,
+                                            "ball_wicket" => $FirstBallCheck->wicket,
+                                            "ball_type" => $FirstBallCheck->ball_type,
+                                            "ball_wicket_type" => $FirstBallCheck->wicket_type,
+                                            "unique_key" => $UniqueKeyOfMatch,
+                                            "Innings_code" => $BattingKeyId,
+                                            "match_id" => $MatchUniqueId
+                                        );
+
+                                        $this->Cricketmodel_model->MatchFirstBallSummaryInsert($BallByBallArrayValues);
+                                    }
+                                }
+                                
+                                
+                            }
 
                             ///$this->CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
                         }
