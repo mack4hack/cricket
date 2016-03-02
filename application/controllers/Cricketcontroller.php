@@ -82,7 +82,7 @@ class Cricketcontroller extends CI_Controller {
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
                     echo "ss<pre>";
-                    print_r($LiveMatchArray); exit;
+                    print_r($LiveMatchArray->data->card->balls); exit;
 
                     if (count((array) $LiveMatchArray->data->card->toss) > 0) {
                         if ($LiveMatchArray->data->card->toss->won != "") {
