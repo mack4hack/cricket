@@ -219,6 +219,39 @@ class Cricketcontroller extends CI_Controller {
 
                                 // print_r($dataWicketArray);
                             } // end of fall wicket foreach
+                            
+                            
+                                $OverNumberValue = $LiveMatchArray->data->card->now->recent_overs[0][0];// get over no
+                                $OverBallKeyValue = $LiveMatchArray->data->card->now->recent_overs[0][1][0]; // get over key
+
+                                //print_r($LiveMatchArray->data->card->balls->$OverBallKeyValue);
+
+                                //$FirstBallCheck = $BallByBallArray->data->balls->$FirstBallMatchKey;
+                                $FirstBallCheck = $LiveMatchArray->data->card->balls->$OverBallKeyValue;
+                                   //echo "In Ball By ball<pre>";
+                                   //print_r($FirstBallCheck);//ball_by_ball
+                                $CheckedMatchBallByBall = $this->Cricketmodel_model->getCheckUniqueMatchBallByBallPresent($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
+
+                                if ($CheckedMatchBallByBall == 0) {
+                                    $BallByBallArrayValues = array(
+                                        "ball_comment" => $FirstBallCheck->comment,
+                                        "ball_batting_team" => $FirstBallCheck->batting_team,
+                                        "ball_over_str" => $FirstBallCheck->over_str,
+                                        "ball_dotball" => $FirstBallCheck->batsman->dotball,
+                                        "ball_runs" => $FirstBallCheck->runs,
+                                        "ball_wicket" => $FirstBallCheck->wicket,
+                                        "ball_type" => $FirstBallCheck->ball_type,
+                                        "ball_wicket_type" => $FirstBallCheck->wicket_type,
+                                        "unique_key" => $UniqueKeyOfMatch,
+                                        "Innings_code" => $BattingKeyId,
+                                        "match_id" => $MatchUniqueId
+                                    );
+
+                                    $this->Cricketmodel_model->MatchFirstBallSummaryInsert($BallByBallArrayValues);
+                                }
+                     
+                     
+                     
 
                             ///$this->CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
                         }
