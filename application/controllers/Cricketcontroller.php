@@ -81,14 +81,10 @@ class Cricketcontroller extends CI_Controller {
                     curl_setopt($ch,CURLOPT_ENCODING , "gzip");
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
-                    echo "ss<pre>";
-                    //print_r($LiveMatchArray->data->card->now->recent_overs[0][1][0]);
+                    //echo "ss<pre>";
                    
-                    $OverNumberValue = $LiveMatchArray->data->card->now->recent_overs[0][0];// get over no
-                    $OverBallKeyValue = $LiveMatchArray->data->card->now->recent_overs[0][1][0]; // get over key
-                     
-                     print_r($LiveMatchArray->data->card->balls->$OverBallKeyValue); exit;
-                    exit;
+                     //print_r($LiveMatchArray->data->card->balls->$OverBallKeyValue); exit;
+                    //exit;
 
                     if (count((array) $LiveMatchArray->data->card->toss) > 0) {
                         if ($LiveMatchArray->data->card->toss->won != "") {
