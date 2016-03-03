@@ -323,7 +323,7 @@ function getCricketMatchOddsByMatchId($match_id,$m_id){
     $this->db->join('config_cric_odds cco','cms.odd_id=cco.odd_id');
     $this->db->join('match_list ml','ml.id=cms.match_id');
     $this->db->where('match_id',$match_id);
-    $this->db->where('m_id',$m_id);
+    $this->db->where('cco.m_id',$m_id);
     $query = $this->db->get();
     //echo $this->db->last_query();die;
     return $query->result_array();
