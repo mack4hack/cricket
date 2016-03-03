@@ -43,14 +43,17 @@ class Cricket extends REST_Controller
     }
 	 
 	function getCricketMatchDetails_get(){
+		date_default_timezone_set("Asia/Calcutta");
 		 $lists = $this->Cricket_model->getCricketMatchDetails();
 		//print_r($lists);die;
 		 if(!empty($lists)){
-		 $i=1;
-		 foreach($lists as $row):
-				$result['Match_'.$i]  = $row;
-				$i++;
-		 endforeach;
+			 $i=1;
+			 foreach($lists as $row):
+					$gmt_time = strtotime($row['start_date']);
+					$row['start_date'] =  date('r', $gmt_time);
+					$result['Match_'.$i]  = $row;
+					$i++;
+			 endforeach;
         }
         if (!empty($result)) {
             
@@ -73,7 +76,16 @@ class Cricket extends REST_Controller
 		 $list_match_odds = $this->Cricket_model->getCricketMatchOdds();
 		 //print_r($list_match_odds);die;
 		 if(!empty($list_match_odds)){
-			
+			$i=0;
+			foreach($list_match_odds as $team):
+				if($team['perticulars'] =='team_1'){
+					$list_match_odds[$i]['perticulars'] = $team['team_a'];
+				}
+				if($team['perticulars'] =='team_2'){
+					$list_match_odds[$i]['perticulars'] = $team['team_b'];
+				}
+			$i++;
+			endforeach;
 		 	$result['Match_Odds']  = $list_match_odds;	
 		 
         	}
