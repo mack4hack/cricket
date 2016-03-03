@@ -848,7 +848,7 @@ function delete_dealer($id)
 	    	$this->db->select('sum(bet_amount) as bet_amount');
 			$this->db->from('dealer_history');
 			$this->db->where('bet_amount >= 0');
-			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 			$this->db->where($where);
 			$query=$this->db->get()->row();
 			$bet_amount = 0;
@@ -860,7 +860,7 @@ function delete_dealer($id)
 			$this->db->select('sum(commission) as commission');
 			$this->db->from('dealer_history');
 			$this->db->where('bet_amount >= 0');
-			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 			$this->db->where($where);
 			$query=$this->db->get()->row();
 			$commission = 0;
@@ -874,7 +874,7 @@ function delete_dealer($id)
 			$this->db->select('sum(total) as total');
 			$this->db->from('dealer_history');
 			$this->db->where('bet_amount >= 0');
-			$where = '(timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+			$where = '(timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 			$this->db->where($where);
 			$query=$this->db->get()->row();
 			$total = 0;
@@ -890,7 +890,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->join('dealer_player', 'dealer_player.player_id = player_history.player_id');
 			$this->db->where('result','1');
-			$where = 'dealer_player.dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$too.'" AND  "'.$fromm.'")';
+			$where = 'dealer_player.dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$too.'" AND  "'.$fromm.'") AND game_type < 4';
 			$this->db->where($where);
 			$query=$this->db->get()->row();
 			$payout = 0;
@@ -961,7 +961,7 @@ function delete_dealer($id)
 		    	$this->db->select('sum(bet_amount) as bet_amount');
 				$this->db->from('dealer_history');
 				$this->db->where('bet_amount >= 0');
-				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$bet_amount = 0;
@@ -973,7 +973,7 @@ function delete_dealer($id)
 				$this->db->select('sum(commission) as commission');
 				$this->db->from('dealer_history');
 				$this->db->where('bet_amount >= 0');
-				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$commission = 0;
@@ -985,7 +985,7 @@ function delete_dealer($id)
 				$this->db->select('sum(payout) as payout');
 				$this->db->from('player_history');
 				$this->db->where('result','1');
-				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$payout = 0;
@@ -1080,7 +1080,7 @@ function delete_dealer($id)
 				$this->db->from('player_history');
 				// $this->db->where('bet_amount >= 0');
 				//$where = 'player_id = "'.$player->player_id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
-				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%"';
+				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$bet_amount = 0;
@@ -1092,7 +1092,7 @@ function delete_dealer($id)
 				$this->db->select('sum(payout) as payout');
 				$this->db->from('player_history');
 				$this->db->where('result','1');
-				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%"';
+				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$payout = 0;
@@ -1193,6 +1193,7 @@ function delete_dealer($id)
 				$this->db->from('player_history');
 				$this->db->where('timeslot_id',$timeslot['timeslot_id']);
 				$this->db->where('player_id',$player_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				//$this->db->like('timeslot',$timeslot->timeslot);
 				$query=$this->db->get()->row();
@@ -1204,6 +1205,7 @@ function delete_dealer($id)
 				$this->db->where('result','1');
 				$this->db->where('timeslot_id',$timeslot['timeslot_id']);
 				$this->db->where('player_id',$player_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$query=$this->db->get()->row();
 				$win = $query->win;
@@ -1245,7 +1247,7 @@ function delete_dealer($id)
 		
 		$this->db->select('id,transaction_id');
      	$this->db->from('player_history');
-     	$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'"';
+     	$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'" AND game_type < 4';
 	    $this->db->where($where);
 	    $this->db->group_by('transaction_id');
 	    $query=$this->db->get();
@@ -1277,6 +1279,7 @@ function delete_dealer($id)
 				// $this->db->where('id',$record->id);
 				$this->db->where('player_id',$player_id);
 				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$this->db->group_by('transaction_id');
 				//$this->db->like('timeslot',$timeslot->timeslot);
@@ -1290,6 +1293,7 @@ function delete_dealer($id)
 				// $this->db->where('id',$record->id);
 				$this->db->where('player_id',$player_id);
 				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$query=$this->db->get()->row();
 				//echo $this->db->last_query(); die;
@@ -1462,6 +1466,7 @@ function delete_dealer($id)
 			$this->db->select('bet_amount as chips');
 			$this->db->from('player_history');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$chips = '';
@@ -1472,6 +1477,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->where('result','1');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			// $this->db->where('transaction_id',$record->transaction_id);
 			// $this->db->like('timeslot',$day);
 			$win = 0;
@@ -1484,6 +1490,7 @@ function delete_dealer($id)
 			$this->db->select('sum(bet_amount) as total_bet');
 			$this->db->from('player_history');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$total_bet = '';
@@ -1494,6 +1501,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->where('result','1');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			//echo $this->db->last_query(); die;
 			$total_wins ='';
@@ -1504,6 +1512,7 @@ function delete_dealer($id)
 			$this->db->select('first_digit,second_digit,jodi_digit');
 			$this->db->from('player_history');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$first_digit = $query->first_digit;
@@ -1531,6 +1540,7 @@ function delete_dealer($id)
 			$this->db->select('timeslot');
 			$this->db->from('player_history');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			//echo $this->db->last_query(); die;
 			if($query)
@@ -1589,6 +1599,8 @@ function delete_dealer($id)
 			$total_balance = 0;
 			$total_commission = 0;
 
+			$data = array();
+
 		    foreach ($week_days as $day) {
 		    	
 
@@ -1599,7 +1611,7 @@ function delete_dealer($id)
 				$this->db->from('player_history');
 				// $this->db->where('bet_amount >= 0');
 				//$where = 'player_id = "'.$player->player_id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'")';
-				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%"';
+				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$bet_amount = 0;
@@ -1611,7 +1623,7 @@ function delete_dealer($id)
 				$this->db->select('sum(payout) as payout');
 				$this->db->from('player_history');
 				$this->db->where('result','1');
-				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%"';
+				$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND game_type < 4';
 				$this->db->where($where);
 				$query=$this->db->get()->row();
 				$payout = 0;
@@ -1675,7 +1687,7 @@ function delete_dealer($id)
 		
 		$this->db->select('id,transaction_id');
      	$this->db->from('player_history');
-     	$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'"';
+     	$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'" AND game_type < 4';
 	    $this->db->where($where);
 	    $this->db->group_by('transaction_id');
 	    $query=$this->db->get();
@@ -1707,6 +1719,7 @@ function delete_dealer($id)
 				// $this->db->where('id',$record->id);
 				$this->db->where('player_id',$player_id);
 				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$this->db->group_by('transaction_id');
 				//$this->db->like('timeslot',$timeslot->timeslot);
@@ -1720,6 +1733,7 @@ function delete_dealer($id)
 				// $this->db->where('id',$record->id);
 				$this->db->where('player_id',$player_id);
 				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$query=$this->db->get()->row();
 				//echo $this->db->last_query(); die;
@@ -1761,6 +1775,7 @@ function delete_dealer($id)
      	$this->db->from('player_history');
      	//$where = 'player_id = "'.$player_id.'" AND timeslot LIKE "%'.$day.'%" AND timeslot_id="'.$timeslot_id.'"';
 	    $this->db->where('transaction_id',$transaction_id);
+	    $this->db->where('game_type <',4);
 	    //$this->db->group_by('transaction_id');
 	    $query=$this->db->get();
 	    //echo($this->db->last_query());  die;
@@ -1779,6 +1794,7 @@ function delete_dealer($id)
 			$this->db->select('bet_amount as chips');
 			$this->db->from('player_history');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$chips = '';
@@ -1789,6 +1805,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->where('result','1');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			// $this->db->where('transaction_id',$record->transaction_id);
 			// $this->db->like('timeslot',$day);
 			$win = 0;
@@ -1801,6 +1818,7 @@ function delete_dealer($id)
 			$this->db->select('sum(bet_amount) as total_bet');
 			$this->db->from('player_history');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$total_bet = '';
@@ -1811,6 +1829,7 @@ function delete_dealer($id)
 			$this->db->from('player_history');
 			$this->db->where('result','1');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			//echo $this->db->last_query(); die;
 			$total_wins ='';
@@ -1821,6 +1840,7 @@ function delete_dealer($id)
 			$this->db->select('first_digit,second_digit,jodi_digit');
 			$this->db->from('player_history');
 			$this->db->where('id',$transaction->id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			// echo $this->db->last_query(); die;
 			$first_digit = $query->first_digit;
@@ -1845,6 +1865,7 @@ function delete_dealer($id)
 			$this->db->select('timeslot');
 			$this->db->from('player_history');
 			$this->db->where('transaction_id',$transaction->transaction_id);
+			$this->db->where('game_type <',4);
 			$query=$this->db->get()->row();
 			//echo $this->db->last_query(); die;
 			if($query)
@@ -1870,6 +1891,405 @@ function delete_dealer($id)
 		}
 		
 		// echo "<pre>"; print_r($data);  	die;
+	  	return $data;
+	}
+
+	function getAccountsCricket($from,$to)
+	{
+		$this->db->select('user_code,id');
+     	$this->db->from('user_master');
+	    $this->db->where('role_id','2');
+	    $query=$this->db->get();
+	     // echo($this->db->last_query());  die;
+	    $dealers =  $query->result();
+
+	    $i=1;
+	    $total_bet = 0 ;
+		$total_wins = 0;
+		$total_balance = 0;
+		$total_commission = 0;
+
+	    foreach ($dealers as $dealer) {
+	    	
+	    	$this->db->select('sum(bet_amount) as bet_amount');
+			$this->db->from('dealer_history');
+			$this->db->where('bet_amount >= 0');
+			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+			$this->db->where($where);
+			$query=$this->db->get()->row();
+			$bet_amount = 0;
+			  //echo($this->db->last_query());  die;
+			if($query){
+				$bet_amount = $query->bet_amount;
+			}
+
+			$this->db->select('sum(commission) as commission');
+			$this->db->from('dealer_history');
+			$this->db->where('bet_amount >= 0');
+			$where = 'dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+			$this->db->where($where);
+			$query=$this->db->get()->row();
+			$commission = 0;
+			//echo($this->db->last_query()); 
+			if($query){
+				$commission = $query->commission;
+			}
+
+			
+
+			$this->db->select('sum(total) as total');
+			$this->db->from('dealer_history');
+			$this->db->where('bet_amount >= 0');
+			$where = '(timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+			$this->db->where($where);
+			$query=$this->db->get()->row();
+			$total = 0;
+			// echo($this->db->last_query()); die;
+			if($query){
+				$total = $query->total;
+			}	
+
+			$too = $to.' 00:00:00'; 
+	    	$fromm = $from.' 23:59:59'; 
+
+			$this->db->select('sum(payout) as payout');
+			$this->db->from('player_history');
+			$this->db->join('dealer_player', 'dealer_player.player_id = player_history.player_id');
+			$this->db->where('result','1');
+			$where = 'dealer_player.dealer_id = "'.$dealer->id.'" AND (timeslot BETWEEN "'.$too.'" AND  "'.$fromm.'") AND game_type > 3';
+			$this->db->where($where);
+			$query=$this->db->get()->row();
+			$payout = 0;
+			//echo($this->db->last_query());
+			if($query){
+				$payout = $query->payout;
+			}
+
+
+			$balance = $bet_amount - $payout - $commission;
+			$total_bet = $total_bet+$bet_amount;
+			$total_wins = $total_wins+$payout;
+			$total_balance = $total_balance+$balance;
+			$total_commission = $total_commission + $commission;
+
+			$data[]= array(
+			   			'sr_no' => $i,
+			   			'user_code'=>$dealer->user_code,
+			   			'dealer_id'=>$dealer->id,
+			   			'bet_amount'=>$bet_amount,
+			   			'payout'=>$payout,
+			   			'commission'=>$commission,
+			   			'total'=>$total,
+			   			'week' => date('d-m-Y',strtotime($to)) .' To '.date('d-m-Y',strtotime($from)),
+			   			'month' => date('M-Y'),
+			   			'balance'=>number_format($balance,2),
+			   			'total_bet'=>number_format($total_bet,2),
+			   			'total_wins'=>number_format($total_wins,2),
+			   			'total_balance'=>number_format($total_balance,2),
+			   			'total_commission'=>number_format($total_commission,2)
+			   			//'draw_time'=>  $timeslot['timeslot'], // date('d-m-y',strtotime($timeslot['timeslot'])).'  '.date('h:i a',strtotime($draw_time['1'])),
+			   			//'balance'=>$credited -($debited + $commission)
+			   		);
+			$i++;
+	    }
+
+	    //print_r($data);
+	    //die;
+
+	    return $data;
+	}
+
+	function getAccountsDealerCricket($from,$to , $dealer_id)
+	{
+		//if(isset($_GET['dealer_id'])){
+			$this->db->select('user_code,user_master.id');
+	     	$this->db->from('user_master');
+		    $this->db->where('role_id','3');
+		    $this->db->where('dealer_id',$dealer_id);
+		    $this->db->join('dealer_player', 'dealer_player.player_id = user_master.id');
+		    $query=$this->db->get();
+		     // echo($this->db->last_query());  die;
+		    $players =  $query->result();
+
+		    $i=1;
+
+		    $total_bet = 0 ;
+			$total_wins = 0;
+			$total_balance = 0;
+			$total_commission = 0;
+
+			$data = array();
+			$week = date('d-m-Y',strtotime($to)) .' To '.date('d-m-Y',strtotime($from));
+		    foreach ($players as $player) {
+		    	
+		    	$to = $to.' 00:00:00'; 
+		    	$from = $from.' 23:59:59'; 
+
+		    	$this->db->select('sum(bet_amount) as bet_amount');
+				$this->db->from('dealer_history');
+				$this->db->where('bet_amount >= 0');
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+				$this->db->where($where);
+				$query=$this->db->get()->row();
+				$bet_amount = 0;
+				 // echo($this->db->last_query());  die;
+				if($query){
+					$bet_amount = $query->bet_amount;
+				}
+
+				$this->db->select('sum(commission) as commission');
+				$this->db->from('dealer_history');
+				$this->db->where('bet_amount >= 0');
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+				$this->db->where($where);
+				$query=$this->db->get()->row();
+				$commission = 0;
+				//echo($this->db->last_query()); 
+				if($query){
+					$commission = $query->commission;
+				}
+
+				$this->db->select('sum(payout) as payout');
+				$this->db->from('player_history');
+				$this->db->where('result','1');
+				$where = 'player_id = "'.$player->id.'" AND (timeslot BETWEEN "'.$to.'" AND  "'.$from.'") AND game_type > 3';
+				$this->db->where($where);
+				$query=$this->db->get()->row();
+				$payout = 0;
+				// echo($this->db->last_query()); die;
+				if($query){
+					$payout = $query->payout;
+				}	
+
+				$balance = $bet_amount - $payout - $commission;
+				$total_bet = $total_bet+$bet_amount;
+				$total_wins = $total_wins+$payout;
+				$total_balance = $total_balance+$balance;
+				$total_commission = $total_commission + $commission;
+
+				$data[]= array(
+				   			'sr_no' => $i,
+				   			'user_code'=>$player->user_code,
+				   			'player_id'=>$player->id,
+				   			'bet_amount'=>$bet_amount,
+				   			'payout'=>$payout,
+				   			'commission'=>$commission,
+				   			'total_bet'=>number_format($total_bet,2),
+				   			'total_wins'=>number_format($total_wins,2),
+				   			'total_balance'=>number_format($total_balance,2),
+				   			'total_commission'=>number_format($total_commission,2),
+				   			//'total'=>$total,
+				   			'week' => $week,
+				   			'month' => date('M-Y'),
+				   			'balance'=>number_format($balance,2),
+				   			//'draw_time'=>  $timeslot['timeslot'], // date('d-m-y',strtotime($timeslot['timeslot'])).'  '.date('h:i a',strtotime($draw_time['1'])),
+				   			//'balance'=>$credited -($debited + $commission)
+				   		);
+				$i++;
+		    }
+		//}
+	   // print_r($data);
+	   // die;
+
+	    return $data;
+	}
+
+	function getCricketAccountsPlayerByDate($player_id,$day)
+	{
+			
+		$data = array();
+		
+		$this->db->select('user_code');
+     	$this->db->from('user_master');
+	    $this->db->where('id',$player_id);
+	    $query=$this->db->get()->row();
+	    $user_code =  $query->user_code;
+
+	   	/*$timeslot_id = 1; 
+	   	for ($i = 0 * 60; $i < 24 * 60; $i+= 15) {
+            $hr = floor($i / 60);
+            if ($hr <= 9) $hr = '0' . $hr;
+            
+            $min = ($i / 60 - floor($i / 60)) * 60;
+            if ($min <= 9) $min = '0' . $min;
+            
+            $start = $hr . ":" . $min;
+            
+            $newTime = date("h:i a", strtotime($start . " +15 minutes"));
+            
+            //$time_slots[] = $start." To ".$newTime;
+            //if(strtotime($newTime) < strtotime(date('h:i a')))
+            	$timeslots[] = array('timeslot_id' => $timeslot_id, 'timeslot' => $newTime,);
+            $timeslot_id++;
+        }*/
+
+        $this->db->select('*');
+		$this->db->from('cric_user_bet');
+		$this->db->like('transaction_time',$day);
+		//$this->db->where('timeslot_id',$timeslot['timeslot_id']);
+		$this->db->where('user_id',$player_id);
+		$this->db->group_by('user_id');
+		$query=$this->db->get();
+		$timeslots = $query->result(); 
+
+		// print_r($timeslots); die;
+
+		// echo $this->db->last_query(); die;
+
+        //echo "<pre>";
+	    //	print_r($timeslots); die;
+
+        $total_bet = 0 ;
+		$total_wins = 0;
+		$total_balance = 0;
+		$total_commission = 0;
+
+
+		if(!empty($timeslots))
+		{	$i=1;
+			foreach ($timeslots as $timeslot)
+			{
+				//print_r($timeslot); die;
+				$this->db->select('sum(bet_amount) as chips');
+				$this->db->from('player_history');
+				//$this->db->where('timeslot',$timeslot['timeslot_id']);
+				$this->db->where('player_id',$player_id);
+				$this->db->where('game_type >',3);
+				$this->db->like('timeslot',$day);
+				//$this->db->like('timeslot',$timeslot->timeslot);
+				$query=$this->db->get()->row();
+				// echo $this->db->last_query(); die;
+				$chips = $query->chips;
+
+				$this->db->select('sum(payout) as win');
+				$this->db->from('player_history');
+				$this->db->where('result','1');
+				$this->db->where('game_type >',3);
+				// $this->db->where('timeslot_id',$timeslot['timeslot_id']);
+				$this->db->where('player_id',$player_id);
+				$this->db->like('timeslot',$day);
+				$query=$this->db->get()->row();
+				$win = $query->win;
+
+				$this->db->select('name');
+				$this->db->from('cric_user_bet');
+				$this->db->join('match_list', 'match_list.id = cric_user_bet.match_id');
+				$query=$this->db->get()->row();
+				$match = $this->db->escape($query->name);
+				$match = str_replace("'","",$match);
+
+			   	$balance = $chips - $win;
+			   	$total_bet = $total_bet + $chips ;
+				$total_wins = $total_wins + $win;
+				$total_balance = $total_balance + $balance;
+
+				if($chips){
+				   	$data[]= array(
+				   			'sr_no' => $i,
+				   			'user_code' => $user_code,
+				   			'bet_amount'=>$chips,
+				   			'payout'=>$win,
+				   			'balance'=>number_format($balance,2),
+				   			'total_bet'=>number_format($total_bet,2),
+				   			'total_wins'=>number_format($total_wins,2),
+				   			'total_balance'=>number_format($total_balance,2),
+				   			'match'=>$match,
+				   			'match_id'=>$timeslot->match_id,
+				   		);
+				   	$i++;
+				}   	
+			}
+		}	
+
+		// echo "<pre>";
+		// print_r($data);
+	 //    die;
+	  	return $data;
+	}
+
+	function getAccountsPlayerDailyByMatch($player_id,$day,$match_id)
+	{
+			
+		$data = array();
+		
+		$this->db->select('bet_id,transaction_id');
+     	$this->db->from('cric_user_bet');
+     	$where = 'user_id = "'.$player_id.'" AND transaction_time LIKE "%'.$day.'%" AND match_id="'.$match_id.'"';
+	    $this->db->where($where);
+	    $this->db->group_by('transaction_id');
+	    $query=$this->db->get();
+	    // echo($this->db->last_query());  die;
+	    $records =  $query->result();
+
+     //    echo "<pre>";
+    	// print_r($records); die;
+
+	    $this->db->select('user_code');
+     	$this->db->from('user_master');
+	    $this->db->where('id',$player_id);
+	    $query=$this->db->get()->row();;
+	    $user_code =  $query->user_code;
+
+        $total_bet = 0 ;
+		$total_wins = 0;
+		$total_balance = 0;
+		$total_commission = 0;
+
+
+		if(!empty($records))
+		{	$i=1;
+			foreach ($records as $record)
+			{
+				//print_r($timeslot); die;
+				$this->db->select('sum(bet_amount) as chips');
+				$this->db->from('player_history');
+				// $this->db->where('id',$record->id);
+				$this->db->where('player_id',$player_id);
+				$this->db->where('game_type >',3);
+				//$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->like('timeslot',$day);
+				$this->db->group_by('transaction_id');
+				//$this->db->like('timeslot',$timeslot->timeslot);
+				$query=$this->db->get()->row();
+				// echo $this->db->last_query(); die;
+				$chips = $query->chips;
+
+				$this->db->select('sum(payout) as win');
+				$this->db->from('player_history');
+				$this->db->where('result','1');
+				$this->db->where('game_type >',3);
+				// $this->db->where('id',$record->id);
+				$this->db->where('player_id',$player_id);
+				$this->db->where('transaction_id',$record->transaction_id);
+				$this->db->like('timeslot',$day);
+				$query=$this->db->get()->row();
+				//echo $this->db->last_query(); die;
+				$win = $query->win;
+
+				
+			   	$balance = $chips - $win;
+			   	$total_bet = $total_bet + $chips ;
+				$total_wins = $total_wins + $win;
+				$total_balance = $total_balance + $balance;
+
+			   	$data[]= array(
+			   			'sr_no' => $i,
+			   			'user_code' => $user_code,
+			   			'bet_amount'=>$chips,
+			   			'payout'=>$win,
+			   			'transaction_id'=>$record->transaction_id,
+			   			'total_bet'=>number_format($total_bet,2),
+			   			'total_wins'=>number_format($total_wins,2),
+			   			//'total_balance'=>$total_balance,
+			   			//'draw_time'=>$timeslot['timeslot'],
+			   		);
+			   	$i++;
+			}
+		}	
+
+		//echo "<pre>";
+		//print_r($data);
+	   //	die;
 	  	return $data;
 	}
 }

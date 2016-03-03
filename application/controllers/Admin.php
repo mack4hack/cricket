@@ -1756,6 +1756,10 @@ class Admin extends CI_Controller
         }    
         else{
 
+            $to = date('Y-m-d');
+            $from = date('Y-m-d');
+            $result['data_daily'] = $this->Admin_model->getAccountsCricket($from, $to);
+
             $monday = date( 'Y-m-d', strtotime( 'monday this week' ) );
             $sunday = date( 'Y-m-d', strtotime( 'sunday' ) );
 
@@ -1767,6 +1771,8 @@ class Admin extends CI_Controller
             if(strtotime($monday) > strtotime($from)){
                 $monday = date( 'Y-m-d', strtotime( '-6 day' ) );
             }
+
+            $result['data_weekly'] = $this->Admin_model->getAccounts($from, $monday);
 
             date_default_timezone_set("Asia/Calcutta");
             if(date('Y-m-d') == $sunday){
@@ -1848,7 +1854,7 @@ class Admin extends CI_Controller
                 
                 $date = date('Y-m-d',strtotime($date));
 
-                $result['data_weekly'] = $this->Admin_model->getAccountsPlayerByDate($player_id,$date);
+                $result['data_weekly'] = $this->Admin_model->getCricketAccountsPlayerByDate($player_id,$date);
                 
                 $this->load->view('admin/accounts_player_cricket_weekly_bydate', $result);
             //}    
@@ -1894,7 +1900,56 @@ class Admin extends CI_Controller
     {
             
                 $this->load->view('admin/singlematch');
-            
+    }
+
+    public function dealerCricketAccountsDaily()
+    {
+        // $weekarr = explode('To', $_GET['week']);
+        // $from = $weekarr[0];
+        $from = date('Y-m-d');#,strtotime($from));
+        $to = $from;
+        // $to = date('Y-m-d',strtotime($to));
+        $dealer_id = $_GET['dealer_id'];
+        $result['data_weekly'] = $this->Admin_model->getAccountsDealerCricket($to, $from,$dealer_id);
+        $this->load->view('admin/dealer_accounts_cricket_daily', $result);
+    }
+
+    public function accountsPlayerCricketDailyByDate()
+    {
+        if (!$this->ion_auth->logged_in()) {
+            redirect('auth/login', 'refresh');
+        }    
+        else{
+            //if(isset($_GET['week'])){
+                $player_id = $_GET['player_id'];
+                $date = $_GET['date'];
+                
+                $date = date('Y-m-d',strtotime($date));
+
+                $result['data_weekly'] = $this->Admin_model->getCricketAccountsPlayerByDate($player_id,$date);
+                
+                $this->load->view('admin/accounts_player_cricket_daily_bydate', $result);
+            //}    
+        }
+        
+    }
+
+    public function accountsPlayerCricketDailyByMatch()
+    {
+        if (!$this->ion_auth->logged_in()) {
+            redirect('auth/login', 'refresh');
+        }    
+        else{
+            //if(isset($_GET['week'])){
+                $player_id = $_GET['player_id'];
+                $date = $_GET['date'];
+                $match_id = $_GET['match_id'];
+               
+                $result['data_weekly'] = $this->Admin_model->getAccountsPlayerDailyByMatch($player_id,$date,$match_id);
+                
+                $this->load->view('admin/accounts_player_cricket_daily_bymatch', $result);
+            //}    
+        }
         
     }
     
