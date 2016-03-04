@@ -1,12 +1,12 @@
 <table class="table table-bordered table-hover">
     <thead>
-        <tr><th colspan="6">Match : <?php echo $_GET['match']; ?></th></tr>
+        <tr><th colspan="6">Match : <?php echo $_GET['transaction_id']; ?></th></tr>
         <tr>
             <th>
                 Sr No
             </th>
             <th>
-                Transaction No.
+                Game.
             </th>
             <th>
                 Total Bets
@@ -21,14 +21,14 @@
     </thead>
     <tbody>
         <?php if(!empty($data_weekly)  ) {
-            $match_id = $_GET['match_id']; 
+            //$match_id = $_GET['match_id']; 
             $date = $_GET['date']; 
         foreach($data_weekly as $dw){ $transaction_id = $dw['transaction_id']; ?>
         <tr class="success">
             <td><?php echo $dw['sr_no']; ?></td>
-            <td id="week_player_trans"><a date="<?php echo $date; ?>" match="<?php echo $match_id ?>"><?php echo $dw['transaction_id']; ?></a></td>
-            <td><?php echo $dw['bet_amount']; ?></td>
-            <td><?php echo $dw['payout']; ?></td>
+            <td id="week_player_trans"><a date="<?php echo $date; ?>" ><?php echo $dw['game_name']; ?></a></td>
+            <td><?php echo $dw['chips']; ?></td>
+            <td><?php echo $dw['win']; ?></td>
             <!-- <td><?php echo $dw['balance']; ?></td> -->
         <!--<td><?php //echo $draw['profit']; ?></td>-->
         </tr>
@@ -39,21 +39,21 @@
         <?php  } ?>
     </tbody>
 </table>
-<div id="mack61"></div>
+<div id="mack62"></div>
 
 <script type="text/javascript">
     
-    $('.table #week_player_trans').each(function(){
-        //dealer_id = $('#dealer_id').val();
-        $(this).click(function(){
-            transaction_id = $(this).find('a').text();
-            //week = '';
-            date = $(this).find('a').attr('date');
-            //draw_time = $(this).find('a').attr('drawtime');
-            //week = encodeURIComponent(week);
-            $('#mack61').load('<?php echo base_url("/admin/accountsPlayerCricketDailyByTransactionId?date='+date+'&transaction_id="); ?>'+transaction_id,function () { });
-            return false;
-        });
-    });
+    // $('.table #week_player_trans').each(function(){
+    //     //dealer_id = $('#dealer_id').val();
+    //     $(this).click(function(){
+    //         transaction_id = $(this).find('a').text();
+    //         //week = '';
+    //         date = $(this).find('a').attr('date');
+    //         //draw_time = $(this).find('a').attr('drawtime');
+    //         //week = encodeURIComponent(week);
+    //         $('#mack61').load('<?php echo base_url("/admin/accountsPlayerCricketDailyByTransactionId?date='+date+'&transaction_id="); ?>'+transaction_id,function () { });
+    //         return false;
+    //     });
+    // });
 
 </script>

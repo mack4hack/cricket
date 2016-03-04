@@ -1564,10 +1564,10 @@ class Admin extends CI_Controller
             //if(isset($_GET['week'])){
                 //$player_id = $_GET['player_id'];
                 $date = $_GET['date'];
-                $draw_time = $_GET['draw_time'];
+                //$draw_time = $_GET['draw_time'];
                 $transaction_id = $_GET['transaction_id'];
                
-                $result['data_weekly'] = $this->Admin_model->getAccountsPlayerByTransactionId($transaction_id,$date,$draw_time);
+                $result['data_weekly'] = $this->Admin_model->getAccountsPlayerByTransactionId($transaction_id,$date);
                 
                 $this->load->view('admin/accounts_player_bytransactionid', $result);
             //}    
@@ -1948,6 +1948,25 @@ class Admin extends CI_Controller
                 $result['data_weekly'] = $this->Admin_model->getAccountsPlayerDailyByMatch($player_id,$date,$match_id);
                 
                 $this->load->view('admin/accounts_player_cricket_daily_bymatch', $result);
+            //}    
+        }
+        
+    }
+
+    public function accountsPlayerCricketDailyByTransactionId()
+    {
+        if (!$this->ion_auth->logged_in()) {
+            redirect('auth/login', 'refresh');
+        }    
+        else{
+            //if(isset($_GET['week'])){
+                $transaction_id = $_GET['transaction_id'];
+                //$date = $_GET['date'];
+               // $match_id = $_GET['match_id'];
+               
+                $result['data_weekly'] = $this->Admin_model->getAccountsPlayerCricketDailyByTransactionId($transaction_id);
+                
+                $this->load->view('admin/accounts_player_cricket_daily_bytransactionid', $result);
             //}    
         }
         
