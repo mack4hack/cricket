@@ -14,11 +14,12 @@ class Cricket extends REST_Controller
         $this->load->database();
          // load database
         $this->load->model('Cricket_model');
-		$this->load->model('Bets_model');
+        $this->load->model('Bets_model');
 		
          // load model
         $this->load->library('ion_auth');
         $this->load->model('Admin_model');
+     
     }
     
     public function getCricketMatchList_get() {
@@ -287,6 +288,66 @@ class Cricket extends REST_Controller
         }
 	}
 	 
-	 
+	
+        
+        //api for cricket account
+        public function accountsPlayerByWeek_get()
+	    {
+	        $weekarr = explode('To', $_GET['week']);
+	        $from = $weekarr[0];
+	        $from = date('Y-m-d',strtotime($from));
+	        $to = $weekarr[1];
+	        $to = date('Y-m-d',strtotime($to));
+	        $player_id = $_GET['player_id'];
+	        $result = $this->Admin_model->getAccountsPlayerByWeekForCricket($player_id,$to,$from);
+	        if(!empty($result))
+			{
+				$this->response([
+				'status' => TRUE,
+				'data' => $result
+				], REST_Controller::HTTP_OK);
+			}
+			else{   
+				$this->response([
+					'status' => FALSE,
+					'message' => 'No Data Found!!!'
+				], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+			}
+	    }
+        
+          function accountsPlayerByDate_get()
+                        {
+                                 
+                                    if(isset($_GET['player_id'])  && isset($_GET['date']))
+		{
+			$player_id = $_GET['player_id'];
+                                                      $date = $_GET['date'];
+                                                      $result['data_weekly'] = $this->Admin_model->getCricketAccountsPlayerByDate($player_id,$date);
+			if(!empty($result))
+			{
+				$this->response([
+				'status' => TRUE,
+				'data' => $result
+				], REST_Controller::HTTP_OK);
+			}
+			else{   
+				$this->response([
+					'status' => FALSE,
+					'message' => 'No Data Found!!!'
+				], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+			}
+		}
+		else{   
+			$this->response([
+				'status' => FALSE,
+				'message' => 'Player Id and Date required!!!'
+			], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+		}
+                                    
+
+                        
+                        }
+        
+        
 }
 ?>

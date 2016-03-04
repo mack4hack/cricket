@@ -598,6 +598,7 @@ class Bets_model extends CI_Model
 				$this->db->where('timeslot_id',$timeslot['timeslot_id']);
 				$this->db->where('player_id',$player_id);
 				$this->db->like('timeslot',$day);
+                                                                        $this->db->where('game_type <',4);
 				//$this->db->like('timeslot',$timeslot->timeslot);
 				$query=$this->db->get()->row();
 				//echo $this->db->last_query(); die;
@@ -608,6 +609,7 @@ class Bets_model extends CI_Model
 				$this->db->where('result','1');
 				$this->db->where('timeslot_id',$timeslot['timeslot_id']);
 				$this->db->where('player_id',$player_id);
+                                                                        $this->db->where('game_type <',4);
 				$this->db->like('timeslot',$day);
 				$query=$this->db->get()->row();
 				$win = $query->win;
@@ -853,4 +855,13 @@ class Bets_model extends CI_Model
         return $data;
 	}
     
-}
+
+        
+           
+        
+        
+        
+        
+        
+        
+                }
