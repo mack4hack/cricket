@@ -370,7 +370,27 @@ class Cricket extends REST_Controller
 				], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
 			}
 	    }            
-                        
+                   
+                public function accountsPlayerByTransactionId_get()
+	    {
+	          
+                   $transaction_id = $_GET['transaction_id'];
+                
+                   $result['data_weekly'] = $this->Admin_model->getAccountsPlayerCricketDailyByTransactionId($transaction_id);
+	        if(!empty($result))
+			{
+				$this->response([
+				'status' => TRUE,
+				'data' => $result
+				], REST_Controller::HTTP_OK);
+			}
+			else{   
+				$this->response([
+					'status' => FALSE,
+					'message' => 'No Data Found!!!'
+				], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+			}
+	    }     
                         
 }
 ?>
