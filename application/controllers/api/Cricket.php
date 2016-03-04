@@ -348,6 +348,29 @@ class Cricket extends REST_Controller
                         
                         }
         
-        
+          
+                 public function accountsPlayerByMatch_get()
+	    {
+	          $player_id = $_GET['player_id'];
+                            $date = $_GET['date'];
+                            $match_id = $_GET['match_id'];
+               
+                           $result['data_weekly'] = $this->Admin_model->getAccountsPlayerDailyByMatch($player_id,$date,$match_id);
+	        if(!empty($result))
+			{
+				$this->response([
+				'status' => TRUE,
+				'data' => $result
+				], REST_Controller::HTTP_OK);
+			}
+			else{   
+				$this->response([
+					'status' => FALSE,
+					'message' => 'No Data Found!!!'
+				], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+			}
+	    }            
+                        
+                        
 }
 ?>
