@@ -70,9 +70,9 @@ class Cricketcontroller extends CI_Controller {
                 foreach ($UniqueKeyOfMatchArray as $key => $v) {
                     $UniqueKeyOfMatch = $v->unique;
                     $MatchUniqueId = $v->id;
-                    //$MatchUniqueId = 45;
-                    //$UniqueKeyOfMatch = "asiacup_2016_g8";
-                    //http://www.litzscore.com/rest/v2/
+                    //$MatchUniqueId = 46;
+                    //$UniqueKeyOfMatch = "asiacup_2016_g9";
+                    //$CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
                     $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
                     $url = $CommonAuthUrl."match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
                     $ch = curl_init();
@@ -81,8 +81,10 @@ class Cricketcontroller extends CI_Controller {
                     curl_setopt($ch,CURLOPT_ENCODING , "gzip");
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
-                    //echo "<pre>";
-                    //print_r($LiveMatchArray);// exit;
+                    //echo "ss<pre>";
+                    //echo $LiveMatchArray->data->card->now->batting_team;
+                    //print_r($LiveMatchArray->data); exit;
+                    //exit;
 
                     if (count((array) $LiveMatchArray->data->card->toss) > 0) {
                         if ($LiveMatchArray->data->card->toss->won != "") {
@@ -114,36 +116,8 @@ class Cricketcontroller extends CI_Controller {
                         foreach ($LiveMatchArray->data->card->innings as $key => $summary) {
 
                             $BattingKeyId = $summary->key;
-                            foreach ($summary->overs_summary as $key => $PerOver) {
-
-                                $CheckedMatchSummaryOver = $this->Cricketmodel_model->getCheckUniqueMatchOverSummaryPresent($MatchUniqueId, $BattingKeyId, $PerOver->over);
-
-                                if ($CheckedMatchSummaryOver == 0) {
-                                    $ScoreExplode = explode("in", $PerOver->score);
-                                    $RunsWicket = explode("/", $ScoreExplode[0]);
-                                    $WicketKeyImp = "";
-
-                                    if (count($PerOver->wickets) > 0) {
-                                        $WicketKeyImp = implode(",", $PerOver->wickets);
-                                    }
-
-                                    $ArrayOfOverSummaryList = array(
-                                        "score" => $PerOver->score,
-                                        "match_id" => $MatchUniqueId,
-                                        "Innings_code" => $BattingKeyId,
-                                        "over" => $PerOver->over,
-                                        "current_run_rate" => $PerOver->current_run_rate,
-                                        "total_run" => $RunsWicket[0],
-                                        "over_run" => $PerOver->runs,
-                                        "wicket" => $RunsWicket[1],
-                                        "wicket_key" => $WicketKeyImp,
-                                        "summary_count" => $key + 1
-                                    );
-
-                                    $this->Cricketmodel_model->MatchOverSummaryInsert($ArrayOfOverSummaryList);
-                                }
-                            } // end of over summary
-
+                            
+                                
                             foreach ($summary->batting_order as $key => $PlayerKey) {
 
                                 $CheckedMatchPlayer = $this->Cricketmodel_model->getCheckUniqueMatchPlyerPresent($MatchUniqueId, $BattingKeyId, $PlayerKey);
@@ -241,13 +215,48 @@ class Cricketcontroller extends CI_Controller {
 
                                 // print_r($dataWicketArray);
                             } // end of fall wicket foreach
+                            
+                            
+                            foreach ($LiveMatchArray->data->card->now->recent_overs as $key => $valueOfRecentOver) {
+                                
+                                
+                                if($valueOfRecentOver[0] == 1 && $LiveMatchArray->data->card->now->batting_team."_1" == $BattingKeyId)
+                                {
+                                    $OverBallKeyValue = $valueOfRecentOver[1][0]; // get over key
 
-                            ///$this->CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
+                                    $FirstBallCheck = $LiveMatchArray->data->card->balls->$OverBallKeyValue;
+
+                                    $CheckedMatchBallByBall = $this->Cricketmodel_model->getCheckUniqueMatchBallByBallPresent($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
+
+                                    if ($CheckedMatchBallByBall == 0) {
+                                        $BallByBallArrayValues = array(
+                                            "ball_comment" => $FirstBallCheck->comment,
+                                            "ball_batting_team" => $FirstBallCheck->batting_team,
+                                            "ball_over_str" => $FirstBallCheck->over_str,
+                                            "ball_dotball" => $FirstBallCheck->batsman->dotball,
+                                            "ball_runs" => $FirstBallCheck->runs,
+                                            "ball_wicket" => $FirstBallCheck->wicket,
+                                            "ball_type" => $FirstBallCheck->ball_type,
+                                            "ball_wicket_type" => $FirstBallCheck->wicket_type,
+                                            "unique_key" => $UniqueKeyOfMatch,
+                                            "Innings_code" => $BattingKeyId,
+                                            "match_id" => $MatchUniqueId
+                                        );
+
+                                        $this->Cricketmodel_model->MatchFirstBallSummaryInsert($BallByBallArrayValues);
+                                    }
+                                }
+                                
+                                
+                            }
+
                         }
                     }
 
 
                     $this->CronCricketMatchPayoutAutomated($UniqueKeyOfMatch, $MatchUniqueId); // get calculate chip and payout
+                    //$this->CronCricketMatchOverSummaryAutomated($UniqueKeyOfMatch, $MatchUniqueId);
+                    //
                     // "<pre>";
                     //print_r($LiveMatchArray->data->card);
                     exit;
@@ -268,47 +277,31 @@ class Cricketcontroller extends CI_Controller {
     }
 
 // end of function
-    // Live Match Data From  
-    function CronLiveMatchBallByBallDataAutomated($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId) {
+
+    function CronCricketMatchOverSummaryAutomated($UniqueKeyOfMatch, $MatchUniqueId)
+    {
         $TokenAccess = $this->GetApiAuthentication();
-        $BattingKeyUpdatedId = $BattingKeyId . "_1";
-        //$BattingKeyUpdatedId = "b_1_1";
-        //$UniqueKeyOfMatch = "asiacup_2016_g1";
-
-        $url = "http://www.litzscore.com/rest/v2/match/" . $UniqueKeyOfMatch . "/balls/" . $BattingKeyUpdatedId . "/?access_token=" . $TokenAccess;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $output = curl_exec($ch);
-        $BallByBallArray = json_decode($output);
-
-        if (count((array) $BallByBallArray) > 6) {
-            $FirstBallMatchKey = $BallByBallArray->data->over->balls[0];
-            $FirstBallCheck = $BallByBallArray->data->balls->$FirstBallMatchKey;
-            //echo "In Ball By ball<pre>";
-            //print_r($FirstBallCheck);//ball_by_ball
-            $CheckedMatchBallByBall = $this->Cricketmodel_model->getCheckUniqueMatchBallByBallPresent($UniqueKeyOfMatch, $MatchUniqueId, $BattingKeyId);
-
-            if ($CheckedMatchBallByBall == 0) {
-                $BallByBallArrayValues = array(
-                    "ball_comment" => $FirstBallCheck->comment,
-                    "ball_batting_team" => $FirstBallCheck->batting_team,
-                    "ball_over_str" => $FirstBallCheck->over_str,
-                    "ball_dotball" => $FirstBallCheck->batsman->dotball,
-                    "ball_runs" => $FirstBallCheck->runs,
-                    "ball_wicket" => $FirstBallCheck->wicket,
-                    "ball_type" => $FirstBallCheck->ball_type,
-                    "ball_wicket_type" => $FirstBallCheck->wicket_type,
-                    "unique_key" => $UniqueKeyOfMatch,
-                    "Innings_code" => $BattingKeyId,
-                    "match_id" => $MatchUniqueId
-                );
-
-                $this->Cricketmodel_model->MatchFirstBallSummaryInsert($BallByBallArrayValues);
-            }
-        }
+        if($TokenAccess != "")
+        {
+            $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";            
+            $url = $CommonAuthUrl."match/".$UniqueKeyOfMatch."/overs_summary/?access_token=" . $TokenAccess;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch,CURLOPT_ENCODING , "gzip");
+            $output = curl_exec($ch);
+            $OverSummaryArray = json_decode($output);
+            curl_close($ch);
+            //$matches = $asd->data->months[0]->days;
+            $ArrayOfMatchList = array();
+            //echo "In Auto<pre>";
+            //print_r($asd);
+            echo "asd<pre>";
+            print_r($OverSummaryArray);
+            exit;
+        }    
     }
+
 
 // end of cron live data access ball by ball
     // one day call to this function 
