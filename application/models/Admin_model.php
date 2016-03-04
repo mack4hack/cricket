@@ -2128,7 +2128,7 @@ function delete_dealer($id)
 		$this->db->like('transaction_time',$day);
 		//$this->db->where('timeslot_id',$timeslot['timeslot_id']);
 		$this->db->where('user_id',$player_id);
-		//$this->db->group_by('user_id');
+		$this->db->group_by('transaction_id');
 		$query=$this->db->get();
 		$timeslots = $query->result(); 
 
