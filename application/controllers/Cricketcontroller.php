@@ -1620,7 +1620,7 @@ class Cricketcontroller extends CI_Controller {
         $this->GetFirstFiftyRunResultBet($MatchId);
         $this->GetFirstRunRateResultBet($MatchId);
         $this->GetHighestOpeningPartnerShipResultBet($MatchId);
-        $this->GetRaceToFiftyResultBet($MatchId);
+        //$this->GetRaceToFiftyResultBet($MatchId);
         $this->GetWicketFallAtRunsGameResultBet($MatchId);
     }
 	
