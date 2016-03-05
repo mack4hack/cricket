@@ -1621,7 +1621,7 @@ class Cricketcontroller extends CI_Controller {
         $this->GetFirstRunRateResultBet($MatchId);
         $this->GetHighestOpeningPartnerShipResultBet($MatchId);
         //$this->GetRaceToFiftyResultBet($MatchId);
-        $this->GetWicketFallAtRunsGameResultBet($MatchId);
+        //$this->GetWicketFallAtRunsGameResultBet($MatchId);
     }
 	
     
