@@ -259,8 +259,7 @@ class Cricketcontroller extends CI_Controller {
                         }
                     }
 
-                    $this->CronCricketMatchOverSummaryAutomated($UniqueKeyOfMatch, $MatchUniqueId);
-                    exit;
+                    $this->CronCricketMatchOverSummaryAutomated($UniqueKeyOfMatch, $MatchUniqueId); // get over summary api
                     $this->CronCricketMatchPayoutAutomated($UniqueKeyOfMatch, $MatchUniqueId); // get calculate chip and payout
                     $this->CronCricketMatchResultBetAutomated($MatchUniqueId); // get sync litz and user
                     //
@@ -305,7 +304,7 @@ class Cricketcontroller extends CI_Controller {
             //print_r($asd);
             echo "$url<pre>";
             print_r($OverSummaryArray);
-            exit;
+            //exit;
         }    
     }
 
