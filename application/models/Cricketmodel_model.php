@@ -207,11 +207,14 @@ class Cricketmodel_model extends CI_Model {
 
     // get match key for current date played       
     function GetLiveMatchKeyAPIToday() {
+        
         $today = date('Y-m-d');
+        $prv_date = date("Y-m-d", strtotime("-1 days"));
+        //$next_date = date("Y-m-d", strtotime("+3 days"));
         $this->db->select('*');
         $this->db->from('match_list');
         $this->db->where('STR_TO_DATE( start_date, "%Y-%m-%d" )
-        BETWEEN STR_TO_DATE( "' . $today . '", "%Y-%m-%d" )
+        BETWEEN STR_TO_DATE( "' . $prv_date . '", "%Y-%m-%d" )
         AND STR_TO_DATE( "' . $today . '", "%Y-%m-%d" )', NULL, FALSE);
         $query = $this->db->get();
 
@@ -273,9 +276,15 @@ class Cricketmodel_model extends CI_Model {
 
     // get match list for backend       
     function getMatchList() {
+        
+        $today = date('Y-m-d');
+        $prv_date = date("Y-m-d", strtotime("-2 days"));
+        $next_date = date("Y-m-d", strtotime("+3 days"));
         $this->db->select('*');
         $this->db->from('match_list');
-        $this->db->where('status != ', 'completed');
+        $this->db->where('STR_TO_DATE( start_date, "%Y-%m-%d" )
+        BETWEEN STR_TO_DATE( "'.$prv_date.'", "%Y-%m-%d" )
+        AND STR_TO_DATE( "'.$next_date.'", "%Y-%m-%d" )', NULL, FALSE );
         $query = $this->db->get();
 
         return $query->result();
@@ -534,7 +543,403 @@ class Cricketmodel_model extends CI_Model {
         return $query->result_array();
     }
     
+    // get match batsman data to backend      
+    function GetAllBatsmanOutAtRunDataDetails($MatchId) {
+        
+        $this->db->select('*');
+        $this->db->from('team_player');
+        $this->db->where('match_id ='. $MatchId);
+        $this->db->where('Innings_code', "a_1");
+        $this->db->where('player_name !=',"null");
+        $this->db->where('player_dismissed', 1);
+        //$this->db->order_by('team_runs', "ASC");
+        $this->db->order_by('player_wicket_index', "ASC");
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+    }
     
+    // get match batsman data to backend      
+    function GetAllBatsmanOutAtRunOFTeamBDataDetails($MatchId) {
+        
+        $this->db->select('*');
+        $this->db->from('team_player');
+        $this->db->where('match_id ='. $MatchId);
+        $this->db->where('Innings_code', "b_1");
+        $this->db->where('player_name !=',"null");
+        $this->db->where('player_dismissed', 1);
+        //$this->db->order_by('team_runs', "ASC");
+        $this->db->order_by('player_wicket_index', "ASC");
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+    }
+    
+    
+    
+    
+    
+    function UpdateScheduledMatchData($where=array(),$data)
+    {
+        $this->db->update('cric_matchbet_schedule',$data,$where);
+        //echo $this->db->last_query();//die;
+        return $this->db->affected_rows();
+    }
+	
+    function GetWinLossGameMatchResult($MatchId){
+		$this->db->select('*');
+        $this->db->from('match_list');
+        $this->db->where('id', $MatchId);
+        //$this->db->where('tp.Innings_code', "a_1");
+        $this->db->where('winner_team !=',"null");
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+	}
+	
+	function GetTossWinLossGameMatchResult($MatchId){
+		$this->db->select('*');
+        $this->db->from('match_list');
+        $this->db->where('id', $MatchId);
+        //$this->db->where('tp.Innings_code', "a_1");
+        $this->db->where('toss_win !=',"null");
+        $query = $this->db->get();
+       //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+	}
+	
+	function GetFirstBallGameMatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('ball_by_ball');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+        $query = $this->db->get();
+       //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+	}
+	
+	function GetFirstOverGameMatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('match_summary');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+        $this->db->where('over',"1");
+        $query = $this->db->get();
+       //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+	}
+
+	function GetFirstTenOverGameMatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('match_summary');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+        $this->db->where('over',"10");
+        $query = $this->db->get();
+       //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+	}
+	
+	function GetFirstWicketGameMatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('team_player');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+        $this->db->where('player_wicket_index',"1");
+        $query = $this->db->get();
+       //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+	}
+	
+	function GetHIghestOpeningMatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('team_player');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+        $this->db->where('player_wicket_index',"1");
+        $query = $this->db->get();
+       //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+	}
+	
+	function GetToMake30MatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('team_player');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+		$this->db->group_by('player_key');
+		$this->db->having('player_runs>=',30);
+		$this->db->having('player_runs<=',49);
+        $query = $this->db->get();
+//       	echo $this->db->last_query();//die;
+        
+        return $query->result_array();
+	}
+	
+	function GetToMake50MatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('team_player');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+		$this->db->group_by('player_key');
+		$this->db->having('player_runs>=',50);
+		$this->db->having('player_runs<=',99);
+        $query = $this->db->get();
+//       	echo $this->db->last_query();//die;
+        
+        return $query->result_array();
+	}
+	
+	function GetToMake100MatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('team_player');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+		$this->db->group_by('player_key');
+		$this->db->having('player_runs>=',100);
+
+        $query = $this->db->get();
+//       	echo $this->db->last_query();//die;
+        
+        return $query->result_array();
+	}
+
+	function GetInnRunRateMatchResult($MatchId,$team){
+		$this->db->select('*');
+        $this->db->from('match_summary');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+        $this->db->order_by('over',"DESC");
+		$this->db->limit(1,0);
+        $query = $this->db->get();
+       //echo $this->db->last_query();die;
+        
+        return $query->result_array();
+	}
+
+	
+	function GetFirstOverGameTeam1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 5)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetFirstOverGameTeam2Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 6)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetFirstTenOverGameTeam1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 7)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetFirstTenOverGameTeam2Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 8)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetFirstWicketTeam1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 9)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetFirstWicketTeam2Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 10)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetHighestOpeningTeam1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 11)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	/*function GetHighestOpeningTeam2Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 10)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }*/
+	
+	
+	function GetToMake30Team1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 15)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetToMake30Team2Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 16)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetToMake50Team1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 17)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetToMake50Team2Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 18)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	function GetToMake100Team1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 19)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetToMake100Team2Details($MatchId) {
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 20)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	function GetInnRunRateTeam1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 21)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetInnRunRateTeam2Details($MatchId) {
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 22)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetFirstBallTeam1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 3)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+	function GetFirstBallTeam2Details($MatchId) {
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 4)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+	
+
     
     
     

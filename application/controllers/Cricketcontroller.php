@@ -60,6 +60,12 @@ class Cricketcontroller extends CI_Controller {
     ///rest/v2/match/{MATCH_KEY}/balls/{OVER_KEY}/
     // Live Match Data From  
     function CronLiveMatchDataAutomated() {
+        
+        //if($CheckMatchStartWithTwoHoursBefore)
+        //{  // need to work
+            
+        //}
+        
         $TokenAccess = $this->GetApiAuthentication();
         if($TokenAccess != "")
         {
@@ -253,9 +259,10 @@ class Cricketcontroller extends CI_Controller {
                         }
                     }
 
-
+                    $this->CronCricketMatchOverSummaryAutomated($UniqueKeyOfMatch, $MatchUniqueId);
+                    exit;
                     $this->CronCricketMatchPayoutAutomated($UniqueKeyOfMatch, $MatchUniqueId); // get calculate chip and payout
-                    //$this->CronCricketMatchOverSummaryAutomated($UniqueKeyOfMatch, $MatchUniqueId);
+                    $this->CronCricketMatchResultBetAutomated($MatchUniqueId); // get sync litz and user
                     //
                     // "<pre>";
                     //print_r($LiveMatchArray->data->card);
@@ -891,6 +898,748 @@ class Cricketcontroller extends CI_Controller {
         $allBatsmanDataArray = $this->Cricketmodel_model->GetAllBatsmanDataDetails($MatchId);
 
         echo json_encode($allBatsmanDataArray);
+    }
+    
+    // Match details batsman out at run data to backend
+    function GetAllBatsmanOutAtRunData() {
+        $data = array(
+            'key' => $this->input->post('key'),
+        );
+        $MatchId = $data['key'];
+
+        $allBatsmanOutAtRunDataArray = $this->Cricketmodel_model->GetAllBatsmanOutAtRunDataDetails($MatchId);
+
+        echo json_encode($allBatsmanOutAtRunDataArray);
+    }
+    
+    // Match details batsman out at run team b data to backend
+    function GetAllBatsmanOutAtRunOFTeamBData() {
+        $data = array(
+            'key' => $this->input->post('key'),
+        );
+        $MatchId = $data['key'];
+
+        $allBatsmanOutAtRunDataArray = $this->Cricketmodel_model->GetAllBatsmanOutAtRunOFTeamBDataDetails($MatchId);
+
+        echo json_encode($allBatsmanOutAtRunDataArray);
+    }
+    
+    
+    
+    
+    
+	function GetWinLossResultBet($MatchId){
+        $AllMatchWinLossArrayData = $this->Cricketmodel_model->GetWinLossGameMatchResult($MatchId);
+		
+		if(!empty($AllMatchWinLossArrayData)){	
+			foreach($AllMatchWinLossArrayData as $row):	
+				$AllMatchWinLossSchduledData = $this->Cricketmodel_model->GetWinLossGameDetails($MatchId);
+				
+				if(!empty($AllMatchWinLossSchduledData)){
+					foreach($AllMatchWinLossSchduledData as $sch):
+					
+						if($row['winner_team'] == 'a' && $sch['odd_id'] == '1'){
+							$where = array('match_id' => $MatchId, "m_id" => '1', "odd_id" => '1',"game_close" => '1');
+							$data = array('result_bet' => 'win');
+							$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+						}
+						elseif($row['winner_team'] != 'a' && $sch['odd_id'] == '2'){
+							$where = array('match_id' => $MatchId, "m_id" => '1', "odd_id" => '1',"game_close" => '1');
+							$data = array('result_bet' => 'loss');
+							$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+						}
+						if($row['winner_team'] == 'b' && $sch['odd_id'] == '2'){
+							$where = array('match_id' => $MatchId, "m_id" => '1', "odd_id" => '2',"game_close" => '1');
+							$data = array('result_bet' => 'win');
+							$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+						}
+						elseif($row['winner_team'] != 'b' && $sch['odd_id'] == '2'){
+							$where = array('match_id' => $MatchId, "m_id" => '1', "odd_id" => '2',"game_close" => '1');
+							$data = array('result_bet' => 'loss');
+							$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+						}
+					endforeach;
+				}
+			endforeach;
+		}
+	}
+	
+	function GetTossWinLossResultBet($MatchId){
+        $AllMatchTossWinLossArrayData = $this->Cricketmodel_model->GetTossWinLossGameMatchResult($MatchId);
+		
+		if(!empty($AllMatchTossWinLossArrayData)){	
+			foreach($AllMatchTossWinLossArrayData as $row):	
+				$AllMatchTossWinLossSchduledData = $this->Cricketmodel_model->GetTossWinLossGameDetails($MatchId);
+				//print_r($AllMatchTossWinLossSchduledData);
+				if(!empty($AllMatchTossWinLossSchduledData)){
+					foreach($AllMatchTossWinLossSchduledData as $sch):
+					//	echo $sch['odd_id'];
+						if($row['toss_win'] == 'a' && $sch['odd_id'] == '3'){
+							$where = array('match_id' => $MatchId, "m_id" => '2', "odd_id" => '3',"game_close" => '1');
+							$data = array('result_bet' => 'win');
+							$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+						}
+						elseif($row['toss_win'] != 'a' && $sch['odd_id'] == '3'){
+							$where = array('match_id' => $MatchId, "m_id" => '2', "odd_id" => '3',"game_close" => '1');
+							$data = array('result_bet' => 'loss');
+							$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+						}
+						if($row['toss_win'] == 'b' && $sch['odd_id'] == '4'){
+							$where = array('match_id' => $MatchId, "m_id" => '2', "odd_id" => '4',"game_close" => '1');
+							$data = array('result_bet' => 'win');
+							$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+						}
+						elseif($row['toss_win'] != 'b' && $sch['odd_id'] == '4'){
+							$where = array('match_id' => $MatchId, "m_id" => '2', "odd_id" => '4',"game_close" => '1');
+							$data = array('result_bet' => 'loss');
+							$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+						}
+					endforeach;
+				}
+			endforeach;
+		}
+	}
+	
+	
+	function GetFirstOverResultBet($MatchId){
+        $AllMatchFirstOverArrayData = $this->Cricketmodel_model->GetFirstOverGameMatchResult($MatchId,"a_1");
+				if(!empty($AllMatchFirstOverArrayData)){	
+					foreach($AllMatchFirstOverArrayData as $row):	
+					    $AllMatchFirstOverSchduledData = $this->Cricketmodel_model->GetFirstOverGameTeam1Details($MatchId);
+						
+						if(!empty($AllMatchFirstOverSchduledData)){
+							foreach($AllMatchFirstOverSchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo $sch['perticular_val'];
+							
+							$explode = explode(',',$sch['perticular_val']);		
+							$range = range($explode[0],$explode[1]);
+							//print_r($range);
+
+							if(true  == in_array($row['total_run'], $range)){	
+							
+								$where = array('match_id' => $MatchId, "m_id" => '5', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+								$where = array('match_id' => $MatchId, "m_id" => '5', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+		
+		$AllMatchFirstOverTeam2ArrayData = $this->Cricketmodel_model->GetFirstOverGameMatchResult($MatchId,"b_1");
+				if(!empty($AllMatchFirstOverTeam2ArrayData)){	
+					foreach($AllMatchFirstOverTeam2ArrayData as $row):	
+					    $AllMatchFirstOverTeam2SchduledData = $this->Cricketmodel_model->GetFirstOverGameTeam2Details($MatchId);
+						
+						if(!empty($AllMatchFirstOverTeam2SchduledData)){
+							foreach($AllMatchFirstOverTeam2SchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo "<br/>";
+						//	echo $sch['perticular_val'];
+							$explode = explode(',',$sch['perticular_val']);		
+							
+							$range = range($explode[0],$explode[1]);
+//							echo $row['team_runs'];
+							if(true  == in_array($row['total_run'], $range)){	
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '6', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '6', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+		
+		
+	}
+	
+	function GetFirstTenOverSessionResultBet($MatchId){
+		$AllMatchFirstOverArrayData = $this->Cricketmodel_model->GetFirstTenOverGameMatchResult($MatchId,"a_1");
+				if(!empty($AllMatchFirstOverArrayData)){	
+					foreach($AllMatchFirstOverArrayData as $row):	
+					    $AllMatchFirstOverSchduledData = $this->Cricketmodel_model->GetFirstTenOverGameTeam1Details($MatchId);
+						
+						if(!empty($AllMatchFirstOverSchduledData)){
+							foreach($AllMatchFirstOverSchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo $sch['perticular_val'];
+							
+							$explode = explode(',',$sch['perticular_val']);		
+							$range = range($explode[0],$explode[1]);
+							//print_r($range);
+
+							if(true  == in_array($row['total_run'], $range)){	
+							
+								$where = array('match_id' => $MatchId, "m_id" => '7', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+								$where = array('match_id' => $MatchId, "m_id" => '7', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+		
+		$AllMatchFirstOverTeam2ArrayData = $this->Cricketmodel_model->GetFirstTenOverGameMatchResult($MatchId,"b_1");
+				if(!empty($AllMatchFirstOverTeam2ArrayData)){	
+					foreach($AllMatchFirstOverTeam2ArrayData as $row):	
+					    $AllMatchFirstOverTeam2SchduledData = $this->Cricketmodel_model->GetFirstTenOverGameTeam2Details($MatchId);
+						
+						if(!empty($AllMatchFirstOverTeam2SchduledData)){
+							foreach($AllMatchFirstOverTeam2SchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo "<br/>";
+						//	echo $sch['perticular_val'];
+							$explode = explode(',',$sch['perticular_val']);		
+							
+							$range = range($explode[0],$explode[1]);
+//							echo $row['team_runs'];
+							if(true  == in_array($row['total_run'], $range)){	
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '8', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '8', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+		
+	}
+	
+	
+	function GetFirstWicketResultBet($MatchId){
+		$FirstWicketTeam1ArrayData = $this->Cricketmodel_model->GetFirstWicketGameMatchResult($MatchId,"a_1");
+				if(!empty($FirstWicketTeam1ArrayData)){	
+					foreach($FirstWicketTeam1ArrayData as $row):	
+					    $FirstWicketOverSchduledData = $this->Cricketmodel_model->GetFirstWicketTeam1Details($MatchId);
+						
+						if(!empty($FirstWicketOverSchduledData)){
+							foreach($FirstWicketOverSchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo $sch['perticular_val'];
+							
+
+							if($row['wicket_type'] == $sch['perticular_val']){
+
+								$where = array('match_id' => $MatchId, "m_id" => '9', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+								$where = array('match_id' => $MatchId, "m_id" => '9', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+		
+		$FirstWicketTeam2ArrayData = $this->Cricketmodel_model->GetFirstWicketGameMatchResult($MatchId,"b_1");
+				if(!empty($FirstWicketTeam2ArrayData)){	
+					foreach($FirstWicketTeam2ArrayData as $row):	
+					    $FirstWicketTeam2SchduledData = $this->Cricketmodel_model->GetFirstWicketTeam2Details($MatchId);
+						
+						if(!empty($FirstWicketTeam2SchduledData)){
+							foreach($FirstWicketTeam2SchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo "<br/>";
+						//	echo $sch['perticular_val'];
+//							echo $row['team_runs'];
+							if($row['wicket_type'] == $sch['perticular_val']){	
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '10', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '10', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+		
+	}
+	
+	function GetFirstThirtiesRunResultBet($MatchId){
+		$FirstThirtiesTeam1ArrayData = $this->Cricketmodel_model->GetToMake30MatchResult($MatchId,"a_1");
+				if(!empty($FirstThirtiesTeam1ArrayData)){	
+					foreach($FirstThirtiesTeam1ArrayData as $row):	
+					    $FirstWicketOverSchduledData = $this->Cricketmodel_model->GetToMake30Team1Details($MatchId);
+						
+						if(!empty($FirstWicketOverSchduledData)){
+							foreach($FirstWicketOverSchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo $sch['perticular_val'];
+							
+
+							if(count($row['player_runs']) == $sch['perticular_val']){
+
+								$where = array('match_id' => $MatchId, "m_id" => '15', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+								$where = array('match_id' => $MatchId, "m_id" => '15', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+				else{
+								$where = array('match_id' => $MatchId, "m_id" => '16', "odd_id" => 187, "game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+
+				}
+		
+		$FirstThirtiesTeam2ArrayData = $this->Cricketmodel_model->GetToMake30MatchResult($MatchId,"b_1");
+				if(!empty($FirstThirtiesTeam2ArrayData)){	
+					foreach($FirstThirtiesTeam2ArrayData as $row):	
+					    $FirstWicketTeam2SchduledData = $this->Cricketmodel_model->GetToMake30Team2Details($MatchId);
+						
+						if(!empty($FirstWicketTeam2SchduledData)){
+							foreach($FirstWicketTeam2SchduledData as $sch):	
+
+							if(count($row['player_runs']) == $sch['perticular_val']){
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '16', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '16', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						else{
+
+								
+						
+						}
+						
+					endforeach;
+				}
+				else{
+								$where = array('match_id' => $MatchId, "m_id" => '16', "odd_id" => 237,"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+				}
+	}
+	
+	function GetFirstFiftyRunResultBet($MatchId){
+		$FirstThirtiesTeam1ArrayData = $this->Cricketmodel_model->GetToMake50MatchResult($MatchId,"a_1");
+				if(!empty($FirstThirtiesTeam1ArrayData)){	
+					foreach($FirstThirtiesTeam1ArrayData as $row):	
+					    $FirstWicketOverSchduledData = $this->Cricketmodel_model->GetToMake50Team1Details($MatchId);
+						
+						if(!empty($FirstWicketOverSchduledData)){
+							foreach($FirstWicketOverSchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo $sch['perticular_val'];
+							
+
+							if(count($row['player_runs']) == $sch['perticular_val']){
+
+								$where = array('match_id' => $MatchId, "m_id" => '17', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+								$where = array('match_id' => $MatchId, "m_id" => '17', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+				else{
+								$where = array('match_id' => $MatchId, "m_id" => '17', "odd_id" => 237, "game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+
+				}
+		
+		$FirstThirtiesTeam2ArrayData = $this->Cricketmodel_model->GetToMake50MatchResult($MatchId,"b_1");
+				if(!empty($FirstThirtiesTeam2ArrayData)){	
+					foreach($FirstThirtiesTeam2ArrayData as $row):	
+					    $FirstWicketTeam2SchduledData = $this->Cricketmodel_model->GetToMake50Team2Details($MatchId);
+						
+						if(!empty($FirstWicketTeam2SchduledData)){
+							foreach($FirstWicketTeam2SchduledData as $sch):	
+
+							if(count($row['player_runs']) == $sch['perticular_val']){
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '18', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '18', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						else{
+
+								
+						
+						}
+						
+					endforeach;
+				}
+				else{
+								$where = array('match_id' => $MatchId, "m_id" => '18', "odd_id" => 238, "game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+
+				}
+	}
+
+	function GetFirstHundredRunResultBet($MatchId){
+			$FirstHundredTeam1ArrayData = $this->Cricketmodel_model->GetInnRunRateMatchResult($MatchId,"a_1");
+				if(!empty($FirstHundredTeam1ArrayData)){	
+					foreach($FirstHundredTeam1ArrayData as $row):	
+					    $FirstWicketOverSchduledData = $this->Cricketmodel_model->GetInnRunRateTeam1Details($MatchId);
+						
+						if(!empty($FirstWicketOverSchduledData)){
+							foreach($FirstWicketOverSchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo $sch['perticular_val'];
+							
+
+							if(count($row['current_run_rate']) == $sch['perticular_val']){
+
+								$where = array('match_id' => $MatchId, "m_id" => '21', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+								$where = array('match_id' => $MatchId, "m_id" => '21', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+				else{
+								$where = array('match_id' => $MatchId, "m_id" => '21', "odd_id" => 239, "game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+
+				}
+		
+		$FirstInnRateTeam2ArrayData = $this->Cricketmodel_model->GetInnRunRateMatchResult($MatchId,"b_1");
+				if(!empty($FirstInnRateTeam2ArrayData)){	
+					foreach($FirstInnRateTeam2ArrayData as $row):	
+					    $FirstWicketTeam2SchduledData = $this->Cricketmodel_model->GetInnRunRateTeam2Details($MatchId);
+						
+						if(!empty($FirstWicketTeam2SchduledData)){
+							foreach($FirstWicketTeam2SchduledData as $sch):	
+
+							if(count($row['player_runs']) == $sch['perticular_val']){
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '22', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '22', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						else{
+
+								
+						
+						}
+						
+					endforeach;
+				}
+				else{
+								$where = array('match_id' => $MatchId, "m_id" => '22', "odd_id" => 240, "game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+
+				}
+		
+	}
+	function GetFirstRunRateResultBet($MatchId){
+			$FirstHundredTeam1ArrayData = $this->Cricketmodel_model->GetInnRunRateMatchResult($MatchId,"a_1");
+				if(!empty($FirstHundredTeam1ArrayData)){	
+					foreach($FirstHundredTeam1ArrayData as $row):	
+					    $FirstWicketOverSchduledData = $this->Cricketmodel_model->GetInnRunRateTeam1Details($MatchId);
+						
+						if(!empty($FirstWicketOverSchduledData)){
+							foreach($FirstWicketOverSchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo $sch['perticular_val'];
+							
+							//echo $sch['perticular_val'];
+							$explode = explode(',',$sch['perticular_val']);		
+							$range = range($explode[0],$explode[1]);
+							//print_r($range);
+							//die;
+							if(true  == in_array($row['current_run_rate'], $range)){
+
+								$where = array('match_id' => $MatchId, "m_id" => '21', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+								$where = array('match_id' => $MatchId, "m_id" => '21', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+				else{
+								$where = array('match_id' => $MatchId, "m_id" => '21', "odd_id" => 239, "game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+
+				}
+		
+		$FirstHundredTeam2ArrayData = $this->Cricketmodel_model->GetInnRunRateMatchResult($MatchId,"b_1");
+				if(!empty($FirstHundredTeam2ArrayData)){	
+					foreach($FirstHundredTeam2ArrayData as $row):	
+					    $FirstWicketTeam2SchduledData = $this->Cricketmodel_model->GetInnRunRateTeam2Details($MatchId);
+						
+						if(!empty($FirstWicketTeam2SchduledData)){
+							foreach($FirstWicketTeam2SchduledData as $sch):	
+
+							$explode = explode(',',$sch['perticular_val']);		
+							$range = range($explode[0],$explode[1]);
+							//print_r($range);
+
+							if(true  == in_array($row['current_run_rate'], $range)){	
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '22', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '22', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						else{
+
+								
+						
+						}
+						
+					endforeach;
+				}
+				else{
+								$where = array('match_id' => $MatchId, "m_id" => '22', "odd_id" => 240, "game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+
+				}
+		
+	}
+	
+	
+	
+	function GetHighestOpeningPartnerShipResultBet($MatchId){
+		
+		$FirstWicketTeam2ArrayData = $this->Cricketmodel_model->GetHIghestOpeningMatchResult($MatchId,"a_1");
+				if(!empty($FirstWicketTeam2ArrayData)){	
+					foreach($FirstWicketTeam2ArrayData as $row):	
+					    $FirstWicketTeam2SchduledData = $this->Cricketmodel_model->GetFirstWicketTeam2Details($MatchId);
+						
+						if(!empty($FirstWicketTeam2SchduledData)){
+							foreach($FirstWicketTeam2SchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo "<br/>";
+						//	echo $sch['perticular_val'];
+//							echo $row['team_runs'];
+							if($row['wicket_type'] == $sch['perticular_val']){	
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '10', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '10', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+			
+	}
+	
+	
+	function GetFirstBallResultBet($MatchId) {
+			$FirstHundredTeam1ArrayData = $this->Cricketmodel_model->GetFirstBallGameMatchResult($MatchId,"a_1");
+				if(!empty($FirstHundredTeam1ArrayData)){	
+					foreach($FirstHundredTeam1ArrayData as $row):	
+					    $FirstWicketOverSchduledData = $this->Cricketmodel_model->GetFirstBallTeam1Details($MatchId);
+						
+						if(!empty($FirstWicketOverSchduledData)){
+							foreach($FirstWicketOverSchduledData as $sch):	
+							//echo $row['team_runs'];
+							//echo $sch['perticular_val'];
+							
+
+							if($row['ball_type'] == $sch['perticular_val'] || $row['ball_runs'] == $sch['perticular_val'] || $row['ball_wicket'] == $sch['perticular_val'] ){
+
+								$where = array('match_id' => $MatchId, "m_id" => '3', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+								$where = array('match_id' => $MatchId, "m_id" => '3', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						
+					endforeach;
+				}
+				else{
+
+				}
+		
+		$FirstInnRateTeam2ArrayData = $this->Cricketmodel_model->GetFirstBallGameMatchResult($MatchId,"b_1");
+				if(!empty($FirstInnRateTeam2ArrayData)){	
+					foreach($FirstInnRateTeam2ArrayData as $row):	
+					    $FirstWicketTeam2SchduledData = $this->Cricketmodel_model->GetFirstBallTeam2Details($MatchId);
+						
+						if(!empty($FirstWicketTeam2SchduledData)){
+							foreach($FirstWicketTeam2SchduledData as $sch):	
+
+							if($row['ball_type'] == $sch['perticular_val'] || $row['ball_runs'] == $sch['perticular_val'] || $row['ball_wicket'] == $sch['perticular_val'] ){
+	
+							//echo "Win";
+								$where = array('match_id' => $MatchId, "m_id" => '4', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'win');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							else{
+							//echo "Loss";							
+								$where = array('match_id' => $MatchId, "m_id" => '4', "odd_id" => $sch['odd_id'],"game_close" => '0');
+								$data = array('result_bet' => 'loss');
+								$this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+							}
+							endforeach;
+						}
+						else{
+
+								
+						
+						}
+						
+					endforeach;
+				}
+				else{
+								
+
+				}
+	}
+	
+	function CronCricketMatchResultBetAutomated($MatchId) {
+        //$MatchId = 41;
+	$this->GetTossWinLossResultBet($MatchId);
+        $this->GetFirstTenOverSessionResultBet($MatchId);
+        $this->GetFirstOverResultBet($MatchId);
+        $this->GetFirstBallResultBet($MatchId);
+        $this->GetWinLossResultBet($MatchId);
+        $this->GetFirstWicketResultBet($MatchId);
+        $this->GetFirstThirtiesRunResultBet($MatchId);
+        $this->GetFirstHundredRunResultBet($MatchId);
+        $this->GetFirstFiftyRunResultBet($MatchId);
+        $this->GetFirstRunRateResultBet($MatchId);
+        $this->GetHighestOpeningPartnerShipResultBet($MatchId);
+        $this->GetRaceToFiftyResultBet($MatchId);
+        $this->GetWicketFallAtRunsGameResultBet($MatchId);
+    }
+	
+    
+    
+    // Match details batsman out at run team b data to backend
+    function GetWinLoasAjaxExecute() {
+        $data = array(
+            'match_id' => $this->input->post('match_id'),
+            'm_id' => $this->input->post('m_id'),
+            'odd_id' => $this->input->post('odd_id')
+        );
+        
+        $MatchId = $data['match_id'];
+        $MId = $data['m_id'];
+        $OddId = $data['odd_id'];
+
+        echo json_encode($MatchId."-- ".$MId."-- ".$OddId);
     }
     
     

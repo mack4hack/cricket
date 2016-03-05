@@ -1414,33 +1414,49 @@
         
         <div id="ScoreCardContainer">
             <div class="SectionTeamA">
-                <div class=""></div>
-                <table border="1" cellspacing="1" cellpadding="1" >
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Batsman</th>
-                            <th>Run</th>
-                            <th>Ball</th>
-                            <th>Strike Rate</th>
-                        </tr>
-                    </thead>
-                    <tbody class="tBodyBatsmansA"></tbody>
-                </table>
+                <div class="tBodyTeamA"></div>
+                <b>Batsman Scorecard</b>
+                <div class="divBatsmanBattingContener">                    
+                    <div>
+                        <span>#</span>
+                        <span>Batsman</span>
+                        <span>Runs(B)</span>
+                        <span>Strike Rate</span>
+                    </div>                  
+                    <div class="tBodyBatsmansA"></div>
+                </div>
+                <b>Fall OF Wicket</b>
+                <div>                    
+                    <div>
+                        <span>Batsman Name</span>
+                        <span>Runs/Wicket</span>
+                        
+                    </div>                  
+                    <div class="tBodyBatsmansOutAtRunsA"></div>
+                </div>
             </div>
-            <div class="SectionTeamB">
-                <table border="1" cellspacing="1" cellpadding="1" >
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Batsman</th>
-                            <th>Run</th>
-                            <th>Ball</th>
-                            <th>Strike Rate</th>
-                        </tr>
-                    </thead>
-                    <tbody class="tBodyBatsmansB"></tbody>
-                </table>
+            <div class="SectionTeamB"> 
+                <div class="tBodyTeamB"></div>
+                <b>Batsman Scorecard</b>
+                <div>                    
+                    <div>
+                        <span>#</span>
+                        <span>Batsman</span>
+                        <span>Runs(B)</span>
+                        <span>Strike Rate</span>
+                    </div>                  
+                    <div class="tBodyBatsmansB"></div>
+                </div>
+                
+                <b>Fall OF Wicket</b>
+                <div>                    
+                    <div>
+                        <span>Batsman Name</span>
+                        <span>Runs/Wicket</span>
+                        
+                    </div>                  
+                    <div class="tBodyBatsmansOutAtRunsB"></div>
+                </div>
             </div>
             
         </div>
@@ -1656,6 +1672,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -1663,29 +1685,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 3)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 4)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -1716,6 +1768,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -1723,29 +1781,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 5)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 6)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -1775,6 +1863,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -1782,29 +1876,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 7)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 8)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -1835,6 +1959,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -1842,29 +1972,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 9)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 10)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -1895,6 +2055,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -1902,29 +2068,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 15)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 16)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -1951,6 +2147,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -1958,29 +2160,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 17)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 18)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -2007,6 +2239,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -2014,29 +2252,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 19)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 20)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -2063,6 +2331,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -2070,29 +2344,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 13)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 14)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -2118,6 +2422,12 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
+                                    
+                                    var TeamDataExecuteB = '';
+                                    var TeamDataWinFlagB = '';
 
 
                                     $.each(res, function (key, value) {
@@ -2125,29 +2435,59 @@
                                         var IndiexId = key + 1;
                                         if (value['m_id'] == 21)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
                                         if (value['m_id'] == 22)
                                         {
+                                            
+                                            TeamDataWinFlagB = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteB = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteB = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteB = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataB += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataB += '<tr class="'+TeamDataWinFlagB+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteB+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -2177,6 +2517,9 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
 
 
                                     $.each(res, function (key, value) {
@@ -2184,17 +2527,31 @@
                                         var IndiexId = key + 1;
 
                                         if (value['m_id'] == 1)
-                                        {
+                                        { 
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+                                            
 
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataA += '<tr class="'+TeamDataWinFlagA+' odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -2224,6 +2581,9 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
 
 
                                     $.each(res, function (key, value) {
@@ -2232,16 +2592,29 @@
 
                                         if (value['m_id'] == 11)
                                         {
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
 
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataA += '<tr '+TeamDataWinFlagA+' class="odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -2268,6 +2641,9 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
+                                    
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
 
 
                                     $.each(res, function (key, value) {
@@ -2276,16 +2652,30 @@
 
                                         if (value['m_id'] == 12)
                                         {
+                                            
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
 
 
-                                            TeamDataA += '<tr class="odd gradeX">\n\
-                                                <td>' + value['perticulars'] + '</td>\n\
-                                                 <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
-                                                <td> ' + value['total_chips'] + ' </td> \n\
-                                                <td class="center">' + value['payout'] + '  </td>\n\
-                                                <td class="center ">\n\
-                                                <input type="button" name="execute"  id="execute" class="execute btn" value="Execute" /> </td>\n\
-                                            </tr>';
+                                            TeamDataA += '<tr '+TeamDataWinFlagA+' class="odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
 
                                         }
 
@@ -2365,7 +2755,68 @@
                             
                             //alert(MatchId+ " "+MatchFormat);
                             MatchBatsmanScoreDataFun(MatchId);
+                            MatchBatsmanOutAtRunDataFun(MatchId);
+                            MatchBatsmanOutAtRunOFTeamBDataFun(MatchId);
                            
+                        }
+                        
+                        function MatchBatsmanOutAtRunOFTeamBDataFun(MatchId)
+                        {
+                            $.ajax({
+                                type: "POST",
+                                url: "<?php echo base_url(); ?>" + "index.php/cricketcontroller/GetAllBatsmanOutAtRunOFTeamBData",
+                                dataType: 'json',
+                                data: {key: MatchId},
+                                success: function (res) {
+
+                                    var TeamDataA = '';
+                                    var TeamDataB = '';
+                                    var IncrementalA = 1;
+                                    var IncrementalB = 1;
+                                    $.each(res, function (key, value) {
+                                       
+                                            TeamDataA += '<div>\n\
+                                                            <span>' + value['player_name'] + '</span>\n\
+                                                            <span>' + value['team_runs'] + '/' + value['player_wicket_index'] + '  </span>\n\
+                                                          </div>';
+                                            IncrementalA = IncrementalA + 1; 
+
+                                    });
+
+                                    $(".tBodyBatsmansOutAtRunsB").html(TeamDataA);
+                                    
+                                }
+                            })
+                        }
+                        
+                        
+                        function MatchBatsmanOutAtRunDataFun(MatchId)
+                        {
+                            $.ajax({
+                                type: "POST",
+                                url: "<?php echo base_url(); ?>" + "index.php/cricketcontroller/GetAllBatsmanOutAtRunData",
+                                dataType: 'json',
+                                data: {key: MatchId},
+                                success: function (res) {
+
+                                    var TeamDataA = '';
+                                    var TeamDataB = '';
+                                    var IncrementalA = 1;
+                                    var IncrementalB = 1;
+                                    $.each(res, function (key, value) {
+                                       
+                                            TeamDataA += '<div>\n\
+                                                            <span>' + value['player_name'] + '</span>\n\
+                                                            <span>' + value['team_runs'] + '/' + value['player_wicket_index'] + '  </span>\n\
+                                                          </div>';
+                                            IncrementalA = IncrementalA + 1; 
+
+                                    });
+
+                                    $(".tBodyBatsmansOutAtRunsA").html(TeamDataA);
+                                    
+                                }
+                            })
                         }
                         
                         function MatchBatsmanScoreDataFun(MatchId)
@@ -2379,42 +2830,67 @@
 
                                     var TeamDataA = '';
                                     var TeamDataB = '';
-                                    var Incremental = 1;
+                                    var TeamNameA = '';
+                                    var TeamNameB = '';
+                                    var IncrementalA = 1;
+                                    var IncrementalB = 1;
                                     $.each(res, function (key, value) {
+                                        
                                         
                                         if(value['Innings_code'] == value['batting_team']+"_1")
                                         {
-                                            TeamDataA += '<tr>\n\
-                                                            <td>' + Incremental + '</td>\n\\n\
-                                                            <td>' + value['player_name'] + '</td>\n\
-                                                            <td> ' + value['player_runs'] + ' </td> \n\
-                                                            <td>' + value['player_balls'] + '  </td>\n\\n\
-                                                            <td>' + value['player_strike_rate'] + '  </td>\n\
-                                                       </tr>';
+                                            TeamDataA += '<div>\n\
+                                                            <span>' + IncrementalA + '</span>\n\
+                                                            <span>' + value['player_name'] + '</span>\n\
+                                                            <span> ' + value['player_runs'] + '(' + value['player_balls'] + ') </span> \n\
+                                                            <span>' + value['player_strike_rate'] + '  </span>\n\
+                                                       </div>';
+                                            IncrementalA = IncrementalA + 1; 
+                                            TeamNameA = value['team_a'];
+                                            
                                         }
                                         else
                                         {
-                                            TeamDataB += '<tr>\n\
-                                                            <td>' + Incremental + '</td>\n\\n\
-                                                            <td>' + value['player_name'] + '</td>\n\
-                                                            <td> ' + value['player_runs'] + ' </td> \n\
-                                                            <td>' + value['player_balls'] + '  </td>\n\\n\
-                                                            <td>' + value['player_strike_rate'] + '  </td>\n\
-                                                       </tr>';
-                                        }
-                                         
-                                             
-                                            Incremental = Incremental + 1;
-                                            
+                                            TeamDataB += '<div>\n\
+                                                            <span>' + IncrementalB + '</span>\n\
+                                                            <span>' + value['player_name'] + '</span>\n\
+                                                            <span> ' + value['player_runs'] + '(' + value['player_balls'] + ') </span> \n\
+                                                            <span>' + value['player_strike_rate'] + '  </span>\n\
+                                                       </div>';
+                                            IncrementalB = IncrementalB + 1;
+                                             TeamNameB = value['team_b'];
+                                        } 
 
                                     });
 
                                     $(".tBodyBatsmansA").html(TeamDataA);
                                     $(".tBodyBatsmansB").html(TeamDataB);
+                                    
+                                    $(".tBodyTeamA").html(TeamNameA);
+                                    $(".tBodyTeamB").html(TeamNameB);
                                     // $(".tBodyRunRateTeamB").html(TeamDataB);
 
                                 }
                             })
+                        }
+                        
+                        function MatchExecuteData(MatchId, mId, OddId )
+                        {
+                           // value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id']
+                           
+                           $.ajax({
+                                type: "POST",
+                                url: "<?php echo base_url(); ?>" + "index.php/cricketcontroller/GetWinLoasAjaxExecute",
+                                dataType: 'json',
+                                data: { match_id: MatchId, m_id: mId, odd_id: OddId },
+                                success: function (res) {
+
+                                    alert(res)
+                                    
+                                }
+                            })
+                           
+                           
                         }
 
 
@@ -2425,6 +2901,10 @@
     }
     thead {
         background-color: #95a5a6;
+    }
+    
+    .WinBetFlag {
+         background-color: #fdbf79 !important;
     }
 
 </style>
