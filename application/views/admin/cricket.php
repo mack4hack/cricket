@@ -149,17 +149,19 @@
 
 
 
+            
             <div class="row"  id="game1">
 
                 <div class="col-md-12">
 
-                    <div class="portlet box green">
+                    <div class="portlet box red">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-gift"></i>Toss
                             </div>
                             <div class="tools">
                                 <input type="button"   name="cancel"  id="cancel" class="cancel btn"  value="cancel all bets"   />
+
                                 <a href="javascript:;" class="collapse">
                                 </a>
                             </div>
@@ -168,11 +170,49 @@
                             <div class="tabbable-custom nav-justified">
 
                                 <div class="tab-content">
-                                    <div class=" tab-pane active  table-scrollable TossClass" id="tab_1_1_1"></div>
+                                    <div class=" tab-pane active table-scrollable" id="tab_1_1_1">
+                                        <table class="table table-striped table-bordered table-hover" id="sample_11">
+                                            <thead>
+                                                <tr>
 
+
+
+                                                    <th>
+                                                        Particular
+                                                    </th>
+                                                    <th>
+                                                        Odds
+                                                    </th>
+                                                    <th>
+                                                        Total Bets
+                                                    </th>
+                                                    <th>
+                                                        Payout
+                                                    </th>
+                                                    <th>
+                                                        Action
+                                                    </th>
+
+
+                                                </tr>
+                                            </thead>
+                                            <tbody class="TossDetailsClass"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
+
                                 <div class="row pull-right col-sm-6" >
 
+                                    <div class="col-sm-4">
+                                        <a href="javascript:;" class="btn red">
+                                            Grand Total
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <a href="javascript:;" class="btn green">
+                                            Winning Amount
+                                        </a>
+                                    </div>
                                     <div class="col-sm-4">
                                         <a href="javascript:;" class="btn purple">
                                             Profit/Loss
@@ -189,7 +229,7 @@
 
                     </div>
                 </div>
-            </div>
+            </div><!--End of game 1 as Toss-->
 
             <div class="row"  id="game2">
 
@@ -1603,60 +1643,60 @@
                                 dataType: 'json',
                                 data: {key: MatchId},
                                 success: function (res) {
+                                    
+                                    
+                                    
+                                    var TeamDataA = '';
+                                    var TeamDataB = '';
+                                    var TeamTossArrayHtmlDataValue = "";
+                                    var TeamDataExecuteA = '';
+                                    var TeamDataWinFlagA = '';
 
-                                    var AllMatchDetailDataValue = '';
-                                    var MatchTeamNameValueA = "";
-                                    var MatchTeamNameValueB = "";
 
-                                    if (res[0].toss_win != null)
-                                    {
+                                    $.each(res, function (key, value) {
+                                        // alert( key + ": " + value['id'] );
+                                        var IndiexId = key + 1;
 
-                                        if (res[0].toss_win == "a" && res[0].decision == "bowl")
+                                        if (value['m_id'] == 2)
                                         {
-                                            //$("#teama").text(res[0].team_a);
-                                            MatchTeamNameValueA = res[0].team_b;
-                                            MatchTeamNameValueB = res[0].team_a;
+                                            
+                                            TeamDataWinFlagA = (value['result_bet'] == "win")?"WinBetFlag":"";
+                                            
+                                            if(value['result_bet'] == "win" && value['execute_flag'] == 0)
+                                            {
+                                                TeamDataExecuteA = '<input type="button" name="execute"  id="execute" class="execute btn" value="Execute" onclick="MatchExecuteData(\'' + value['match_id'] + '\',\'' + value['m_id'] + '\',\'' + value['odd_id'] + '\')"; /> ';
+                                            }
+                                            else if(value['result_bet'] == "win" && value['execute_flag'] == 1)
+                                            {
+                                                TeamDataExecuteA = 'Payment Paid';
+                                            }
+                                            else
+                                            {
+                                                TeamDataExecuteA = 'Not Available';
+                                            }
+
+
+                                            TeamTossArrayHtmlDataValue += '<tr '+TeamDataWinFlagA+' class="odd gradeX">\n\
+                                                            <td>' + value['perticulars'] + '</td>\n\
+                                                            <td> <input type="text" class="OddToraceFiftyClass" name="odds_' + IndiexId + '" id="odds_' + value['match_id'] + '_' + value['odd_id'] + '_' + value['id'] + '" value="' + value['odds'] + '"/> </td>\n\
+                                                            <td> ' + value['total_chips'] + ' </td> \n\
+                                                            <td class="center">' + value['payout'] + '  </td>\n\
+                                                            <td class="center ">'+TeamDataExecuteA+'</td>\n\
+                                                          </tr>';
+
                                         }
 
-                                        if (res[0].toss_win == "b" && res[0].decision == "bowl")
-                                        {
-                                            //$("#teama").text(res[0].team_a);
-                                            MatchTeamNameValueA = res[0].team_a;
-                                            MatchTeamNameValueB = res[0].team_b;
-                                        }
 
-                                        if (res[0].toss_win == "a" && res[0].decision == "bat")
-                                        {
-                                            //$("#teama").text(res[0].team_a);
-                                            MatchTeamNameValueA = res[0].team_a;
-                                            MatchTeamNameValueB = res[0].team_b;
-                                        }
 
-                                        if (res[0].toss_win == "b" && res[0].decision == "bat")
-                                        {
-                                            //$("#teama").text(res[0].team_a);
-                                            MatchTeamNameValueA = res[0].team_b;
-                                            MatchTeamNameValueB = res[0].team_a;
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        //alert("out");
-                                        MatchTeamNameValueA = res[0].team_a;
-                                        MatchTeamNameValueB = res[0].team_b;
-                                    }
-
-                                    //alert("Before");
-                                    AllMatchDetailDataValue += '<table class="table table-striped table-bordered table-hover" id="sample_1"><thead><tr>';
-                                    AllMatchDetailDataValue += '<td>' + MatchTeamNameValueA + '</td><td>' + MatchTeamNameValueB + '</td><td>Total Bet on Team A</td><td>Payout</td><td>Total Bet on Team B</td><td>Payout</td><td>Enter Result</td><td><input type="button"   name="execute"  id="execute" class="execute btn"  value="Execute"   /></td>';
-                                    AllMatchDetailDataValue += '</tr></thead></table>';
-
-                                    $(".TossClass").html(AllMatchDetailDataValue);
-
-                                }
-                            });
-
+                                    });
+                                    
+                                    $(".TossDetailsClass").html(TeamTossArrayHtmlDataValue);
+                                    
+                                    }                                      
+                                      
+                                   });
+                                    
+                                    
 
                         }
 
@@ -2884,9 +2924,9 @@
                                 dataType: 'json',
                                 data: { match_id: MatchId, m_id: mId, odd_id: OddId },
                                 success: function (res) {
-
-                                    alert(res)
                                     
+                                    MatchDetailValues(res['MatchId'], res['MatchFormat']);
+                                
                                 }
                             })
                            

@@ -286,9 +286,11 @@ class Cricketcontroller extends CI_Controller {
 
     function CronCricketMatchOverSummaryAutomated($UniqueKeyOfMatch, $MatchUniqueId)
     {
+        
         $TokenAccess = $this->GetApiAuthentication();
         if($TokenAccess != "")
         {
+            $UniqueKeyOfMatch = "asiacup_2016_g10";
             $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";            
             $url = $CommonAuthUrl."match/".$UniqueKeyOfMatch."/overs_summary/?access_token=" . $TokenAccess;
             $ch = curl_init();
@@ -1621,25 +1623,180 @@ class Cricketcontroller extends CI_Controller {
         $this->GetFirstRunRateResultBet($MatchId);
         $this->GetHighestOpeningPartnerShipResultBet($MatchId);
         //$this->GetRaceToFiftyResultBet($MatchId);
-        //$this->GetWicketFallAtRunsGameResultBet($MatchId);
+        $this->GetWicketFallAtRunsGameResultBet($MatchId);
     }
 	
     
     
     // Match details batsman out at run team b data to backend
+   
     function GetWinLoasAjaxExecute() {
         $data = array(
             'match_id' => $this->input->post('match_id'),
             'm_id' => $this->input->post('m_id'),
             'odd_id' => $this->input->post('odd_id')
         );
-        
+
         $MatchId = $data['match_id'];
         $MId = $data['m_id'];
         $OddId = $data['odd_id'];
+        $GameClosed = false;
 
-        echo json_encode($MatchId."-- ".$MId."-- ".$OddId);
+                $scheduled_res = $this->Cricketmodel_model->GetMatchScheduledDetails($MatchId,$MId);
+                
+                  /*get payout of winner and add to their account*/
+
+                if(!empty($scheduled_res)){
+
+                        foreach($scheduled_res as $res):
+                        
+                            
+                        if($res['result_bet'] == 'win'){
+                                $users_bet = $this->Cricketmodel_model->GetUserBetDetails($MatchId,$OddId);
+                                if(!empty($users_bet)){
+                                        $present_amount=0;
+                                        foreach($users_bet as $bet):
+                                                $this->db->select('present_amount');
+                                                $this->db->from('user_master');
+                                                $this->db->where('id', $bet['user_id']);
+                                                $query1 = $this->db->get()->row();
+                                                $current_amount =   $query1->present_amount;
+                                                $present_amount = $current_amount + $bet['payout'];
+
+                                                $data_user = array("payout" => $present_amount);
+
+                                                $this->Cricketmodel_model->SetUpdateMasterUserData($bet['user_id'],
+$data_user);
+
+                                                $data_user = array( "execute_flag" => '1');
+                                                $this->Cricketmodel_model->SetUpdateScheduledData(MatchId,$OddId
+, $data_user);
+
+                                        endforeach;
+                                }
+                        }
+                        elseif($res['result_bet'] == 'loss'){
+                                $users_bet = $this->Cricketmodel_model->GetUserBetDetails($MatchId,$OddId);
+                                if(!empty($users_bet)){
+                                        $present_amount=0;
+                                        foreach($users_bet as $bet):
+                                                $this->db->select('present_amount');
+                                                $this->db->from('user_master');
+                                                $this->db->where('id', $bet['user_id']);
+                                                $query1 = $this->db->get()->row();
+                                                $current_amount =   $query1->present_amount;
+                                                $present_amount = $current_amount - $bet['payout'];
+
+                                                $data_user = array("user_id" => $u_id, "match_id" =>
+$match_id,"odd_id" => $odd_id, "payout" => $present_amount);
+
+                                                $this->Cricketmodel_model->SetUpdateMasterUserData($bet['user_id'],
+$data_user);
+
+                                                $data_user = array( "execute_flag" => '1');
+                                                $this->Cricketmodel_model->SetUpdateScheduledData(MatchId,
+$OddId, $data_user);
+
+                                        endforeach;
+                                }
+                        }
+
+                        endforeach;
+                }
+
+       
+        $MatchFormat = $this->Cricketmodel_model->getMatchFormatData($MatchId);
+							   
+	$MatchArray = array(
+            "MatchId" => $MatchId,
+            "MatchFormat" => $MatchFormat
+        );
+
+        echo json_encode($MatchArray);
+                
     }
+    
+    
+    
+    function GetWicketFallAtRunsGameResultBet($MatchId){
+                                $AllMatchFirstOverArrayData =
+$this->Cricketmodel_model->GetRunsWicketMatchResult($MatchId,"a_1");
+                                if(!empty($AllMatchFirstOverArrayData)){
+                                        foreach($AllMatchFirstOverArrayData as $row):
+                                            $AllMatchFirstOverSchduledData =
+$this->Cricketmodel_model->GetRunsWicketTeam1Details($MatchId);
+
+                                                if(!empty($AllMatchFirstOverSchduledData)){
+                                                        foreach($AllMatchFirstOverSchduledData as $sch):
+                                                        //echo $row['team_runs'];
+                                                        //echo $sch['perticular_val'];
+
+                                                        $explode = explode(',',$sch['perticular_val']);
+                                                        $range = range($explode[0],$explode[1]);
+                                                        //print_r($range);
+
+                                                        if(true  == in_array($row['total_run'], $range)){
+
+                                                                $where = array('match_id' => $MatchId, "m_id" => '13',
+"odd_id" => $sch['odd_id'],"game_close" => '1');
+                                                                $data = array('result_bet' => 'win');
+                                                                $this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+                                                        }
+                                                        else{
+                                                                $where = array('match_id' => $MatchId, "m_id" => '13',
+"odd_id" => $sch['odd_id'],"game_close" => '1');
+                                                                $data = array('result_bet' => 'loss');
+                                                                $this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+                                                        }
+                                                        endforeach;
+                                                }
+
+                                        endforeach;
+                                }
+
+                $AllMatchFirstOverTeam2ArrayData =
+$this->Cricketmodel_model->GetRunsWicketMatchResult($MatchId,"b_1");
+                                if(!empty($AllMatchFirstOverTeam2ArrayData)){
+                                        foreach($AllMatchFirstOverTeam2ArrayData as $row):
+                                            $AllMatchFirstOverTeam2SchduledData =
+$this->Cricketmodel_model->GetRunsWicketTeam2Details($MatchId);
+
+                                                if(!empty($AllMatchFirstOverTeam2SchduledData)){
+                                                        foreach($AllMatchFirstOverTeam2SchduledData as $sch):
+                                                        //echo $row['team_runs'];
+                                                        //echo "<br/>";
+                                                //      echo $sch['perticular_val'];
+                                                        $explode = explode(',',$sch['perticular_val']);
+
+                                                        $range = range($explode[0],$explode[1]);
+//                                                      echo $row['team_runs'];
+                                                        if(true  == in_array($row['total_run'], $range)){
+
+                                                        //echo "Win";
+                                                                $where = array('match_id' => $MatchId, "m_id" => '14',
+"odd_id" => $sch['odd_id'],"game_close" => '1');
+                                                                $data = array('result_bet' => 'win');
+                                                                $this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+                                                        }
+                                                        else{
+                                                        //echo "Loss";
+                                                                $where = array('match_id' => $MatchId, "m_id" => '14',
+"odd_id" => $sch['odd_id'],"game_close" => '1');
+                                                                $data = array('result_bet' => 'loss');
+                                                                $this->Cricketmodel_model->UpdateScheduledMatchData($where,$data);
+                                                        }
+                                                        endforeach;
+                                                }
+
+                                        endforeach;
+                                }
+
+        }
+                
+                
+                
+    
+    
     
     
 }

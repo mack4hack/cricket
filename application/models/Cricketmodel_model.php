@@ -292,12 +292,28 @@ class Cricketmodel_model extends CI_Model {
 
     // get match list for backend Toss Data       
     function GetTossGameDetails($MatchId) {
+       
+        /*
         $this->db->select('*');
         $this->db->from('match_list');
         $this->db->where('id', $MatchId);
         $query = $this->db->get();
 
         return $query->result();
+         * 
+        */
+        
+        
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND cms.m_id = 2');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+        
+        
     }
 
     // get match pericular data for backend First ball Data       
@@ -938,6 +954,83 @@ class Cricketmodel_model extends CI_Model {
         //echo $this->db->last_query();die;
         return $query->result_array();
     }
+    
+    
+    
+    
+    function GetUserBetDetails($MatchId,$mid,$oddId) {
+        $this->db->select('*');
+        $this->db->from('cric_user_bet');
+        $this->db->where('match_id' ,$MatchId);
+        $this->db->where('m_id' ,$mid);
+        $this->db->where('odd_id' ,$oddId);
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+
+        function SetUpdateMasterUserData($userId, $data) {
+        //$data = array("match_load" => 1);
+        $this->db->where('user_id', $userId);
+        $this->db->update("user_master", $data);
+
+    }
+
+        function SetUpdateScheduledData($matchId,$odd_id, $data) {
+        //$data = array("match_load" => 1);
+        $this->db->where('match_id', $matchId);
+        $this->db->where('odd_id', $odd_id);
+        $this->db->update("cric_matchbet_schedule", $data);
+
+    }
+
+        function GetMatchScheduledDetails($MatchId,$mid) {
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule');
+        $this->db->where('match_id' ,$MatchId);
+        $this->db->where('m_id' ,$mid);
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+    
+    
+    function GetRunsWicketTeam1Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 13)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+
+        function GetRunsWicketTeam2Details($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND (cms.m_id = 14)');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
+
+        function GetRunsWicketMatchResult($MatchId,$team){
+                $this->db->select('*');
+        $this->db->from('team_player');
+        $this->db->where('match_id', $MatchId);
+        $this->db->where('Innings_code', $team);
+        $this->db->where('player_wicket_index',"1");
+        $query = $this->db->get();
+       //echo $this->db->last_query();die;
+           return $query->result_array();
+        }
 	
 
     
