@@ -53,6 +53,25 @@ class Cricketmodel_model extends CI_Model {
         return $status;
     }
 
+    
+    
+    // checked match over summary is available or not
+    function getMatchOverSummaryPresent($MatchUniqueId, $BattingKeyId) {
+
+        $this->db->select('*');
+        $this->db->where('match_id', $MatchUniqueId);
+        $this->db->where('Innings_code', $BattingKeyId);
+        //$this->db->where('over', $OverCount);
+        $query = $this->db->get("match_summary");
+        
+
+        return $query->result();
+        
+        
+
+    }
+
+    
     // checked match player unique summary is available or not
     function getCheckUniqueMatchPlyerPresent($MatchUniqueId, $BattingKeyId, $PlayerKey) {
 
@@ -126,6 +145,24 @@ class Cricketmodel_model extends CI_Model {
         $this->db->where('player_key', $PlayerKey);
         $this->db->update("team_player", $PlayerDetailArrayData);
     }
+    
+    
+    // update schedule  data into our database
+    function GetUpdateClosedScheduleGame($MatchUniqueId , $MId) {
+        
+        $DetailArrayData = array( "game_close" => "1" );
+        
+         foreach ($MId as $id) {
+        
+        $this->db->where('match_id', $MatchUniqueId);
+        $this->db->where("m_id", $id);
+        $this->db->update("cric_matchbet_schedule", $DetailArrayData);
+        //echo $this->db->last_query();//die;
+         }
+        
+    }
+    
+    
 
     // get match Player Key To     
     function GetSelectPlayerAllKeyData($MatchUniqueId, $BattingKeyId) {
@@ -265,6 +302,14 @@ class Cricketmodel_model extends CI_Model {
         $data = array("match_load" => 1);
         $this->db->where('id', $MatchId);
         $this->db->update("match_list", $data);
+    }
+    
+    // update match key data
+    function MatchUpdateIfChanges($data , $UniqueKey) {
+       
+        $this->db->where('unique', $UniqueKey);
+        $this->db->update("match_list", $data);
+        
     }
 
     // update match load to 1 after insertion of master data to schedule data

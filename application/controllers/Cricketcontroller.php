@@ -87,10 +87,10 @@ class Cricketcontroller extends CI_Controller {
                     curl_setopt($ch,CURLOPT_ENCODING , "gzip");
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
-                    echo "ss<pre>";
+                    //echo "ss<pre>";
                     //echo $LiveMatchArray->data->card->now->batting_team;
-                    print_r($LiveMatchArray->data); exit;
-                    exit;
+                    //print_r($LiveMatchArray->data); exit;
+                    //exit;
 
                     if (count((array) $LiveMatchArray->data->card->toss) > 0) {
                         if ($LiveMatchArray->data->card->toss->won != "") {
@@ -250,12 +250,39 @@ class Cricketcontroller extends CI_Controller {
                                         );
 
                                         $this->Cricketmodel_model->MatchFirstBallSummaryInsert($BallByBallArrayValues);
+                                        
+                                        // game clise logic //1st over//race to 50//make 30 50 100
+                                        if($BattingKeyId == 'a_1' )
+                                        { 
+                                            $arrayUpdateGame = array(1,5,12,15,17,19);
+                                            
+                                            $this->Cricketmodel_model->GetUpdateClosedScheduleGame($MatchUniqueId , $MId);
+        
+                                        }
+                                        
+                                        if($BattingKeyId == 'b_1' )
+                                        {
+                                            $arrayUpdateGame = array(6,16,18,20);
+                                            
+                                            $this->Cricketmodel_model->GetUpdateClosedScheduleGame($MatchUniqueId , $MId);
+        
+                                        }
+                                        
+                                        
                                     }
+                                    
                                 }
                                 
                                 
-                            }
-
+                            } // end of recent over logic
+                                
+                            
+                            
+                            
+                            
+                            
+                            $this->CronGameClosedAutomated($MatchUniqueId , $BattingKeyId); // game closed
+                            
                         }
                     }
 
@@ -284,13 +311,42 @@ class Cricketcontroller extends CI_Controller {
 
 // end of function
 
+    
+    function CronGameClosedAutomated($MatchUniqueId , $BattingKeyId)
+    {
+        //$MatchUniqueId = 41;
+        //$BattingKeyId = "a_1";
+        $GetOverDataForGameClosedList = $this->Cricketmodel_model->getMatchOverSummaryPresent($MatchUniqueId , $BattingKeyId);
+        
+        if(count($GetOverDataForGameClosedList) > 0)
+        {
+            foreach ($GetOverDataForGameClosedList as $key => $value) {
+                
+                //echo $value->over."<br>";
+                if($value->over == 7)
+                { 
+                    $MId = ($BattingKeyId == 'a_1')?array(7):array(8);
+                   
+                    $TestResult = $this->Cricketmodel_model->GetUpdateClosedScheduleGame($MatchUniqueId , $MId);
+        
+                    //print_r($TestResult); exit;
+                }
+                
+            }
+            
+        }
+        
+    }
+    
+    
+    //over summary data automation
     function CronCricketMatchOverSummaryAutomated()
     {
         //$UniqueKeyOfMatch, $MatchUniqueId
         $TokenAccess = $this->GetApiAuthentication();
         if($TokenAccess != "")
         {
-            $UniqueKeyOfMatch = "asiacup_2016_g10";
+            $UniqueKeyOfMatch = "asiacup_2016_final";
             $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";            
             $url = $CommonAuthUrl."match/".$UniqueKeyOfMatch."/overs_summary/?access_token=" . $TokenAccess;
             $ch = curl_init();
@@ -344,13 +400,31 @@ class Cricketcontroller extends CI_Controller {
                         if ($v->format == "t20" || $v->format == "one-day") {
                             $CheckedMatchKey = $this->Cricketmodel_model->getCheckUniqueMatchIdPresent($v->key);
 
-                            if ($CheckedMatchKey == 0) { // 0 will insert int odatabase as new match from server
+                            if ($CheckedMatchKey == 0) { // 0 will insert into database as new match from server
                                 $ArrayOfMatchList[] = array("name" => $v->name, "status" => $v->status
                                     , "unique" => $v->key, "format" => $v->format, "venue" => $v->venue
-                                    , "start_date" => $v->start_date->iso, "team_a" => $v->teams->a->name, "team_b" => $v->teams->b->name
+                                    , "start_date" => $v->start_date->iso, "team_a" => $v->teams->a->name
+                                    , "team_b" => $v->teams->b->name
                                     , "winner_team" => $v->winner_team, "match_load" => 0
                                 );
                             }
+                            else
+                            {
+                                $ArrayOfMatchUpdateLits = array(
+                                    
+                                                            "name" => $v->name
+                                                            , "venue" => $v->venue
+                                                            , "start_date" => $v->start_date->iso
+                                                            , "team_a" => $v->teams->a->name
+                                                            , "team_b" => $v->teams->b->name
+                                   
+                                                            );
+                                
+                                $this->Cricketmodel_model->MatchUpdateIfChanges($ArrayOfMatchUpdateLits , $v->key);
+                                
+                                
+                                
+                            }    
                         }
                     }
                 }
