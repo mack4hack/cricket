@@ -76,8 +76,8 @@ class Cricketcontroller extends CI_Controller {
                 foreach ($UniqueKeyOfMatchArray as $key => $v) {
                     $UniqueKeyOfMatch = $v->unique;
                     $MatchUniqueId = $v->id;
-                    $MatchUniqueId = 46;
-                    $UniqueKeyOfMatch = "asiacup_2016_g9";
+                    //$MatchUniqueId = 46;
+                    //$UniqueKeyOfMatch = "asiacup_2016_g9";
                     //$CommonAuthUrl = "http://www.litzscore.com/rest/v2/";
                     $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";
                     $url = $CommonAuthUrl."match/" . $UniqueKeyOfMatch . "/?access_token=" . $TokenAccess;
