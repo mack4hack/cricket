@@ -284,9 +284,9 @@ class Cricketcontroller extends CI_Controller {
 
 // end of function
 
-    function CronCricketMatchOverSummaryAutomated($UniqueKeyOfMatch, $MatchUniqueId)
+    function CronCricketMatchOverSummaryAutomated()
     {
-        
+        //$UniqueKeyOfMatch, $MatchUniqueId
         $TokenAccess = $this->GetApiAuthentication();
         if($TokenAccess != "")
         {
