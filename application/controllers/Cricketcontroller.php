@@ -310,7 +310,7 @@ class Cricketcontroller extends CI_Controller {
             
             //echo  count($OverSummaryArray->data->innings);
             
-            if($OverSummaryArray->data->innings > 0 )
+            if(count( $OverSummaryArray->data->innings ) > 0 )
             {
                 foreach ($OverSummaryArray->data->innings as $key => $value) {
                     
@@ -320,7 +320,7 @@ class Cricketcontroller extends CI_Controller {
             }
             
             
-            //exit;
+            exit;
         }    
     }
 
