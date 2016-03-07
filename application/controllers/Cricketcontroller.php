@@ -375,7 +375,7 @@ class Cricketcontroller extends CI_Controller {
             //print_r($asd);
             //echo "asd";
             
-            print_r($output);
+            print_r($matches);
             //exit;
             foreach ($matches as $value) {
                 $MatchData = array_filter($value->matches);
