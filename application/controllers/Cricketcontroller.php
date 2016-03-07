@@ -1556,8 +1556,7 @@ class Cricketcontroller extends CI_Controller {
                                                 $this->Cricketmodel_model->SetUpdateMasterUserData($bet['user_id'],
 $data_user);
                                                 $data_user = array( "execute_flag" => '1');
-                                                $this->Cricketmodel_model->SetUpdateScheduledData(MatchId,$OddId
-, $data_user);
+                                                $this->Cricketmodel_model->SetUpdateScheduledData($MatchId,$OddId, $data_user);
                                         endforeach;
                                 }
                         }

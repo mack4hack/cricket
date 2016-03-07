@@ -193,7 +193,7 @@ class Cricketmodel_model extends CI_Model {
     function GetLiveMatchKeyAPIToday() {
         
         $today = date('Y-m-d');
-        $prv_date = date("Y-m-d", strtotime("-4 days"));
+        $prv_date = date("Y-m-d", strtotime("-3 days"));
         //$next_date = date("Y-m-d", strtotime("+3 days"));
         $this->db->select('*');
         $this->db->from('match_list');
