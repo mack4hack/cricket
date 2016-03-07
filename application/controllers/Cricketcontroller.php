@@ -285,47 +285,80 @@ class Cricketcontroller extends CI_Controller {
 
 // end of function
 
-    function CronCricketMatchOverSummaryAutomated()
+function CronCricketMatchOverSummaryAutomated()
+{
+    //$UniqueKeyOfMatch, $MatchUniqueId
+    $UniqueKeyOfMatch = "asiacup_2016_final";
+    $MatchUniqueId = 50;
+    $TokenAccess = $this->GetApiAuthentication();
+    if($TokenAccess != "")
     {
-        //$UniqueKeyOfMatch, $MatchUniqueId
-        $UniqueKeyOfMatch = "asiacup_2016_final";
-        $TokenAccess = $this->GetApiAuthentication();
-        if($TokenAccess != "")
-        {
-            $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";            
-            $url = $CommonAuthUrl."match/".$UniqueKeyOfMatch."/overs_summary/?access_token=" . $TokenAccess;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch,CURLOPT_ENCODING , "gzip");
-            $output = curl_exec($ch);
-            $OverSummaryArray = json_decode($output);
-            curl_close($ch);
-            //$matches = $asd->data->months[0]->days;
-            $ArrayOfMatchList = array();
-            //echo "In Auto<pre>";
-            //print_r($asd);
-            
-            echo "<pre>";
-            
-            //echo  count($OverSummaryArray->data->innings);
-             print_r($OverSummaryArray->data->innings);
-            if(count( $OverSummaryArray->data->innings ) > 0 )
-            {
-                foreach ($OverSummaryArray->data->innings as $key => $summary) {
-                    
-                   foreach ($summary->overs_summary as $key => $PerOver) {
-                    
-                        print_r($PerOver);
+        $CommonAuthUrl = "https://rest.cricketapi.com/rest/v2/";            
+        $url = $CommonAuthUrl."match/".$UniqueKeyOfMatch."/overs_summary/?access_token=" . $TokenAccess;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch,CURLOPT_ENCODING , "gzip");
+        $output = curl_exec($ch);
+        $OverSummaryArray = json_decode($output);
+        curl_close($ch);
+        //$matches = $asd->data->months[0]->days;
+        $ArrayOfMatchList = array();
+        //echo "In Auto<pre>";
+        //print_r($asd);
 
-                   }
-                    
-                }
+        echo "<pre>";
+
+        //echo  count($OverSummaryArray->data->innings);
+         print_r($OverSummaryArray->data->innings);
+        if(count( $OverSummaryArray->data->innings ) > 0 )
+        {
+            foreach ($OverSummaryArray->data->innings as $key => $summary) {
+
+                $BattingKeyId = $summary->key;
+
+               foreach ($summary->overs_summary as $key => $PerOver) {
+                //match
+                    //print_r($PerOver->over);
+                    //$PerOver->match->score
+                    //$PerOver->match->current_run_rate//runs
+
+                    $CheckedMatchSummaryOver = $this->Cricketmodel_model->getCheckUniqueMatchOverSummaryPresent($MatchUniqueId, $BattingKeyId, $PerOver->over);
+
+                    if ($CheckedMatchSummaryOver == 0) {
+                                $ScoreExplode = explode("in", $PerOver->match->score);
+                                $RunsWicket = explode("/", $ScoreExplode[0]);
+                                $WicketKeyImp = "";
+
+//                                if (count($PerOver->wickets) > 0) {
+//                                    $WicketKeyImp = implode(",", $PerOver->wickets);
+//                                }
+
+                                $ArrayOfOverSummaryList = array(
+                                    "score" => $PerOver->match->score,
+                                    "match_id" => $MatchUniqueId,
+                                    "Innings_code" => $BattingKeyId,
+                                    "over" => $PerOver->over,
+                                    "current_run_rate" => $PerOver->match->current_run_rate,
+                                    "total_run" => $RunsWicket[0],  
+                                    "over_run" => $PerOver->runs,
+                                    "wicket" => $RunsWicket[1],
+                                    "wicket_key" => $WicketKeyImp,
+                                    "summary_count" => $key + 1
+                                );
+
+                                $this->Cricketmodel_model->MatchOverSummaryInsert($ArrayOfOverSummaryList);
+                            }
+                        } // end of over summary
+
+
+               }
+
             }
-            
-            
-            exit;
-        }    
+        }
+
+
+        exit;
     }
 
 
