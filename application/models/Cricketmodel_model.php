@@ -257,7 +257,7 @@ class Cricketmodel_model extends CI_Model {
     function getMatchList() {
         
         $today = date('Y-m-d');
-        $prv_date = date("Y-m-d", strtotime("-2 days"));
+        $prv_date = date("Y-m-d", strtotime("-4 days"));
         $next_date = date("Y-m-d", strtotime("+5 days"));
         $this->db->select('*');
         $this->db->from('match_list');
