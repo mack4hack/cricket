@@ -308,9 +308,9 @@ class Cricketcontroller extends CI_Controller {
             
             echo "<pre>";
             
-            //echo  count($OverSummaryArray->innings);
+            echo  count($OverSummaryArray->data->innings);
             
-            print_r($OverSummaryArray);
+            print_r($OverSummaryArray->data->innings);
             //exit;
         }    
     }
