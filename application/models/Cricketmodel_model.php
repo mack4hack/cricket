@@ -245,6 +245,7 @@ class Cricketmodel_model extends CI_Model {
        
         $this->db->where('unique', $UniqueKey);
         $this->db->update("match_list", $data);
+        echo $this->db->last_query();die;
         
     }
     // update match load to 1 after insertion of master data to schedule data
