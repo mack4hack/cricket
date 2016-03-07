@@ -370,10 +370,10 @@ class Cricketcontroller extends CI_Controller {
             curl_close($ch);
             $matches = $asd->data->months[0]->days;
             $ArrayOfMatchList = array();
-            //echo "In Auto<pre>";
+            echo "In Auto<pre>";
             //print_r($asd);
             //echo "asd";
-            //print_r($output);
+            print_r($output);
             //exit;
             foreach ($matches as $value) {
                 $MatchData = array_filter($value->matches);
@@ -411,6 +411,7 @@ class Cricketcontroller extends CI_Controller {
                     }
                 }
             } // end of foreach
+            exit;
             $this->Cricketmodel_model->MatchListInsert($ArrayOfMatchList);
             $ArrayMatchListNotLoaded = $this->Cricketmodel_model->GetMatchNotLoaded();
             if (count($ArrayMatchListNotLoaded) > 0) {
