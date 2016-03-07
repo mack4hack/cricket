@@ -308,9 +308,18 @@ class Cricketcontroller extends CI_Controller {
             
             echo "<pre>";
             
-            echo  count($OverSummaryArray->data->innings);
+            //echo  count($OverSummaryArray->data->innings);
             
-            print_r($OverSummaryArray->data->innings);
+            if($OverSummaryArray->data->innings > 0 )
+            {
+                foreach ($OverSummaryArray->data->innings as $key => $value) {
+                    
+                    print_r($value);
+                    
+                }
+            }
+            
+            
             //exit;
         }    
     }
