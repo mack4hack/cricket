@@ -150,7 +150,7 @@ class Cricketmodel_model extends CI_Model {
     function MatchOverSummaryInsert($data) {
         // foreach($data as $insert_data){
         $this->db->insert('match_summary', $data);
-        //echo $this->db->last_query();die;
+        echo $this->db->last_query();//die;
         // }
         return true;
     }

@@ -82,10 +82,10 @@ class Cricketcontroller extends CI_Controller {
                     curl_setopt($ch,CURLOPT_ENCODING , "gzip");
                     $output = curl_exec($ch);
                     $LiveMatchArray = json_decode($output);
-                    echo "ss<pre>";
+                    //echo "ss<pre>";
                     //echo $LiveMatchArray->data->card->now->batting_team;
-                    print_r($LiveMatchArray->data); exit;
-                    exit;
+                    //print_r($LiveMatchArray->data); exit;
+                    //exit;
                     if (count((array) $LiveMatchArray->data->card->toss) > 0) {
                         if ($LiveMatchArray->data->card->toss->won != "") {
                             $RunRate = (isset($LiveMatchArray->data->card->now->req->runs_rate)) ? $LiveMatchArray->data->card->now->req->runs_rate : "0";
@@ -371,11 +371,11 @@ class Cricketcontroller extends CI_Controller {
             $matches = $asd->data->months[0]->days;
             $ArrayOfMatchList = array();
             
-            echo "In Auto<pre>";
+            //echo "In Auto<pre>";
             //print_r($asd);
             //echo "asd";
             
-            print_r($matches);
+            //print_r($matches);
             //exit;
             foreach ($matches as $value) {
                 $MatchData = array_filter($value->matches);
@@ -413,7 +413,7 @@ class Cricketcontroller extends CI_Controller {
                     }
                 }
             } // end of foreach
-            exit;
+            //exit;
             $this->Cricketmodel_model->MatchListInsert($ArrayOfMatchList);
             $ArrayMatchListNotLoaded = $this->Cricketmodel_model->GetMatchNotLoaded();
             if (count($ArrayMatchListNotLoaded) > 0) {
