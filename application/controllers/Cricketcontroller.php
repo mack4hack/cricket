@@ -312,9 +312,13 @@ class Cricketcontroller extends CI_Controller {
             
             if(count( $OverSummaryArray->data->innings ) > 0 )
             {
-                foreach ($OverSummaryArray->data->innings as $key => $value) {
+                foreach ($OverSummaryArray->data->innings as $key => $summary) {
                     
-                    print_r($value);
+                   foreach ($summary->overs_summary as $key => $PerOver) {
+                    
+                        print_r($PerOver);
+
+                   }
                     
                 }
             }
