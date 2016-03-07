@@ -305,6 +305,7 @@ class Cricketcontroller extends CI_Controller {
             $ArrayOfMatchList = array();
             //echo "In Auto<pre>";
             //print_r($asd);
+            
             echo "<pre>";
             
             echo  count($OverSummaryArray->innings);
