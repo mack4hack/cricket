@@ -60,8 +60,13 @@ class Cricketcontroller extends CI_Controller {
         if($TokenAccess != "")
         {
             $UniqueKeyOfMatchArray = $this->Cricketmodel_model->GetLiveMatchKeyAPIToday();
+            
+            
+            
             echo "<pre>";
-            print_r($UniqueKeyOfMatchArray);
+            print_r($this->Cricketmodel_model->GetLiveMatchKeyAPIToday());
+            
+            
             if (count($UniqueKeyOfMatchArray) > 0) {
                 foreach ($UniqueKeyOfMatchArray as $key => $v) {
                     $UniqueKeyOfMatch = $v->unique;
