@@ -74,6 +74,7 @@ class Cricketcontroller extends CI_Controller {
             if (count($UniqueKeyOfMatchArray) > 0) {
 
                 foreach ($UniqueKeyOfMatchArray as $key => $v) {
+                    
                     $UniqueKeyOfMatch = $v->unique;
                     $MatchUniqueId = $v->id;
                     //$MatchUniqueId = 46;
@@ -304,8 +305,11 @@ class Cricketcontroller extends CI_Controller {
             $ArrayOfMatchList = array();
             //echo "In Auto<pre>";
             //print_r($asd);
-            echo "$url<pre>";
-            print_r($OverSummaryArray);
+            echo "<pre>";
+            
+            echo  count($OverSummaryArray->innings);
+            
+            print_r($OverSummaryArray->innings);
             //exit;
         }    
     }
