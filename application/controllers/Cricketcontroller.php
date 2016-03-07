@@ -64,7 +64,7 @@ class Cricketcontroller extends CI_Controller {
             
             
             echo "<pre>";
-            print_r($this->Cricketmodel_model->GetLiveMatchKeyAPIToday());
+            print_r($UniqueKeyOfMatchArray);
             
             
             if (count($UniqueKeyOfMatchArray) > 0) {
