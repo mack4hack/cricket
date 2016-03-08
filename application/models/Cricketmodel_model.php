@@ -201,7 +201,7 @@ class Cricketmodel_model extends CI_Model {
         BETWEEN STR_TO_DATE( "' . $prv_date . '", "%Y-%m-%d" )
         AND STR_TO_DATE( "' . $today . '", "%Y-%m-%d" )', NULL, FALSE);
         $query = $this->db->get();
-        echo $this->db->last_query();//die;
+        //echo $this->db->last_query();//die;
         return $query->result();
     }
     // get config_cric_odds data for        
