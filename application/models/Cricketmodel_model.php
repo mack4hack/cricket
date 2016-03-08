@@ -945,6 +945,19 @@ class Cricketmodel_model extends CI_Model {
        //echo $this->db->last_query();die;
            return $query->result_array();
         }
+        
+        function GetTossWinLossGameDetails($MatchId) {
+
+        $this->db->select('*');
+        $this->db->from('cric_matchbet_schedule cms');
+        $this->db->join('config_cric_odds cco', 'cms.odd_id=cco.odd_id');
+        //$this->db->join('match_list ml','cms.match_id=ml.id');
+        $this->db->where('cms.match_id =' . $MatchId . ' AND cms.m_id = 2');
+        //$this->db->where('');
+        $query = $this->db->get();
+        //echo $this->db->last_query();die;
+        return $query->result_array();
+    }
 	
     
     
