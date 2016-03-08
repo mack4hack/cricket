@@ -63,10 +63,6 @@ class Cricketcontroller extends CI_Controller {
             
             
             
-            echo "<pre>";
-            print_r($UniqueKeyOfMatchArray);
-            
-            
             if (count($UniqueKeyOfMatchArray) > 0) {
                 foreach ($UniqueKeyOfMatchArray as $key => $v) {
                     $UniqueKeyOfMatch = $v->unique;
