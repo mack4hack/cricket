@@ -329,13 +329,35 @@ function getCricketMatchOddsByMatchId($match_id,$m_id){
     return $query->result_array();
 }
 
+//function getCricketMatchId($match_id){
+//    
+//    $this->db->select('id,batting_team,bowling_team,runs_str');
+//    $this->db->from('match_list');
+//    $this->db->where('id',$match_id);
+//    $query = $this->db->get();
+//    //echo $this->db->last_query();die;
+//    return $query->result_array();
+//}
+
+
 function getCricketMatchId($match_id){
-    
-    $this->db->select('id,batting_team,bowling_team,runs_str');
+
+    $this->db->select('id,batting_team,bowling_team,team_a,team_b,runs_str');
     $this->db->from('match_list');
     $this->db->where('id',$match_id);
     $query = $this->db->get();
     //echo $this->db->last_query();die;
+    return $query->result_array();
+}
+
+function getCricketScoreCardMatchId($match_id,$team){
+
+    $this->db->select('*');
+    $this->db->from('team_player');
+    $this->db->where('match_id',$match_id);
+        $this->db->order_by('player_wicket_index','ASC');
+    $query = $this->db->get();
+  //  echo $this->db->last_query();die;
     return $query->result_array();
 }
 

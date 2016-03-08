@@ -267,29 +267,6 @@ class Cricket extends REST_Controller
         }
 	} 
 	
-	function getMatchLiveScore_get(){
-		$match_id = $this->get('match_id');
-		$live_score = $this->Cricket_model->getCricketMatchId($match_id);
-		if(!empty($live_score)){
-		 	$result['Live_Score']  = $live_score;	
-        }
-		if (!empty($result)) {
-            
-            $this->response(['status' => TRUE, 'data' => $result
-            ], REST_Controller::HTTP_OK);
-             // NOT_FOUND (404) being the HTTP response code
-            
-            
-        } 
-        else {
-            $this->response(['status' => FALSE, 'message' => 'No data found!'], REST_Controller::HTTP_NOT_FOUND);
-             // NOT_FOUND (404) being the HTTP response code
-            
-        }
-	}
-	 
-	
-        
         //api for cricket account
         public function accountsPlayerByWeek_get()
 	    {
@@ -390,7 +367,82 @@ class Cricket extends REST_Controller
 					'message' => 'No Data Found!!!'
 				], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
 			}
-	    }     
+	    } 
+            
+            
+            
+            function getMatchLiveScoreCard_get(){
+                $match_id = $this->get('match_id');
+                $live_score_a1 =
+$this->Cricket_model->getCricketScoreCardMatchId($match_id,"a_1");
+                if(!empty($live_score_a1)){
+                        $result['Live_Score_Team1']  = $live_score_a1;
+        }
+                $live_score_b1 =
+$this->Cricket_model->getCricketScoreCardMatchId($match_id,"b_1");
+                if(!empty($live_score_b1)){
+                        $result['Live_Score_Team2']  = $live_score_b1;
+        }
+                if (!empty($result)) {
+
+            $this->response(['status' => TRUE, 'data' => $result
+            ], REST_Controller::HTTP_OK);
+             // NOT_FOUND (404) being the HTTP response code
+
+
+        }
+        else {
+            $this->response(['status' => FALSE, 'message' => 'No data
+found!'], REST_Controller::HTTP_NOT_FOUND);
+             // NOT_FOUND (404) being the HTTP response code
+
+        }
+        }
+        
+        
+        function getMatchLiveScore_get(){
+                $match_id = $this->get('match_id');
+                $live_score = $this->Cricket_model->getCricketMatchId($match_id);
+                if(!empty($live_score)){
+                        $i=0;
+                        foreach($live_score as $row):
+                        if($row['batting_team']!=NULL && $row['bowling_team']!=NULL)
+                        {
+                                if($row['batting_team'] =='a'){
+                                                $live_score[$i]['batting_team'] = $row['team_a'];
+                                }
+                                if($row['bowling_team'] =='b'){
+                                                $live_score[$i]['bowling_team'] = $row['team_b'];
+                                }
+                                if($row['batting_team'] =='b'){
+                                                $live_score[$i]['batting_team'] = $row['team_b'];
+                                }
+                                if($row['bowling_team'] =='a'){
+                                                $live_score[$i]['bowling_team'] = $row['team_a'];
+                                }
+
+                        }
+                        $i++;
+                    endforeach;
+                        $result['Live_Score']  = $live_score;
+        }
+                if (!empty($result)) {
+
+            $this->response(['status' => TRUE, 'data' => $result
+            ], REST_Controller::HTTP_OK);
+             // NOT_FOUND (404) being the HTTP response code
+
+
+        }
+        else {
+            $this->response(['status' => FALSE, 'message' => 'No data
+found!'], REST_Controller::HTTP_NOT_FOUND);
+             // NOT_FOUND (404) being the HTTP response code
+
+        }
+        }
+
+
                         
 }
 ?>
