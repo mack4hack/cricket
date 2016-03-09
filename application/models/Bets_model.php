@@ -428,7 +428,7 @@ class Bets_model extends CI_Model
         $current_month = $now['year'] . "-" . $now['mon'] . "-" . $now['mday'];
         //$start_date = date('Y-m-d H:m:s');
         //$pre_date = date($current_month,strtotime("60 days"));
-        $pre_date = date('Y-m-d', strtotime('-60 days', strtotime($current_month)));
+        $pre_date = date('Y-m-d', strtotime('-30 days', strtotime($current_month)));
         //echo $pre_date;die;
         $this->db->select('lucky_number,timeslot,timeslot_id');
         $this->db->from('lucky_numbers');
